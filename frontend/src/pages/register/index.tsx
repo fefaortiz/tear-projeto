@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import './styles.css'; // Usaremos os mesmos estilos
+import './style.css'; // Usaremos os mesmos estilos
 
 export function RegisterPage() {
   const [username, setUsername] = useState('');

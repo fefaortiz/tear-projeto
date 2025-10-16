@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom'; // Usaremos Link para navegar
-import './styles.css';
+import './style.css'; // Reutilizando os mesmos estilos da página de registro
 
 export function LoginPage() {
   const [username, setUsername] = useState('');

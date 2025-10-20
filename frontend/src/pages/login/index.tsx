@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom'; // Usaremos Link para navegar
-import './styles.css';
+import './style.css';
 
 export function LoginPage() {
   const [username, setUsername] = useState('');
@@ -12,29 +12,23 @@ export function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // O backend espera dados de formulário, então usamos URLSearchParams
-    const formData = new URLSearchParams();
-    formData.append('username', username);
-    formData.append('password', password);
-
+    // O backend deste projeto espera { email, senha } em JSON
     try {
-      // ATENÇÃO: Troque a URL pela URL do seu NOVO backend quando o tiver
-      const response = await axios.post('http://127.0.0.1:8000/token', formData, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
+      const response = await axios.post(`${apiUrl}/login`, {
+        email: username,
+        senha: password
       });
-      
-      const token = response.data.access_token;
-      localStorage.setItem('token', token); // Guarda o token no navegador
-      
-      setMessage('Login realizado com sucesso!');
-      setIsError(false); 
-      
-      // Futuramente, você pode redirecionar o usuário aqui:
-      // window.location.href = '/dashboard';
 
-    } catch (error) {
+      // Se o backend retornar um token
+      const token = response.data.token || response.data.access_token;
+      if (token) localStorage.setItem('token', token);
+
+      setMessage('Login realizado com sucesso!');
+      setIsError(false);
+
+    } catch (error: any) {
+      console.error('Login error:', error);
       setMessage('Erro: Usuário ou senha incorretos.');
       setIsError(true);
     }

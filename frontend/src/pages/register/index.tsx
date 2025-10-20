@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import './styles.css'; // Usaremos os mesmos estilos
+import './style.css'; // Usaremos os mesmos estilos
 
 export function RegisterPage() {
   const [username, setUsername] = useState('');
@@ -12,17 +12,20 @@ export function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); 
     try {
-      // ATENÇÃO: Troque a URL pela URL do seu NOVO backend quando o tiver
-      const response = await axios.post('http://127.0.0.1:8000/register/', {
-        username: username,
-        password: password
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
+      // NOTE: O backend atual não tem rota /register implementada.
+      // Aqui enviamos para /terapeutas como placeholder — adapte conforme seu backend.
+      const response = await axios.post(`${apiUrl}/register`, {
+        email: username,
+        senha: password
       });
-      setMessage(`Usuário '${response.data.username}' registrado com sucesso!`);
-      setIsError(false); 
+      setMessage(`Usuário '${response.data.username || username}' registrado com sucesso!`);
+      setIsError(false);
 
     } catch (error: any) {
-      setMessage('Erro: ' + (error.response?.data?.detail || 'Não foi possível registrar.'));
-      setIsError(true); 
+      console.error('Register error:', error);
+      setMessage('Erro: ' + (error.response?.data?.error || 'Não foi possível registrar.'));
+      setIsError(true);
     }
   };
 

@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { LoginPage } from './pages/login';
 import { RegisterPage } from './pages/register';
+import { InitialPage } from './pages/initial';
+import { RequireAuth } from './components/RequireAuth';
 
 
 // Um componente simples para uma futura página principal
@@ -19,6 +21,11 @@ function App() {
 
       {/* Exemplo de uma rota protegida no futuro */}
       <Route path="/home" element={<HomePage />} /> 
+      <Route path="/initial" element={
+        <RequireAuth>
+          <InitialPage />
+        </RequireAuth>
+      } />
     </Routes>
   );
 }

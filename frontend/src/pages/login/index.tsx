@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom'; // Usaremos Link para navegar
 import './style.css'; // Reutilizando os mesmos estilos da página de registro
@@ -6,8 +7,10 @@ import './style.css'; // Reutilizando os mesmos estilos da página de registro
 export function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +30,10 @@ export function LoginPage() {
       setMessage('Login realizado com sucesso!');
       setIsError(false);
 
-    } catch (error: any) {
+      // Redirecionar para a página inicial usando React Router
+      navigate('/initial');
+
+    } catch (error: unknown) {
       console.error('Login error:', error);
       setMessage('Erro: Usuário ou senha incorretos.');
       setIsError(true);
@@ -39,7 +45,7 @@ export function LoginPage() {
       <form onSubmit={handleSubmit}>
         <h2>Login</h2>
         <div className="input-group">
-          <label>Usuário:</label>
+          <label>Email:</label>
           <input
             type="text"
             value={username}
@@ -49,12 +55,22 @@ export function LoginPage() {
         </div>
         <div className="input-group">
           <label>Senha:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="password-input">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Esconder senha" : "Mostrar senha"}
+            >
+              {showPassword ? "👁️" : "👁️‍🗨️"}
+            </button>
+          </div>
         </div>
         <button type="submit">Entrar</button>
         

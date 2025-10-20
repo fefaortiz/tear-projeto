@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { LoginPage } from './pages/Login';
-import { RegisterPage } from './pages/Register';
+import { LoginPage } from './pages/login';
+import { RegisterPage } from './pages/register';
+
 
 // Um componente simples para uma futura página principal
 function HomePage() {
@@ -14,6 +15,7 @@ function App() {
       <Route path="/" element={<Navigate to="/login" />} />
 
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
       {/* Exemplo de uma rota protegida no futuro */}
       <Route path="/home" element={<HomePage />} /> 

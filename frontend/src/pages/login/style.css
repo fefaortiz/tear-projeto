@@ -1,19 +1,33 @@
-/* Estilos básicos para o container do formulário */
-.form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
+
+* {
+  box-sizing: border-box;
 }
 
-form {
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  background-color: #f4f7f6; 
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  max-width: 400px;
+}
+
+.App {
   background-color: #ffffff;
   padding: 2.5rem; 
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  width: 100%;
-  max-width: 400px;
+  text-align: center;
+}
+
+form {
   display: flex;
   flex-direction: column;
   gap: 1.25rem; 
@@ -23,27 +37,29 @@ form h2 {
   margin-top: 0;
   margin-bottom: 1rem;
   color: #333;
-  text-align: center;
 }
 
-.input-group {
+form div {
   display: flex;
   flex-direction: column;
   text-align: left;
 }
 
-.input-group label {
+form label {
   font-size: 0.9rem;
   font-weight: 500;
   margin-bottom: 0.25rem;
   color: #555;
 }
 
-.input-group input {
+input[type="text"],
+input[type="password"] {
   padding: 0.8rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
+  background-color: #fff;   
+  color: #333; 
 }
 
 button {
@@ -54,33 +70,35 @@ button {
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+button[type="submit"] {
   background-color: #007aff; 
   color: white;
 }
 
-button:hover {
+button[type="submit"]:hover {
   background-color: #0056b3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.toggle-link {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-.toggle-link a {
+.toggle-btn {
+  background-color: transparent;
   color: #007aff;
-  text-decoration: none;
-  font-weight: 600;
+  margin-top: 1rem;
+  padding: 0.5rem;
 }
 
-/* Estilos para mensagens de feedback (sucesso/erro) */
+.toggle-btn:hover {
+  background-color: #f4f7f6;
+}
+
 .feedback-message {
   font-size: 0.9rem;
   font-weight: 500;
   margin-top: 1rem;
   padding: 0.75rem;
   border-radius: 4px;
-  text-align: center;
 }
 
 .feedback-message.success {

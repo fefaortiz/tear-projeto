@@ -18,6 +18,50 @@ export function RegisterPage() {
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
 
+const formatCPF = (value: string): string => {
+  const digitsOnly = value.replace(/\D/g, '');
+  const truncatedDigits = digitsOnly.substring(0, 11);
+  const len = truncatedDigits.length;
+  if (len <= 3) {
+    return truncatedDigits;
+  } else if (len <= 6) {
+    return truncatedDigits.replace(/^(\d{3})(\d{1,3})/, '$1.$2');
+  } else if (len <= 9) {
+    return truncatedDigits.replace(/^(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+  } else {
+    return truncatedDigits.replace(/^(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+  }
+};
+const formatPhone = (value: string): string => {
+    // 1. Remove tudo que não for dígito
+    const digitsOnly = value.replace(/\D/g, '');
+
+    // 2. Limita a 11 dígitos (máximo para celular com DDD)
+    const truncatedDigits = digitsOnly.substring(0, 11);
+    const len = truncatedDigits.length;
+
+    if (len <= 2) {
+      return truncatedDigits.replace(/^(\d{0,2})/, '($1');
+    } else if (len <= 6) {
+      return truncatedDigits.replace(/^(\d{2})(\d{0,4})/, '($1) $2');
+    } else if (len <= 10) {
+      return truncatedDigits.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else {
+      return truncatedDigits.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+    }
+  };
+
+  const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatPhone(event.target.value);
+    setTelefone(formattedValue);
+  };
+
+
+  const handleCpfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatCPF(event.target.value);
+    setCpf(formattedValue);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -94,9 +138,9 @@ export function RegisterPage() {
           <input
             type="text"
             value={cpf}
-            onChange={(e) => setCpf(e.target.value)}
+            onChange={handleCpfChange}
             required
-            maxLength={11}
+            maxLength={14}
           />
         </div>
         <div className="input-group">
@@ -118,7 +162,7 @@ export function RegisterPage() {
           <input
             type="tel"
             value={telefone}
-            onChange={(e) => setTelefone(e.target.value)}
+            onChange={handlePhoneChange}
             required
           />
         </div>

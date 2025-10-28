@@ -81,7 +81,7 @@ export function LoginPage() {
         )}
 
         <p className="toggle-link">
-          Não tem uma conta? <Link to="/register">Cadastre-se</Link>
+          Não tem uma conta? <Link to="/register/select">Cadastre-se</Link>
         </p>
       </form>
     </div>

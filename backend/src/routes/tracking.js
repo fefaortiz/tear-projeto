@@ -8,27 +8,28 @@ const verifyToken = require('../middleware/authMiddleware');
 // ==========================================================
 router.post('/', verifyToken, async (req, res) => {
   try {
-    // 1. Pega os dados do corpo da requisição
-    const { nome, intensidade, dia_de_registro, idtraits } = req.body;
+    // 1. Pega os dados do corpo da requisição (dia_de_registro REMOVIDO)
+    const { nome, intensidade, idtraits } = req.body;
 
     // 2. Pega os dados do usuário LOGADO (o "Criador")
     const { id: creatorId, email: creatorEmail } = req.user;
 
-    // 3. Validação básica
-    if (!idtraits || !dia_de_registro) {
+    // 3. Validação básica (verificação de dia_de_registro REMOVIDA)
+    if (!idtraits) {
       return res.status(400).json({ 
-        error: 'Campos idtraits (a qual trait pertence) e dia_de_registro são obrigatórios.' 
+        error: 'Campo idtraits (a qual trait pertence) é obrigatório.' 
       });
     }
 
-    // 3.1
-    // Verifica se já existe um tracking para esta trait neste dia
+    const hoje = new Date().toISOString().split('T')[0];
+
+    // 3.2
     const existingTracking = await db('tracking')
       .where({
         idtraits: idtraits,
-        dia_de_registro: dia_de_registro
+        dia_de_registro: hoje // Usa a data gerada
       })
-      .first(); // .first() é eficiente, só precisamos saber se 1 existe
+      .first(); 
 
     if (existingTracking) {
       // 409 Conflict é o status correto para "recurso já existe"
@@ -37,33 +38,24 @@ router.post('/', verifyToken, async (req, res) => {
       });
     }
 
-    // 4. Prepara o objeto para inserção
+    // 4. Prepara o objeto para inserção [MODIFICADO]
     const newTrackingData = {
       nome,
       intensidade,
-      dia_de_registro,
+      dia_de_registro: hoje, // Salva a data de hoje
       idtraits, // O "pai" deste tracking
     };
 
-    // 5. [LÓGICA MODIFICADA]
-    // Adiciona o "Criador" com base no EMAIL do usuário logado
-    
-    // Tenta encontrar o email na tabela de pacientes
-    const paciente = await db('paciente').where({ Email: creatorEmail }).first();
+    // 5. Lógica do Criador (igual)
+    const paciente = await db('paciente').where({ email: creatorEmail }).first();
 
     if (paciente) {
-        // O criador é um Paciente
-        newTrackingData.IDPaciente_Criador = creatorId;
-
+        newTrackingData.idpaciente_criador = creatorId;
     } else {
-        // Se não é paciente, verifica se é um cuidador
-        const cuidador = await db('cuidador').where({ Email: creatorEmail }).first();
-        
+        const cuidador = await db('cuidador').where({ email: creatorEmail }).first();
         if (cuidador) {
-            newTrackingData.IDCuidador_Criador = creatorId;
+            newTrackingData.idcuidador_criador = creatorId;
         } else {
-            // O Email do token não corresponde a nenhum paciente ou cuidador
-            // (Também pode ser um Terapeuta, mas ele não pode criar tracking)
             return res.status(401).json({ error: 'Usuário (criador) inválido ou não autorizado a criar.' });
         }
     }
@@ -75,6 +67,10 @@ router.post('/', verifyToken, async (req, res) => {
 
   } catch (error) {
     console.error('Erro ao criar Tracking:', error);
+    if (error.code === '23505') { // 23505 = unique_violation
+        return res.status(409).json({ error: 'Já existe um registro de tracking para esta característica neste dia.' });
+    }
+
     // Erro de FK (ex: IDTraits (pai) não existe)
     if (error.code === '23503') {
       return res.status(404).json({ error: 'A Trait (característica) especificada não foi encontrada.' });
@@ -82,7 +78,6 @@ router.post('/', verifyToken, async (req, res) => {
     res.status(500).json({ error: 'Erro interno ao criar Tracking.' });
   }
 });
-
 
 // ==========================================================
 // GET /api/tracking (Buscar Trackings por Trait)
@@ -98,8 +93,8 @@ router.get('/', verifyToken, async (req, res) => {
     }
 
     const trackings = await db('tracking')
-      .where({ IDTraits: idtrait })
-      .orderBy('Dia_de_Registro', 'asc'); // 'asc' (ascendente) para ver a linha do tempo
+      .where({ idtraits: idtrait })
+      .orderBy('dia_de_registro', 'asc'); // 'asc' (ascendente) para ver a linha do tempo
 
     res.status(200).json(trackings);
 
@@ -151,7 +146,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
     const { id: idtracking } = req.params;
 
     const deletedCount = await db('tracking')
-      .where({ IDTracking: idtracking })
+      .where({ idtracking: idtracking })
       .delete();
 
     if (deletedCount === 0) {

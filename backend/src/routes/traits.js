@@ -11,18 +11,25 @@ router.post('/:idpaciente', verifyToken, async (req, res) => {
   try {
     const { idpaciente } = req.params;
 
-    const { nome, descricao, intensidade, data_de_criacao } = req.body;
+    // [MODIFICADO] 'data_de_criacao' removida do body
+    const { nome, descricao, intensidade } = req.body;
 
     const { id: creatorId, email: creatorEmail } = req.user;
 
     let role = null;
 
-    if (!nome || !data_de_criacao || !idpaciente) {
+    // [MODIFICADO] Validação de 'data_de_criacao' removida
+    if (!nome || !idpaciente) {
       return res.status(400).json({ 
-        error: 'Campos Nome, Data_de_Criacao e IDPaciente (dono) são obrigatórios.' 
+        // Mensagem de erro atualizada
+        error: 'Campos Nome e IDPaciente (dono) são obrigatórios.' 
       });
     }
 
+    // [NOVO] Gera a data de hoje
+    const hoje = new Date().toISOString().split('T')[0];
+
+    // (O restante da sua lógica de autorização permanece)
     const paciente = await db('paciente').where({ email: creatorEmail }).first();
     const pacienteDoTrait = await db('paciente').where({ idpaciente: idpaciente }).first();
     
@@ -44,11 +51,12 @@ router.post('/:idpaciente', verifyToken, async (req, res) => {
       return res.status(404).json({ error: 'Usuário do token não encontrado.' });
     }
 
+    // [MODIFICADO] Objeto usa a data 'hoje'
     const newTraitData = {
       nome,
       descricao,
       intensidade,
-      data_de_criacao,
+      data_de_criacao: hoje, // <-- Alterado
       idpaciente,
     };
 
@@ -57,6 +65,7 @@ router.post('/:idpaciente', verifyToken, async (req, res) => {
     } else if (role === 'cuidador') {
       newTraitData.idcuidador_criador = creatorId;
     } else {
+      // (Esta mensagem de erro está copiada do seu código)
       return res.status(403).json({ error: 'Apenas pacientes ou cuidadores podem criar trackings.' });
     }
 

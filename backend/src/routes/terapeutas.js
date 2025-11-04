@@ -106,7 +106,7 @@ router.get('/por-paciente', verifyToken, async (req, res) => {
 // NOVO: Rota PATCH /api/terapeutas/profile
 // Atualiza o perfil do terapeuta LOGADO
 // ==========================================================
-router.patch('/profile', verifyToken, async (req, res) => {
+router.patch('/update', verifyToken, async (req, res) => {
   const { id: idterapeuta } = req.user;
 
   const { nome, telefone, sexo, data_de_nascimento, email, senha } = req.body;
@@ -187,15 +187,29 @@ router.patch('/profile', verifyToken, async (req, res) => {
   }
 });
 
-router.get('/cuidadores', verifyToken, async (req, res) => {
+// ==========================================================
+// NOVO: Rota DELETE /api/terapeutas/profile
+// Exclui o perfil do terapeuta LOGADO
+// ==========================================================
+router.delete('/delete', verifyToken, async (req, res) => {
+  const { id: idterapeuta } = req.user;
+
   try {
-    const cuidadores = await db('cuidador').select('*');
-    return res.status(200).json(cuidadores);
-  } catch (error) {
-    console.error('Error fetching cuidadores:', error);
-    return res.status(500).json({ 
-      error: 'Ocorreu um erro ao buscar os cuidadores.' 
+    const deletedCount = await db('terapeuta')
+      .where({ idterapeuta: idterapeuta })
+      .del();
+
+    if (deletedCount === 0) {
+      return res.status(404).json({ error: 'Terapeuta não encontrado.' });
+    }
+    
+    return res.status(200).json({ 
+      message: 'Conta do terapeuta excluída com sucesso. Todos os pacientes associados foram desvinculados.' 
     });
+
+  } catch (error) {
+    console.error('Erro ao excluir terapeuta:', error);
+    return res.status(500).json({ error: 'Ocorreu um erro interno ao excluir o perfil.' });
   }
 });
 

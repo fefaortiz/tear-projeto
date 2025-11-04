@@ -59,8 +59,39 @@ CREATE TABLE Traits (
     Descricao TEXT,
     Intensidade INT,
     Data_de_Criacao DATE NOT NULL,
+    
+    -- Coluna "DONO": A qual paciente esta Trait pertence.
     IDPaciente INT NOT NULL,
-    FOREIGN KEY (IDPaciente) REFERENCES Paciente(IDPaciente) ON DELETE CASCADE ON UPDATE CASCADE
+
+    -- -------- CAMPOS "CREATED BY" -------- --
+    -- A coluna deve ser INT, pois referencia IDPaciente (SERIAL = INT)
+    IDPaciente_Criador INT, 
+    
+    -- A coluna deve ser INT, pois referencia IDCuidador (SERIAL = INT)
+    IDCuidador_Criador INT,
+    -- ------------------------------------- --
+
+    -- Chave Estrangeira do "DONO"
+    -- Se o paciente "dono" for deletado, a Trait é deletada junto.
+    FOREIGN KEY (IDPaciente) REFERENCES Paciente(IDPaciente) 
+        ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Chave Estrangeira do "CRIADOR" (Paciente)
+    -- Se o paciente "criador" for deletado, a Trait permanece.
+    FOREIGN KEY (IDPaciente_Criador) REFERENCES Paciente(IDPaciente) 
+        ON DELETE SET NULL ON UPDATE CASCADE, 
+        
+    -- Chave Estrangeira do "CRIADOR" (Cuidador)
+    -- Se o cuidador "criador" for deletado, a Trait permanece.
+    FOREIGN KEY (IDCuidador_Criador) REFERENCES Cuidador(IDCuidador) 
+        ON DELETE SET NULL ON UPDATE CASCADE,
+
+    -- Garante que OU um paciente OU um cuidador criou (nunca ambos, nunca nenhum)
+    CONSTRAINT chk_criador_unico_trait CHECK (
+        (IDPaciente_Criador IS NOT NULL AND IDCuidador_Criador IS NULL) 
+        OR 
+        (IDPaciente_Criador IS NULL AND IDCuidador_Criador IS NOT NULL)
+    )
 );
 
 -- Tabela para rastrear a evolução de uma característica (trait) ao longo do tempo.
@@ -70,5 +101,35 @@ CREATE TABLE Tracking (
     Intensidade INT,
     Dia_de_Registro DATE NOT NULL,
     IDTraits INT NOT NULL,
-    FOREIGN KEY (IDTraits) REFERENCES Traits(IDTraits) ON DELETE CASCADE ON UPDATE CASCADE
+
+    -- CAMPOS "CREATED BY" --
+    -- A coluna deve ser INT, pois ela referencia IDPaciente (que é SERIAL, ou seja, INT)
+    IDPaciente_Criador INT, 
+    
+    -- A coluna deve ser INT, pois ela referencia IDCuidador (que é SERIAL, ou seja, INT)
+    IDCuidador_Criador INT,
+    -- --------------------- --
+
+    -- Esta é a FK principal (o "Dono"), que já faz o CASCADE
+    FOREIGN KEY (IDTraits) REFERENCES Traits(IDTraits) 
+        ON DELETE CASCADE ON UPDATE CASCADE,
+        
+    -- Esta é a FK do "Criador"
+    -- Usamos SET NULL para que, se o Paciente-Criador for deletado,
+    -- o registro de Tracking NÃO seja deletado, apenas perca a referência.
+    FOREIGN KEY (IDPaciente_Criador) REFERENCES Paciente(IDPaciente) 
+        ON DELETE SET NULL ON UPDATE CASCADE, 
+        
+    -- Esta é a FK do "Criador"
+    -- Usamos SET NULL para que, se o Cuidador-Criador for deletado,
+    -- o registro de Tracking NÃO seja deletado, apenas perca a referência.
+    FOREIGN KEY (IDCuidador_Criador) REFERENCES Cuidador(IDCuidador) 
+        ON DELETE SET NULL ON UPDATE CASCADE,
+
+    -- Garante que OU um paciente OU um cuidador criou (nunca ambos, nunca nenhum)
+    CONSTRAINT chk_criador_unico CHECK (
+        (IDPaciente_Criador IS NOT NULL AND IDCuidador_Criador IS NULL) 
+        OR 
+        (IDPaciente_Criador IS NULL AND IDCuidador_Criador IS NOT NULL)
+    )
 );

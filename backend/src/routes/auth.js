@@ -15,20 +15,33 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
     }
 
-    const terapeuta = await db('terapeuta').where({ email }).first();
+    const terapeuta = await db('terapeuta').where({ email: email }).first();
+    const paciente = await db('paciente').where({ email: email }).first();
+    const cuidador = await db('cuidador').where({ email: email }).first();
 
-    if (!terapeuta) {
+    const usuario = terapeuta || paciente || cuidador;
+
+    const idDoUsuario = usuario.idterapeuta || usuario.idpaciente || usuario.idcuidador;
+
+    if (!usuario) {
+      console.log("oi");
       return res.status(401).json({ error: 'Credenciais inválidas.' });
     }
 
-    const isPasswordCorrect = await bcrypt.compare(senha, terapeuta.senha);
+    console.log(senha);
+    console.log(usuario.senha);
+
+    const isPasswordCorrect = await bcrypt.compare(senha, usuario.senha);
+
+    console.log(isPasswordCorrect)
 
     if (!isPasswordCorrect) {
-      return res.status(401).json({ error: 'Credenciais inválidas.' });
+      console.log("tchau");
+      return res.status(401).json({ error: 'Senha inválida.' });
     }
 
     const token = jwt.sign(
-      { id: terapeuta.idterapeuta, email: terapeuta.email },
+      { id: idDoUsuario, email: usuario.email },
       process.env.JWT_SECRET,
       { expiresIn: '8h' }
     );
@@ -49,26 +62,26 @@ router.post('/login', async (req, res) => {
 // ==========================================================
 router.post('/register', async (req, res) => {
   const {
-    Nome,
-    CPF,
-    Telefone,
-    Sexo,
-    Data_de_Nascimento, // Espera formato 'YYYY-MM-DD'
-    Email,
-    Senha,
-    EmailTerapeuta,
-    EmailCuidador
+    nome,
+    cpf,
+    telefone,
+    sexo,
+    data_de_nascimento, // Espera formato 'YYYY-MM-DD'
+    email,
+    senha,
+    emailTerapeuta,
+    emailCuidador
   } = req.body;
 
-  if (!Nome || !Email || !Senha || !CPF || !EmailTerapeuta || !EmailCuidador) {
+  if (!nome || !email || !senha || !cpf || !emailTerapeuta || !emailCuidador) {
     return res.status(400).json({ error: 'Campos obrigatórios não encontrados.' });
   }
 
   try {
     const [novoPaciente] = await db.transaction(async (trx) => {
-      const pacienteExistente = await trx('Paciente')
-        .where({ Email: Email })
-        .orWhere({ CPF: CPF })
+      const pacienteExistente = await trx('paciente')
+        .where({ email: email })
+        .orWhere({ cpf: cpf })
         .first();
 
       if (pacienteExistente) {
@@ -77,40 +90,40 @@ router.post('/register', async (req, res) => {
 
       // 3. Encontrar o ID do Terapeuta pelo email
       let idTerapeuta = null;
-      if (EmailTerapeuta) {
-        const terapeuta = await trx('Terapeuta').where({ Email: EmailTerapeuta }).first();
+      if (emailTerapeuta) {
+        const terapeuta = await trx('terapeuta').where({ email: emailTerapeuta }).first();
         if (terapeuta) {
-          idTerapeuta = terapeuta.IDTerapeuta;
+          idTerapeuta = terapeuta.idterapeuta;
         }
       }
 
       // 4. Encontrar o ID do Cuidador pelo email
       let idCuidador = null;
-      if (EmailCuidador) {
-        const cuidador = await trx('Cuidador').where({ Email: EmailCuidador }).first();
+      if (emailCuidador) {
+        const cuidador = await trx('cuidador').where({ email: emailCuidador }).first();
         if (cuidador) {
-          idCuidador = cuidador.IDCuidador;
+          idCuidador = cuidador.idcuidador;
         }
       }
 
       const salt = await bcrypt.genSalt(10);
-      const senhaHash = await bcrypt.hash(Senha, salt);
+      const senhaHash = await bcrypt.hash(senha, salt);
 
       const pacienteParaInserir = {
-        Nome,
-        CPF,
-        Telefone,
-        Sexo,
-        Data_de_Nascimento,
-        Email,
-        Senha: senhaHash, // Salva a senha hasheada
-        IDTerapeuta: idTerapeuta,
-        IDCuidador: idCuidador,
-        EmailTerapeuta: EmailTerapeuta,
-        EmailCuidador: EmailCuidador   
+        nome,
+        cpf,
+        telefone,
+        sexo,
+        data_de_nascimento,
+        email,
+        senha: senhaHash, // Salva a senha hasheada
+        idterapeuta: idTerapeuta,
+        idcuidador: idCuidador,
+        emailterapeuta: emailTerapeuta,
+        emailcuidador: emailCuidador   
       };
 
-      return trx('Paciente').insert(pacienteParaInserir).returning('*');
+      return trx('paciente').insert(pacienteParaInserir).returning('*');
     });
 
     return res.status(201).json({
@@ -135,27 +148,27 @@ router.post('/register', async (req, res) => {
 // ==========================================================
 router.post('/registerTerapeuta', async (req, res) => {
   const {
-    Nome,
-    CPF,
-    Telefone,
-    CRP_CRM,
-    Sexo,
-    Data_de_Nascimento,
-    Email,
-    Senha
+    nome,
+    cpf,
+    telefone,
+    crp_crm,
+    sexo,
+    data_de_nascimento,
+    email,
+    senha
   } = req.body;
 
-  if (!Nome || !CPF || !CRP_CRM || !Email || !Senha) {
-    return res.status(400).json({ error: 'Campos obrigatórios (Nome, CPF, CRP/CRM, Email, Senha) estão faltando.' });
+  if (!nome || !cpf || !crp_crm || !email || !senha) {
+    return res.status(400).json({ error: 'Campos obrigatórios (Nome, CPF, CRP/CRM, Email, senha) estão faltando.' });
   }
 
   try {
     const resultado = await db.transaction(async (trx) => {
       
-      const terapeutaExistente = await trx('Terapeuta')
-        .where({ Email: Email })
-        .orWhere({ CPF: CPF })
-        .orWhere({ CRP_CRM: CRP_CRM})
+      const terapeutaExistente = await trx('terapeuta')
+        .where({ email: email })
+        .orWhere({ cpf: cpf })
+        .orWhere({ crp_crm: crp_crm})
         .first();
 
       if (terapeutaExistente) {
@@ -163,31 +176,31 @@ router.post('/registerTerapeuta', async (req, res) => {
       }
 
       const salt = await bcrypt.genSalt(10);
-      const senhaHash = await bcrypt.hash(Senha, salt);
+      const senhaHash = await bcrypt.hash(senha, salt);
 
       const terapeutaParaInserir = {
-        Nome,
-        CPF,
-        Telefone,
-        CRP_CRM,
-        Sexo,
-        Data_de_Nascimento,
-        Email,
-        Senha: senhaHash
+        nome,
+        cpf,
+        telefone,
+        crp_crm,
+        sexo,
+        data_de_nascimento,
+        email,
+        senha: senhaHash
       };
 
-      const [novoTerapeuta] = await trx('Terapeuta')
+      const [novoTerapeuta] = await trx('terapeuta')
         .insert(terapeutaParaInserir)
         .returning('*');
 
       // LÓGICA PRINCIPAL: Atualizar pacientes "órfãos"
       // Encontra todos os pacientes que se cadastraram com o email
       // deste terapeuta, mas que ainda não têm o IDTerapeuta preenchido.
-      const pacientesAtualizadosCount = await trx('Paciente')
-        .where({ EmailTerapeuta: novoTerapeuta.Email }) // Encontra pelo Email
-        .andWhere({ IDTerapeuta: null }) // Apenas os que ainda não têm ID
+      const pacientesAtualizadosCount = await trx('paciente')
+        .where({ emailterapeuta: novoTerapeuta.email }) // Encontra pelo email
+        .andWhere({ idterapeuta: null }) // Apenas os que ainda não têm ID
         .update({
-          IDTerapeuta: novoTerapeuta.IDTerapeuta // Preenche o ID
+          idterapeuta: novoTerapeuta.idterapeuta // Preenche o ID
         });
       
       // Retorna os dados para fora da transação
@@ -216,25 +229,25 @@ router.post('/registerTerapeuta', async (req, res) => {
 // ==========================================================
 router.post('/registerCuidador', async (req, res) => {
   const {
-    Nome,
-    CPF,
-    Telefone,
-    Sexo,
-    Data_de_Nascimento,
-    Email,
-    Senha
+    nome,
+    cpf,
+    telefone,
+    sexo,
+    data_de_nascimento,
+    email,
+    senha
   } = req.body;
 
-  if (!Nome || !CPF || !Email || !Senha) {
-    return res.status(400).json({ error: 'Campos obrigatórios (Nome, CPF, Email, Senha) estão faltando.' });
+  if (!nome || !cpf || !email || !senha) {
+    return res.status(400).json({ error: 'Campos obrigatórios (Nome, CPF, Email, senha) estão faltando.' });
   }
 
   try {
     const resultado = await db.transaction(async (trx) => {
       
-      const cuidadorExistente = await trx('Cuidador')
-        .where({ Email: Email })
-        .orWhere({ CPF: CPF })
+      const cuidadorExistente = await trx('cuidador')
+        .where({ email: email })
+        .orWhere({ cpf: cpf })
         .first();
 
       if (cuidadorExistente) {
@@ -242,31 +255,30 @@ router.post('/registerCuidador', async (req, res) => {
       }
 
       const salt = await bcrypt.genSalt(10);
-      const senhaHash = await bcrypt.hash(Senha, salt);
+      const senhaHash = await bcrypt.hash(senha, salt);
 
       const cuidadorParaInserir = {
-        Nome,
-        CPF,
-        Telefone,
-        CRP_CRM,
-        Sexo,
-        Data_de_Nascimento,
-        Email,
-        Senha: senhaHash
+        nome,
+        cpf,
+        telefone,
+        sexo,
+        data_de_nascimento,
+        email,
+        senha: senhaHash
       };
 
-      const [novoCuidador] = await trx('Cuidador')
+      const [novoCuidador] = await trx('cuidador')
         .insert(cuidadorParaInserir)
         .returning('*');
 
       // LÓGICA PRINCIPAL: Atualizar pacientes "órfãos"
       // Encontra todos os pacientes que se cadastraram com o email
       // deste Cuidador, mas que ainda não têm o IDCuidador preenchido.
-      const pacientesAtualizadosCount = await trx('Paciente')
-        .where({ EmailCuidador: novoCuidador.Email }) // Encontra pelo Email
-        .andWhere({ IDCuidador: null }) // Apenas os que ainda não têm ID
+      const pacientesAtualizadosCount = await trx('paciente')
+        .where({ emailcuidador: novoCuidador.email }) // Encontra pelo email
+        .andWhere({ idcuidador: null }) // Apenas os que ainda não têm ID
         .update({
-          IDCuidador: novoCuidador.IDCuidador // Preenche o ID
+          idcuidador: novoCuidador.idcuidador // Preenche o ID
         });
       
       // Retorna os dados para fora da transação

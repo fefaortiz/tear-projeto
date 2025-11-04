@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
 });
 
 // ==========================================================
-// ## Rota de Cadastro de Visitante ##
+// ## Rota de Cadastro de Paciente ##
 // ==========================================================
 router.post('/register', async (req, res) => {
   const {

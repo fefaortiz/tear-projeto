@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const verifyToken = require('../middleware/authMiddleware');
 
 // GET route to fetch all therapists
-// O caminho é '/', pois o prefixo /api/terapeutas será definido no server.js
+// O caminho é '/', pois o prefixo /api/cuidadores será definido no server.js
 router.get('/', verifyToken, async (req, res) => {
   try {
     const cuidadores = await db('cuidador').select('*');

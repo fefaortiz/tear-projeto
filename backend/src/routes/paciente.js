@@ -4,35 +4,35 @@ const db = require('../database/connection');
 const bcrypt = require('bcryptjs');
 const verifyToken = require('../middleware/authMiddleware');
 
-// GET route to fetch all therapists
-// O caminho é '/', pois o prefixo /api/terapeutas será definido no server.js
+// GET route to fetch all pacientes
+// O caminho é '/', pois o prefixo /api/paciente será definido no server.js
 router.get('/', verifyToken, async (req, res) => {
   try {
-    const terapeutas = await db('terapeuta').select('*');
-    return res.status(200).json(terapeutas);
+    const pacientes = await db('paciente').select('*');
+    return res.status(200).json(pacientes);
   } catch (error) {
-    console.error('Error fetching terapeutas:', error);
+    console.error('Error fetching pacientes:', error);
     return res.status(500).json({ 
-      error: 'Ocorreu um erro ao buscar os terapeutas.' 
+      error: 'Ocorreu um erro ao buscar os pacientes.' 
     });
   }
 });
 
 // ==========================================================
-// NOVO: Rota 2 (GET /api/terapeutas/lookup)
-// Busca um terapeuta por ID, CPF ou Email
+// NOVO: Rota 2 (GET /api/pacientes/lookup)
+// Busca um paciente por ID, CPF ou Email
 // ==========================================================
 router.get('/lookup', verifyToken, async (req, res) => {
   try {
     // 1. Pega os parâmetros da URL (ex: /lookup?cpf=123)
     const { id, cpf, email } = req.query;
 
-    let terapeuta;
-    const query = db('terapeuta');
+    let paciente;
+    const query = db('paciente');
 
-    // (Presumindo colunas minúsculas: 'idterapeuta', 'cpf', 'email')
+    // (Presumindo colunas minúsculas: 'idpaciente', 'cpf', 'email')
     if (id) {
-      query.where({ idterapeuta: id });
+      query.where({ idpaciente: id });
     } else if (cpf) {
       query.where({ cpf: cpf });
     } else if (email) {
@@ -43,71 +43,112 @@ router.get('/lookup', verifyToken, async (req, res) => {
       });
     }
 
-    terapeuta = await query.first();
+    paciente = await query.first();
 
-    if (!terapeuta) {
-      return res.status(404).json({ error: 'Terapeuta não encontrado.' });
+    if (!paciente) {
+      return res.status(404).json({ error: 'Paciente não encontrado.' });
     }
 
-    return res.status(200).json(terapeuta);
+    return res.status(200).json(paciente);
 
   } catch (error) {
-    console.error('Erro ao buscar terapeuta:', error);
+    console.error('Erro ao buscar paciente:', error);
     return res.status(500).json({ error: 'Ocorreu um erro interno.' });
   }
 });
 
 // ==========================================================
-// NOVO: Rota 3 (GET /api/terapeutas/por-paciente)
-// Busca o terapeuta vinculado a um paciente
+// Rota 3 (GET /api/pacientes/por-terapeuta)
+// Busca os pacientes vinculados a um terapeuta
 // ==========================================================
-router.get('/por-paciente', verifyToken, async (req, res) => {
+router.get('/por-terapeuta', verifyToken, async (req, res) => {
   try {
-    // 1. Pega os parâmetros de busca do paciente
-    const { id_paciente, email_paciente, cpf_paciente } = req.query;
+    const { id_terapeuta, email_terapeuta, cpf_terapeuta } = req.query;
 
-    if (!id_paciente && !email_paciente && !cpf_paciente) {
+    if (!id_terapeuta && !email_terapeuta && !cpf_terapeuta) {
       return res.status(400).json({ 
-        error: 'Parâmetro de busca (id_paciente ou email_paciente ou cpf_paciente) é obrigatório.' 
+        error: 'Parâmetro de busca (id_terapeuta, email_terapeuta ou cpf_terapeuta) é obrigatório.' 
+      });
+    }
+
+    // 2. Esta é a forma eficiente: Usamos um JOIN    
+    // "SELECT paciente.* FROM paciente
+    //  JOIN terapeuta ON paciente.idterapeuta = terapeuta.idterapeuta
+    //  WHERE terapeuta.idterapeuta = ? OR terapeuta.email = ? OR terapeuta.cpf = ?"
+    
+    const query = db('paciente') // Começamos selecionando da tabela 'paciente'
+      .join('terapeuta', 'paciente.idterapeuta', '=', 'terapeuta.idterapeuta')
+      .select('paciente.*'); // Queremos os dados dos pacientes
+
+    // 3. Aplicamos os filtros baseados nos dados do TERAPEUTA
+    if (id_terapeuta) {
+      query.where('terapeuta.idterapeuta', id_terapeuta);
+    } else if (email_terapeuta) {
+      query.where('terapeuta.email', email_terapeuta);
+    } else if (cpf_terapeuta) {
+      query.where('terapeuta.cpf', cpf_terapeuta);
+    }
+
+    const pacientes = await query;
+
+    return res.status(200).json(pacientes);
+
+  } catch (error) {
+    // Atualizamos a mensagem de erro para refletir a ação correta
+    console.error('Erro ao buscar pacientes por terapeuta:', error);
+    return res.status(500).json({ error: 'Ocorreu um erro interno.' });
+  }
+});
+
+// ==========================================================
+// CORRIGIDO: Rota 3 (GET /api/pacientes/por-cuidador)
+// Busca os pacientes vinculados a um cuidador
+// ==========================================================
+router.get('/por-cuidador', verifyToken, async (req, res) => {
+  try {
+    const { id_cuidador, email_cuidador, cpf_cuidador } = req.query;
+
+    if (!id_cuidador && !email_cuidador && !cpf_cuidador) {
+      return res.status(400).json({ 
+        error: 'Parâmetro de busca (id_cuidador, email_cuidador ou cpf_cuidador) é obrigatório.' 
       });
     }
 
     // 2. Esta é a forma eficiente: Usamos um JOIN
-    // "SELECT terapeuta.* FROM terapeuta
-    //  JOIN paciente ON terapeuta.idterapeuta = paciente.idterapeuta
-    //  WHERE paciente.idpaciente = ? OR paciente.email = ?"
-    const query = db('terapeuta')
-      .join('paciente', 'terapeuta.idterapeuta', '=', 'paciente.idterapeuta')
-      .select('terapeuta.*');
+    // "SELECT paciente.* FROM paciente
+    //  JOIN cuidador ON paciente.idcuidador = cuidador.idcuidador
+    //  WHERE cuidador.idcuidador = ? OR cuidador.email = ? OR cuidador.cpf = ?"
+    
+    const query = db('paciente') // Começamos selecionando da tabela 'paciente'
+      .join('cuidador', 'paciente.idcuidador', '=', 'cuidador.idcuidador')
+      .select('paciente.*'); // Queremos os dados dos pacientes
 
-    if (id_paciente) {
-      query.where('paciente.idpaciente', id_paciente);
-    } else if (email_paciente) {
-      query.where('paciente.email', email_paciente);
-    } else if (cpf_paciente) {
-      query.where('paciente.cpf', cpf_paciente);
+    // 3. Aplicamos os filtros baseados nos dados do TERAPEUTA
+    if (id_cuidador) {
+      query.where('cuidador.idcuidador', id_cuidador);
+    } else if (email_cuidador) {
+      query.where('cuidador.email', email_cuidador);
+    } else if (cpf_cuidador) {
+      query.where('cuidador.cpf', cpf_cuidador);
     }
 
-    const terapeuta = await query.first();
+    const pacientes = await query;
 
-    if (!terapeuta) {
-      return res.status(404).json({ error: 'Terapeuta não encontrado para este paciente.' });
-    }
-
-    return res.status(200).json(terapeuta);
+    return res.status(200).json(pacientes);
 
   } catch (error) {
-    console.error('Erro ao buscar terapeuta por paciente:', error);
+    // Atualizamos a mensagem de erro para refletir a ação correta
+    console.error('Erro ao buscar pacientes por cuidador:', error);
     return res.status(500).json({ error: 'Ocorreu um erro interno.' });
   }
 });
 
 // ==========================================================
-// NOVO: Rota PATCH /api/terapeutas/profile
-// Atualiza o perfil do terapeuta LOGADO
+// NOVO: Rota PATCH /api/pacientes/profile
+// Atualiza o perfil do paciente LOGADO
 // ==========================================================
 router.patch('/profile', verifyToken, async (req, res) => {
-  const { id: idterapeuta } = req.user;
+  const { id: idpaciente } = req.user;
 
   const { nome, telefone, sexo, data_de_nascimento, email, senha } = req.body;
 
@@ -138,48 +179,39 @@ router.patch('/profile', verifyToken, async (req, res) => {
   }
 
   try {
-    const [updatedTerapeuta] = await db.transaction(async (trx) => {
+    const [updatedPaciente] = await db.transaction(async (trx) => {
       // Passo A: Precisamos do email *antigo* antes de atualizar
-      const terapeutaAtual = await trx('terapeuta')
-        .where({ idterapeuta })
+      const pacienteAtual = await trx('paciente')
+        .where({ idpaciente })
         .first();
 
-      if (!terapeutaAtual) {
-        throw new Error('Terapeuta não encontrado');
+      if (!pacienteAtual) {
+        throw new Error('Paciente não encontrado');
       }
 
-      // Passo B: Atualiza a tabela 'terapeuta'
-      const [terapeuta] = await trx('terapeuta')
-        .where({ idterapeuta })
+      // Passo B: Atualiza a tabela 'paciente'
+      const [paciente] = await trx('paciente')
+        .where({ idpaciente })
         .update(updateData)
-        .returning('*'); // Retorna o objeto completo do terapeuta atualizado
+        .returning('*'); // Retorna o objeto completo do paciente atualizado
 
-      // Passo C: Lógica especial para o EMAIL
-      // Se o email foi atualizado (e é diferente do antigo),
-      // devemos propagar essa mudança para a tabela 'paciente'.
-      if (email && email !== terapeutaAtual.email) {
-        await trx('paciente')
-          .where({ emailterapeuta: terapeutaAtual.email }) // Encontra pacientes com o email antigo
-          .update({ emailterapeuta: email }); // Atualiza para o email novo
-      }
-
-      return [terapeuta]; // Finaliza e retorna o terapeuta
+      return [paciente]; // Finaliza e retorna o paciente
     });
 
     res.status(200).json({
       message: "Perfil atualizado com sucesso.",
-      terapeuta: updatedTerapeuta
+      paciente: updatedPaciente
     });
 
   } catch (error) {
-    console.error('Erro ao atualizar terapeuta:', error);
+    console.error('Erro ao atualizar paciente:', error);
     
     // Erro comum: o novo email já existe no banco
     if (error.code === '23505') {
       return res.status(409).json({ error: 'O email fornecido já está em uso.' });
     }
 
-    if (error.message === 'Terapeuta não encontrado') {
+    if (error.message === 'Paciente não encontrado') {
         return res.status(404).json({ error: error.message });
     }
 
@@ -187,14 +219,48 @@ router.patch('/profile', verifyToken, async (req, res) => {
   }
 });
 
-router.get('/cuidadores', verifyToken, async (req, res) => {
+// ==========================================================
+// NOVO: Rota DELETE /api/pacientes/:idpaciente
+// Deleta um paciente específico pelo ID
+// ==========================================================
+router.delete('/:idpaciente', verifyToken, async (req, res) => {
   try {
-    const cuidadores = await db('cuidador').select('*');
-    return res.status(200).json(cuidadores);
+    // 1. Pega o ID dos parâmetros da rota (ex: /api/pacientes/123)
+    const { idpaciente } = req.params;
+
+    // 2. Executa a deleção no banco de dados
+    // O .delete() retorna o número de linhas afetadas
+    const deletedCount = await db('paciente')
+      .where({ idpaciente: idpaciente })
+      .delete();
+
+    // 3. Verifica se o paciente foi encontrado e deletado
+    if (deletedCount === 0) {
+      // Se nenhuma linha foi afetada, o paciente com esse ID não existe
+      return res.status(404).json({ error: 'Paciente não encontrado.' });
+    }
+
+    // 4. Retorna sucesso
+    // (O status 200 com mensagem é bom, ou 204 No Content sem corpo)
+    return res.status(200).json({ 
+      message: 'Paciente deletado com sucesso.' 
+    });
+
   } catch (error) {
-    console.error('Error fetching cuidadores:', error);
+    console.error('Erro ao deletar paciente:', error);
+
+    // 5. [IMPORTANTE] Tratar erros de chave estrangeira (Foreign Key)
+    // Se o paciente estiver vinculado a outras tabelas (ex: sessões),
+    // o banco de dados pode impedir a deleção.
+    // O código '23503' é padrão do PostgreSQL para "foreign_key_violation".
+    if (error.code === '23503') {
+      return res.status(409).json({ // 409 Conflict
+        error: 'Este paciente não pode ser deletado pois está associado a outros registros.' 
+      });
+    }
+
     return res.status(500).json({ 
-      error: 'Ocorreu um erro ao buscar os cuidadores.' 
+      error: 'Ocorreu um erro interno ao tentar deletar o paciente.' 
     });
   }
 });

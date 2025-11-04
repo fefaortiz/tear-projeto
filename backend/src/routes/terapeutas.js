@@ -187,4 +187,16 @@ router.patch('/profile', verifyToken, async (req, res) => {
   }
 });
 
+router.get('/cuidadores', verifyToken, async (req, res) => {
+  try {
+    const cuidadores = await db('cuidador').select('*');
+    return res.status(200).json(cuidadores);
+  } catch (error) {
+    console.error('Error fetching cuidadores:', error);
+    return res.status(500).json({ 
+      error: 'Ocorreu um erro ao buscar os cuidadores.' 
+    });
+  }
+});
+
 module.exports = router;

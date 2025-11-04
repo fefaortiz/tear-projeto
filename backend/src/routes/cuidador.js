@@ -187,14 +187,48 @@ router.patch('/profile', verifyToken, async (req, res) => {
   }
 });
 
-router.get('/cuidadores', verifyToken, async (req, res) => {
+// ==========================================================
+// NOVO: Rota DELETE /api/cuidadores/:idcuidador
+// Deleta um cuidador específico pelo ID
+// ==========================================================
+router.delete('/:idcuidador', verifyToken, async (req, res) => {
   try {
-    const cuidadores = await db('cuidador').select('*');
-    return res.status(200).json(cuidadores);
+    // 1. Pega o ID dos parâmetros da rota (ex: /api/cuidadores/123)
+    const { idcuidador } = req.params;
+
+    // 2. Executa a deleção no banco de dados
+    // O .delete() retorna o número de linhas afetadas
+    const deletedCount = await db('cuidador')
+      .where({ idcuidador: idcuidador })
+      .delete();
+
+    // 3. Verifica se o cuidador foi encontrado e deletado
+    if (deletedCount === 0) {
+      // Se nenhuma linha foi afetada, o cuidador com esse ID não existe
+      return res.status(404).json({ error: 'Cuidador não encontrado.' });
+    }
+
+    // 4. Retorna sucesso
+    // (O status 200 com mensagem é bom, ou 204 No Content sem corpo)
+    return res.status(200).json({ 
+      message: 'Cuidador deletado com sucesso.' 
+    });
+
   } catch (error) {
-    console.error('Error fetching cuidadores:', error);
+    console.error('Erro ao deletar cuidador:', error);
+
+    // 5. [IMPORTANTE] Tratar erros de chave estrangeira (Foreign Key)
+    // Se o cuidador estiver vinculado a outras tabelas (ex: sessões),
+    // o banco de dados pode impedir a deleção.
+    // O código '23503' é padrão do PostgreSQL para "foreign_key_violation".
+    if (error.code === '23503') {
+      return res.status(409).json({ // 409 Conflict
+        error: 'Este cuidador não pode ser deletado pois está associado a outros registros.' 
+      });
+    }
+
     return res.status(500).json({ 
-      error: 'Ocorreu um erro ao buscar os cuidadores.' 
+      error: 'Ocorreu um erro interno ao tentar deletar o cuidador.' 
     });
   }
 });

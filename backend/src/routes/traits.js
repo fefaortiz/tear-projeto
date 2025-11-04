@@ -7,48 +7,65 @@ const verifyToken = require('../middleware/authMiddleware');
 // ==========================================================
 // POST /api/traits (Criar nova Trait)
 // ==========================================================
-router.post('/', verifyToken, async (req, res) => {
+router.post('/:idpaciente', verifyToken, async (req, res) => {
   try {
-    // 1. Pega os dados do corpo da requisição
-    const { Nome, Descricao, Intensidade, Data_de_Criacao, IDPaciente } = req.body;
+    const { idpaciente } = req.params;
 
-    // 2. Pega os dados do usuário LOGADO (o "Criador")
-    const { id: creatorId, role: creatorRole } = req.user;
+    const { nome, descricao, intensidade, data_de_criacao } = req.body;
 
-    // 3. Validação básica
-    if (!Nome || !Data_de_Criacao || !IDPaciente) {
+    const { id: creatorId, email: creatorEmail } = req.user;
+
+    let role = null;
+
+    if (!nome || !data_de_criacao || !idpaciente) {
       return res.status(400).json({ 
         error: 'Campos Nome, Data_de_Criacao e IDPaciente (dono) são obrigatórios.' 
       });
     }
 
-    // 4. Prepara o objeto para inserção
-    const newTraitData = {
-      Nome,
-      Descricao,
-      Intensidade,
-      Data_de_Criacao,
-      IDPaciente, // O "dono" da Trait (para quem ela se aplica)
-    };
-
-    // 5. Adiciona o "Criador" com base no role do usuário logado
-    if (creatorRole === 'paciente') {
-      newTraitData.IDPaciente_Criador = creatorId;
-    } else if (creatorRole === 'cuidador') {
-      newTraitData.IDCuidador_Criador = creatorId;
+    const paciente = await db('paciente').where({ email: creatorEmail }).first();
+    const pacienteDoTrait = await db('paciente').where({ idpaciente: idpaciente }).first();
+    
+    if (paciente) {
+      role = 'paciente';
     } else {
-      // Se for um "terapeuta" ou outro role, ele não pode criar
-      return res.status(403).json({ error: 'Apenas pacientes ou cuidadores podem criar traits.' });
+      const cuidador = await db('cuidador').where({ email: creatorEmail }).first();
+      if (cuidador) {
+          role = 'cuidador';
+          if (pacienteDoTrait.idcuidador !== creatorId) {
+            return res.status(403).json({ error: 'Usuário do token não autorizado a criar um trait pelo paciente.' });
+          }
+      }
     }
 
-    // 6. Insere no banco
+    if (role) {
+      console.log('O papel (role) do usuário é:', role);
+    } else {
+      return res.status(404).json({ error: 'Usuário do token não encontrado.' });
+    }
+
+    const newTraitData = {
+      nome,
+      descricao,
+      intensidade,
+      data_de_criacao,
+      idpaciente,
+    };
+
+    if (role === 'paciente') {
+      newTraitData.idpaciente_criador = creatorId;
+    } else if (role === 'cuidador') {
+      newTraitData.idcuidador_criador = creatorId;
+    } else {
+      return res.status(403).json({ error: 'Apenas pacientes ou cuidadores podem criar trackings.' });
+    }
+
     const [createdTrait] = await db('traits').insert(newTraitData).returning('*');
 
     res.status(201).json(createdTrait);
 
   } catch (error) {
     console.error('Erro ao criar Trait:', error);
-    // Erro de FK (ex: IDPaciente (dono) não existe)
     if (error.code === '23503') {
       return res.status(404).json({ error: 'O paciente (dono) especificado não foi encontrado.' });
     }
@@ -59,11 +76,9 @@ router.post('/', verifyToken, async (req, res) => {
 // ==========================================================
 // GET /api/traits (Buscar Traits por Paciente)
 // ==========================================================
-router.get('/', verifyToken, async (req, res) => {
+router.get('/:idpaciente', verifyToken, async (req, res) => {
   try {
-    // É essencial filtrar por paciente.
-    // NUNCA retorne todas as traits de todos os pacientes.
-    const { idpaciente } = req.query;
+    const { idpaciente } = req.params;
 
     if (!idpaciente) {
       return res.status(400).json({ 
@@ -71,10 +86,9 @@ router.get('/', verifyToken, async (req, res) => {
       });
     }
 
-    // Busca todas as traits que pertencem (IDPaciente) ao paciente informado
     const traits = await db('traits')
-      .where({ IDPaciente: idpaciente })
-      .orderBy('Data_de_Criacao', 'desc');
+      .where({ idpaciente: idpaciente })
+      .orderBy('data_de_criacao', 'desc');
 
     res.status(200).json(traits);
 
@@ -90,20 +104,20 @@ router.get('/', verifyToken, async (req, res) => {
 router.put('/:id', verifyToken, async (req, res) => {
   try {
     const { id: idtrait } = req.params;
-    // Apenas alguns campos devem ser atualizáveis
-    const { Nome, Descricao, Intensidade } = req.body;
+
+    const { nome, descricao, intensidade } = req.body;
 
     const updateData = {};
-    if (Nome !== undefined) updateData.Nome = Nome;
-    if (Descricao !== undefined) updateData.Descricao = Descricao;
-    if (Intensidade !== undefined) updateData.Intensidade = Intensidade;
+    if (nome !== undefined) updateData.nome = nome;
+    if (descricao !== undefined) updateData.descricao = descricao;
+    if (intensidade !== undefined) updateData.intensidade = intensidade;
 
     if (Object.keys(updateData).length === 0) {
       return res.status(400).json({ error: 'Nenhum campo para atualizar foi fornecido.' });
     }
 
     const [updatedTrait] = await db('traits')
-      .where({ IDTraits: idtrait })
+      .where({ idtraits: idtrait })
       .update(updateData)
       .returning('*');
 
@@ -127,7 +141,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
     const { id: idtrait } = req.params;
 
     const deletedCount = await db('traits')
-      .where({ IDTraits: idtrait })
+      .where({ idtraits: idtrait })
       .delete();
 
     if (deletedCount === 0) {

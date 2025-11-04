@@ -1,23 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/connection');
-// Precisamos do middleware para saber QUEM está criando o Tracking
 const verifyToken = require('../middleware/authMiddleware');
 
 // ==========================================================
-// POST /api/tracking (Criar novo Tracking)
+// POST /api/tracking (Criar novo Tracking) - LÓGICA DE EMAIL
 // ==========================================================
 router.post('/', verifyToken, async (req, res) => {
   try {
     // 1. Pega os dados do corpo da requisição
-    // O IDTraits é a "Trait" pai da qual este tracking faz parte.
-    const { Nome, Intensidade, Dia_de_Registro, IDTraits } = req.body;
+    const { nome, intensidade, dia_de_registro, idtraits } = req.body;
 
     // 2. Pega os dados do usuário LOGADO (o "Criador")
-    const { id: creatorId, role: creatorRole } = req.user;
+    const { id: creatorId, email: creatorEmail } = req.user;
 
     // 3. Validação básica
-    if (!IDTraits || !Dia_de_Registro) {
+    if (!idtraits || !dia_de_registro) {
       return res.status(400).json({ 
         error: 'Campos IDTraits (a qual trait pertence) e Dia_de_Registro são obrigatórios.' 
       });
@@ -25,19 +23,33 @@ router.post('/', verifyToken, async (req, res) => {
 
     // 4. Prepara o objeto para inserção
     const newTrackingData = {
-      Nome,
-      Intensidade,
-      Dia_de_Registro,
-      IDTraits, // O "pai" deste tracking
+      nome,
+      intensidade,
+      dia_de_registro,
+      idtraits, // O "pai" deste tracking
     };
 
-    // 5. Adiciona o "Criador" com base no role do usuário logado
-    if (creatorRole === 'paciente') {
-      newTrackingData.IDPaciente_Criador = creatorId;
-    } else if (creatorRole === 'cuidador') {
-      newTrackingData.IDCuidador_Criador = creatorId;
+    // 5. [LÓGICA MODIFICADA]
+    // Adiciona o "Criador" com base no EMAIL do usuário logado
+    
+    // Tenta encontrar o email na tabela de pacientes
+    const paciente = await db('paciente').where({ Email: creatorEmail }).first();
+
+    if (paciente) {
+        // O criador é um Paciente
+        newTrackingData.IDPaciente_Criador = creatorId;
+
     } else {
-      return res.status(403).json({ error: 'Apenas pacientes ou cuidadores podem criar trackings.' });
+        // Se não é paciente, verifica se é um cuidador
+        const cuidador = await db('cuidador').where({ Email: creatorEmail }).first();
+        
+        if (cuidador) {
+            newTrackingData.IDCuidador_Criador = creatorId;
+        } else {
+            // O Email do token não corresponde a nenhum paciente ou cuidador
+            // (Também pode ser um Terapeuta, mas ele não pode criar tracking)
+            return res.status(401).json({ error: 'Usuário (criador) inválido ou não autorizado a criar.' });
+        }
     }
 
     // 6. Insere no banco
@@ -55,12 +67,12 @@ router.post('/', verifyToken, async (req, res) => {
   }
 });
 
+
 // ==========================================================
 // GET /api/tracking (Buscar Trackings por Trait)
 // ==========================================================
 router.get('/', verifyToken, async (req, res) => {
   try {
-    // É essencial filtrar pela Trait (IDTraits).
     const { idtrait } = req.query; // ex: /api/tracking?idtrait=5
 
     if (!idtrait) {
@@ -69,8 +81,6 @@ router.get('/', verifyToken, async (req, res) => {
       });
     }
 
-    // Busca todos os trackings que pertencem (IDTraits) à Trait informada
-    // Ordena por data para mostrar a evolução
     const trackings = await db('tracking')
       .where({ IDTraits: idtrait })
       .orderBy('Dia_de_Registro', 'asc'); // 'asc' (ascendente) para ver a linha do tempo
@@ -89,21 +99,19 @@ router.get('/', verifyToken, async (req, res) => {
 router.put('/:id', verifyToken, async (req, res) => {
   try {
     const { id: idtracking } = req.params;
-    
-    // Campos que podem ser atualizados em um registro de tracking
-    const { Nome, Intensidade, Dia_de_Registro } = req.body;
+    const { nome, intensidade, dia_de_registro } = req.body;
 
     const updateData = {};
-    if (Nome !== undefined) updateData.Nome = Nome;
-    if (Intensidade !== undefined) updateData.Intensidade = Intensidade;
-    if (Dia_de_Registro !== undefined) updateData.Dia_de_Registro = Dia_de_Registro;
+    if (nome !== undefined) updateData.nome = nome;
+    if (intensidade !== undefined) updateData.intensidade = intensidade;
+    if (dia_de_registro !== undefined) updateData.dia_de_registro = dia_de_registro;
 
     if (Object.keys(updateData).length === 0) {
       return res.status(400).json({ error: 'Nenhum campo para atualizar foi fornecido.' });
     }
 
     const [updatedTracking] = await db('tracking')
-      .where({ IDTracking: idtracking })
+      .where({ idtracking: idtracking })
       .update(updateData)
       .returning('*');
 
@@ -134,8 +142,6 @@ router.delete('/:id', verifyToken, async (req, res) => {
       return res.status(404).json({ error: 'Registro de Tracking não encontrado.' });
     }
 
-    // Esta tabela não tem 'ON DELETE CASCADE' para outras,
-    // então a deleção é simples.
     res.status(200).json({ message: 'Registro de Tracking deletado com sucesso.' });
 
   } catch (error) {

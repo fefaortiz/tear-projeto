@@ -36,6 +36,8 @@ CREATE TABLE Paciente (
     Senha VARCHAR(255) NOT NULL,
     IDTerapeuta INT,
     IDCuidador INT,
+    EmailTerapeuta VARCHAR(255) NOT NULL,
+    EmailCuidador VARCHAR(255) NOT NULL,
     FOREIGN KEY (IDTerapeuta) REFERENCES Terapeuta(IDTerapeuta) ON DELETE SET NULL ON UPDATE CASCADE,
     FOREIGN KEY (IDCuidador) REFERENCES Cuidador(IDCuidador) ON DELETE SET NULL ON UPDATE CASCADE
 );

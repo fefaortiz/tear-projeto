@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth.js');
+const cuidadorRoutes = require('./routes/cuidador.js');
+const pacienteRoutes = require('./routes/paciente.js');
 const terapeutaRoutes = require('./routes/terapeutas.js');
 const trackingRoutes = require('./routes/tracking.js');
 const traitsRoutes = require('./routes/traits.js');
@@ -25,6 +27,12 @@ app.use('/api/auth', authRoutes);
 
 // Todas as rotas em terapeuta.js começarão com /api/terapeutas
 app.use('/api/terapeutas', terapeutaRoutes); 
+
+// Todas as rotas em cuidador.js começarão com /api/cuidadores
+app.use('/api/cuidadores', cuidadorRoutes); 
+
+// Todas as rotas em paciente.js começarão com /api/pacientes
+app.use('/api/pacientes', pacienteRoutes); 
 
 // Todas as rotas em tracking.js começarão com /api/tracking
 app.use('/api/tracking', trackingRoutes); 

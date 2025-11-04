@@ -17,7 +17,23 @@ router.post('/', verifyToken, async (req, res) => {
     // 3. Validação básica
     if (!idtraits || !dia_de_registro) {
       return res.status(400).json({ 
-        error: 'Campos IDTraits (a qual trait pertence) e Dia_de_Registro são obrigatórios.' 
+        error: 'Campos idtraits (a qual trait pertence) e dia_de_registro são obrigatórios.' 
+      });
+    }
+
+    // 3.1
+    // Verifica se já existe um tracking para esta trait neste dia
+    const existingTracking = await db('tracking')
+      .where({
+        idtraits: idtraits,
+        dia_de_registro: dia_de_registro
+      })
+      .first(); // .first() é eficiente, só precisamos saber se 1 existe
+
+    if (existingTracking) {
+      // 409 Conflict é o status correto para "recurso já existe"
+      return res.status(409).json({ 
+        error: 'Já existe um registro de tracking para esta característica neste dia.' 
       });
     }
 

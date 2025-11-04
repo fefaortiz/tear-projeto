@@ -8,31 +8,31 @@ const verifyToken = require('../middleware/authMiddleware');
 // O caminho é '/', pois o prefixo /api/terapeutas será definido no server.js
 router.get('/', verifyToken, async (req, res) => {
   try {
-    const terapeutas = await db('terapeuta').select('*');
-    return res.status(200).json(terapeutas);
+    const cuidadores = await db('cuidador').select('*');
+    return res.status(200).json(cuidadores);
   } catch (error) {
-    console.error('Error fetching terapeutas:', error);
+    console.error('Error fetching cuidadores:', error);
     return res.status(500).json({ 
-      error: 'Ocorreu um erro ao buscar os terapeutas.' 
+      error: 'Ocorreu um erro ao buscar os cuidadores.' 
     });
   }
 });
 
 // ==========================================================
-// NOVO: Rota 2 (GET /api/terapeutas/lookup)
-// Busca um terapeuta por ID, CPF ou Email
+// NOVO: Rota 2 (GET /api/cuidadores/lookup)
+// Busca um cuidador por ID, CPF ou Email
 // ==========================================================
 router.get('/lookup', verifyToken, async (req, res) => {
   try {
     // 1. Pega os parâmetros da URL (ex: /lookup?cpf=123)
     const { id, cpf, email } = req.query;
 
-    let terapeuta;
-    const query = db('terapeuta');
+    let cuidador;
+    const query = db('cuidador');
 
-    // (Presumindo colunas minúsculas: 'idterapeuta', 'cpf', 'email')
+    // (Presumindo colunas minúsculas: 'idcuidador', 'cpf', 'email')
     if (id) {
-      query.where({ idterapeuta: id });
+      query.where({ idcuidador: id });
     } else if (cpf) {
       query.where({ cpf: cpf });
     } else if (email) {
@@ -43,23 +43,23 @@ router.get('/lookup', verifyToken, async (req, res) => {
       });
     }
 
-    terapeuta = await query.first();
+    cuidador = await query.first();
 
-    if (!terapeuta) {
-      return res.status(404).json({ error: 'Terapeuta não encontrado.' });
+    if (!cuidador) {
+      return res.status(404).json({ error: 'Cuidador não encontrado.' });
     }
 
-    return res.status(200).json(terapeuta);
+    return res.status(200).json(cuidador);
 
   } catch (error) {
-    console.error('Erro ao buscar terapeuta:', error);
+    console.error('Erro ao buscar cuidador:', error);
     return res.status(500).json({ error: 'Ocorreu um erro interno.' });
   }
 });
 
 // ==========================================================
-// NOVO: Rota 3 (GET /api/terapeutas/por-paciente)
-// Busca o terapeuta vinculado a um paciente
+// NOVO: Rota 3 (GET /api/cuidadores/por-paciente)
+// Busca o cuidador vinculado a um paciente
 // ==========================================================
 router.get('/por-paciente', verifyToken, async (req, res) => {
   try {
@@ -73,12 +73,12 @@ router.get('/por-paciente', verifyToken, async (req, res) => {
     }
 
     // 2. Esta é a forma eficiente: Usamos um JOIN
-    // "SELECT terapeuta.* FROM terapeuta
-    //  JOIN paciente ON terapeuta.idterapeuta = paciente.idterapeuta
+    // "SELECT cuidador.* FROM cuidador
+    //  JOIN paciente ON cuidador.idcuidador = paciente.idcuidador
     //  WHERE paciente.idpaciente = ? OR paciente.email = ?"
-    const query = db('terapeuta')
-      .join('paciente', 'terapeuta.idterapeuta', '=', 'paciente.idterapeuta')
-      .select('terapeuta.*');
+    const query = db('cuidador')
+      .join('paciente', 'cuidador.idcuidador', '=', 'paciente.idcuidador')
+      .select('cuidador.*');
 
     if (id_paciente) {
       query.where('paciente.idpaciente', id_paciente);
@@ -88,26 +88,26 @@ router.get('/por-paciente', verifyToken, async (req, res) => {
       query.where('paciente.cpf', cpf_paciente);
     }
 
-    const terapeuta = await query.first();
+    const cuidador = await query.first();
 
-    if (!terapeuta) {
-      return res.status(404).json({ error: 'Terapeuta não encontrado para este paciente.' });
+    if (!cuidador) {
+      return res.status(404).json({ error: 'Cuidador não encontrado para este paciente.' });
     }
 
-    return res.status(200).json(terapeuta);
+    return res.status(200).json(cuidador);
 
   } catch (error) {
-    console.error('Erro ao buscar terapeuta por paciente:', error);
+    console.error('Erro ao buscar cuidador por paciente:', error);
     return res.status(500).json({ error: 'Ocorreu um erro interno.' });
   }
 });
 
 // ==========================================================
-// NOVO: Rota PATCH /api/terapeutas/profile
-// Atualiza o perfil do terapeuta LOGADO
+// NOVO: Rota PATCH /api/cuidadores/profile
+// Atualiza o perfil do cuidador LOGADO
 // ==========================================================
 router.patch('/profile', verifyToken, async (req, res) => {
-  const { id: idterapeuta } = req.user;
+  const { id: idcuidador } = req.user;
 
   const { nome, telefone, sexo, data_de_nascimento, email, senha } = req.body;
 
@@ -138,52 +138,64 @@ router.patch('/profile', verifyToken, async (req, res) => {
   }
 
   try {
-    const [updatedTerapeuta] = await db.transaction(async (trx) => {
+    const [updatedCuidador] = await db.transaction(async (trx) => {
       // Passo A: Precisamos do email *antigo* antes de atualizar
-      const terapeutaAtual = await trx('terapeuta')
-        .where({ idterapeuta })
+      const cuidadorAtual = await trx('cuidador')
+        .where({ idcuidador })
         .first();
 
-      if (!terapeutaAtual) {
-        throw new Error('Terapeuta não encontrado');
+      if (!cuidadorAtual) {
+        throw new Error('Cuidador não encontrado');
       }
 
-      // Passo B: Atualiza a tabela 'terapeuta'
-      const [terapeuta] = await trx('terapeuta')
-        .where({ idterapeuta })
+      // Passo B: Atualiza a tabela 'cuidador'
+      const [cuidador] = await trx('cuidador')
+        .where({ idcuidador })
         .update(updateData)
-        .returning('*'); // Retorna o objeto completo do terapeuta atualizado
+        .returning('*'); // Retorna o objeto completo do cuidador atualizado
 
       // Passo C: Lógica especial para o EMAIL
       // Se o email foi atualizado (e é diferente do antigo),
       // devemos propagar essa mudança para a tabela 'paciente'.
-      if (email && email !== terapeutaAtual.email) {
+      if (email && email !== cuidadorAtual.email) {
         await trx('paciente')
-          .where({ emailterapeuta: terapeutaAtual.email }) // Encontra pacientes com o email antigo
-          .update({ emailterapeuta: email }); // Atualiza para o email novo
+          .where({ emailcuidador: cuidadorAtual.email }) // Encontra pacientes com o email antigo
+          .update({ emailcuidador: email }); // Atualiza para o email novo
       }
 
-      return [terapeuta]; // Finaliza e retorna o terapeuta
+      return [cuidador]; // Finaliza e retorna o terapeuta
     });
 
     res.status(200).json({
       message: "Perfil atualizado com sucesso.",
-      terapeuta: updatedTerapeuta
+      cuidador: updatedCuidador
     });
 
   } catch (error) {
-    console.error('Erro ao atualizar terapeuta:', error);
+    console.error('Erro ao atualizar cuidador:', error);
     
     // Erro comum: o novo email já existe no banco
     if (error.code === '23505') {
       return res.status(409).json({ error: 'O email fornecido já está em uso.' });
     }
 
-    if (error.message === 'Terapeuta não encontrado') {
+    if (error.message === 'Cuidador não encontrado') {
         return res.status(404).json({ error: error.message });
     }
 
     res.status(500).json({ error: 'Ocorreu um erro interno ao atualizar o perfil.' });
+  }
+});
+
+router.get('/cuidadores', verifyToken, async (req, res) => {
+  try {
+    const cuidadores = await db('cuidador').select('*');
+    return res.status(200).json(cuidadores);
+  } catch (error) {
+    console.error('Error fetching cuidadores:', error);
+    return res.status(500).json({ 
+      error: 'Ocorreu um erro ao buscar os cuidadores.' 
+    });
   }
 });
 

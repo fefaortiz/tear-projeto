@@ -1,7 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Login } from './pages/login';
+import { LoginPage } from './pages/login';
 import { RegisterPage } from './pages/register';
 import { InitialPage } from './pages/initial';
+import DatavizPage from './pages/dataviz';
 import { RequireAuth } from './components/RequireAuth';
 import { RegisterSelectPage } from './pages/register-select';
 import { RegisterTherapistPage } from './pages/register-therapist';
@@ -15,7 +16,8 @@ function App() {
       <div className="max-w-screen mx-auto">
         <Routes>
           <Route path="/" element={<LandingPage />} /> 
-          <Route path="/login" element={<Login />} />
+          <Route path="/dataviz" element={<DatavizPage />} /> 
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/register/select" element={<RegisterSelectPage />} />
           <Route path="/register/therapist" element={<RegisterTherapistPage />} />

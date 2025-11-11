@@ -1,0 +1,135 @@
+/* * style.module.css
+ * Estilos para a página de DataViz
+ */
+
+.pageContainer {
+  width: 100%;
+  max-width: 1200px; /* Limita a largura máxima em desktops */
+  margin: 0 auto; /* Centraliza o container */
+  padding: 2rem;
+  font-family: 'Inter', sans-serif; /* Use uma fonte moderna (adicione ao seu index.css) */
+  color: #333;
+  background-color: #f9faff; /* Um fundo levemente azulado/cinza */
+  min-height: 100vh;
+  box-sizing: border-box; /* Garante que o padding não estoure a largura */
+}
+
+/* --- Cabeçalho --- */
+.header {
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 1rem;
+}
+
+.header h1 {
+  color: #2a2a72; /* Um azul escuro */
+  margin: 0;
+  font-size: 2.25rem; /* 36px */
+}
+
+.header p {
+  font-size: 1.125rem; /* 18px */
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+/* --- KPIs (Key Performance Indicators) --- */
+.kpiContainer {
+  display: flex;
+  flex-wrap: wrap; /* Permite quebrar a linha em telas menores */
+  gap: 1.5rem; /* Espaço entre os cards */
+  margin-bottom: 2rem;
+}
+
+.kpiCard {
+  flex: 1; /* Faz com que os cards dividam o espaço */
+  min-width: 250px; /* Largura mínima antes de quebrar */
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza o texto */
+  gap: 0.5rem;
+  border: 1px solid #eee;
+}
+
+.kpiValue {
+  font-size: 2.5rem; /* 40px */
+  font-weight: 700;
+  color: #007BFF; /* Azul de destaque */
+}
+
+.kpiLabel {
+  font-size: 1rem; /* 16px */
+  color: #666;
+  text-align: center;
+}
+
+/* --- Grid dos Gráficos --- */
+.chartsGrid {
+  display: grid;
+  /* Cria duas colunas de tamanho igual */
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem; /* Espaço entre os gráficos */
+}
+
+.chartWrapper {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+}
+
+.chartWrapper h3 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #444;
+  font-size: 1.25rem; /* 20px */
+}
+
+/* --- Estados de Loading/Erro --- */
+.loading,
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.error {
+  color: #D32F2F; /* Vermelho de erro */
+}
+
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+  .pageContainer {
+    padding: 1rem; /* Menos padding em telas menores */
+  }
+
+  .header h1 {
+    font-size: 1.75rem; /* 28px */
+  }
+
+  .header p {
+    font-size: 1rem; /* 16px */
+  }
+
+  .chartsGrid {
+    /* Força uma coluna em telas móveis */
+    grid-template-columns: 1fr;
+  }
+}
+
+.mapNote {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.75rem;
+}

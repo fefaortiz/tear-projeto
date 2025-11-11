@@ -1,18 +1,8 @@
 // src/pages/register-patient/index.tsx
-import React, { useState, useEffect} from 'react';
+import React, { useState} from 'react';
 import { formatCPF, formatPhone } from '../../utils/masking';
 import { useNavigate } from 'react-router-dom'; // Importe useNavigate
-import './style.css'; // Crie este CSS
-
-interface Therapist {
-  IDTerapeuta: number;
-  Nome: string;
-}
-
-interface Caregiver {
-  IDCuidador: number;
-  Nome: string;
-}
+import styles from './style.module.css'; // Crie este CSS
 
 function RegisterPatientPage() {
   const [nome, setNome] = useState('');
@@ -22,52 +12,15 @@ function RegisterPatientPage() {
   const [dataNascimento, setDataNascimento] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [emailTerapeuta, setEmailTerapeuta ] = useState(''); // Email do terapeuta associado
+  const [emailCuidador, setEmailCuidador ] = useState('');
 
-  const [therapists, setTherapists] = useState<Therapist[]>([]); // Lista de terapeutas
-  const [caregivers, setCaregivers] = useState<Caregiver[]>([]); // Lista de cuidadores
-  const [selectedTherapistId, setSelectedTherapistId] = useState<string>(''); // ID do terapeuta selecionado
-  const [selectedCaregiverId, setSelectedCaregiverId] = useState<string>(''); // ID do cuidador selecionado
   const [loading, setLoading] = useState<boolean>(true); // Estado de carregamento (opcional)
   const [error, setError] = useState<string | null>(null); // Estado de erro (opcional)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   
   const navigate = useNavigate(); // Hook para navegação
-
-  useEffect(() => {
-    // Simula a chamada à API para buscar terapeutas e cuidadores
-    // Dentro do useEffect, substitua a simulação por algo assim:
-    const fetchDropdownData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        // Faz as chamadas em paralelo
-        const [therapistResponse, caregiverResponse] = await Promise.all([
-          fetch('http://localhost:3333/therapists'), // Ajuste a URL base se necessário
-          fetch('http://localhost:3333/caregivers')
-        ]);
-
-        if (!therapistResponse.ok || !caregiverResponse.ok) {
-          throw new Error('Falha ao buscar dados dos dropdowns');
-        }
-
-        const therapistsData: Therapist[] = await therapistResponse.json();
-        const caregiversData: Caregiver[] = await caregiverResponse.json();
-
-        setTherapists(therapistsData);
-        setCaregivers(caregiversData);
-
-      } catch (err: any) {
-        console.error("Erro ao buscar dados:", err);
-        setError("Não foi possível carregar terapeutas e cuidadores. Tente recarregar a página.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDropdownData();
-
-  }, []); 
 
   const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCpf(formatCPF(e.target.value));
@@ -82,10 +35,6 @@ const handleSubmit = async (e: React.FormEvent) => {
     setIsSubmitting(true); // Indica que o envio começou
     setSubmitError(null); // Limpa erros anteriores
 
-    // Prepara os dados para envio
-    const therapistId = selectedTherapistId ? parseInt(selectedTherapistId, 10) : null;
-    const caregiverId = selectedCaregiverId ? parseInt(selectedCaregiverId, 10) : null;
-
     const patientData = {
       nome,
       // Envia CPF apenas se houver algum dígito, senão envia null
@@ -96,8 +45,8 @@ const handleSubmit = async (e: React.FormEvent) => {
       dataNascimento: dataNascimento || null, // Garante null se vazio
       email,
       senha, // A senha será hasheada no backend
-      IDTerapeuta: therapistId,
-      IDCuidador: caregiverId,
+      emailTerapeuta,
+      emailCuidador
     };
 
     console.log('Enviando dados do paciente:', patientData); // Para debug
@@ -136,10 +85,9 @@ const handleSubmit = async (e: React.FormEvent) => {
   };
 
 return (
-    <div className="register-container">
+    <div className={styles.registerPatientContainer}>
       <h2>Cadastro de Paciente</h2>
       <form onSubmit={handleSubmit}>
-        {/* Campos existentes... */}
         <div>
           <label htmlFor="nome">Nome Completo:</label>
           <input type="text" id="nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
@@ -174,46 +122,15 @@ return (
             <option value="PrefiroNaoInformar">Prefiro não informar</option>
           </select>
         </div>
+        <div>
+          <label htmlFor="email terapeuta">Email de seu terapeuta:</label>
+          <input type="email" id="emailTerapeuta" value={emailTerapeuta} onChange={(e) => setEmail(e.target.value)}/>
+        </div>
+        <div>
+          <label htmlFor="email responsável">Email de seu responsável:</label>
+          <input type="email" id="emailCuidador" value={emailCuidador} onChange={(e) => setEmail(e.target.value)}/>
+        </div>
 
-        {/* --- NOVOS Dropdowns --- */}
-        {loading && <p>Carregando terapeutas e cuidadores...</p>}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-
-        {!loading && !error && (
-          <>
-            <div>
-              <label htmlFor="terapeuta">Terapeuta Responsável (Opcional):</label>
-              <select
-                id="terapeuta"
-                value={selectedTherapistId}
-                onChange={(e) => setSelectedTherapistId(e.target.value)}
-              >
-                <option value="">Nenhum</option>
-                {therapists.map((therapist) => (
-                  <option key={therapist.IDTerapeuta} value={therapist.IDTerapeuta}>
-                    {therapist.Nome}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="cuidador">Cuidador Associado (Opcional):</label>
-              <select
-                id="cuidador"
-                value={selectedCaregiverId}
-                onChange={(e) => setSelectedCaregiverId(e.target.value)}
-              >
-                <option value="">Nenhum</option>
-                {caregivers.map((caregiver) => (
-                  <option key={caregiver.IDCuidador} value={caregiver.IDCuidador}>
-                    {caregiver.Nome}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </>
-        )}
         {submitError && <p style={{ color: 'red', marginTop: '10px' }}>Erro: {submitError}</p>}
 
         <button type="submit" disabled={loading || isSubmitting}> {/* Desabilita botão */}

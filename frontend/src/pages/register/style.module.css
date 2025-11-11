@@ -14,19 +14,18 @@ body {
   min-height: 100vh;
 }
 
-#root {
-  width: 100%;
-  max-width: 400px;
-}
 
-.form-container {
-  width: 100%;
-  max-width: 400px;
+.registerContainer {
+  min-width: 100%;
   margin: 0 auto;
   background-color: #ffffff;
   padding: 2.5rem;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.registerInputGroup{
+  background-color: red;
 }
 
 .App {
@@ -46,7 +45,6 @@ form {
 form h2 {
   margin-top: 0;
   margin-bottom: 1rem;
-  color: #333;
 }
 
 form div {
@@ -62,13 +60,13 @@ form label {
   color: #555;
 }
 
-.password-input {
+.registerPasswordInput {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.password-input input {
+.registerPasswordInput input {
   width: 100%;
 }
 
@@ -87,7 +85,7 @@ form label {
   justify-content: center;
   color: #555;
   opacity: 0.7;
-  .input-helper {
+  .RegisterinputHelper {
     color: #999;
     font-size: 0.8rem;
     font-weight: normal;
@@ -129,8 +127,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
-.password-input input[type="text"],
-.password-input input[type="password"] {
+.registerPasswordInput input[type="text"],
+.registerPasswordInput input[type="password"] {
   padding-right: 2.5rem;
 }
 
@@ -142,16 +140,6 @@ button {
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-button[type="submit"] {
-  background-color: #007aff; 
-  color: white;
-}
-
-button[type="submit"]:hover {
-  background-color: #0056b3;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .toggle-btn {
@@ -201,3 +189,4 @@ button[type="submit"]:hover {
 .toggle-link a:hover {
   text-decoration: underline;
 }
+

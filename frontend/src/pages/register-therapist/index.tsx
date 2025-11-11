@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import './style.css'; // Usaremos os mesmos estilos
+import styles from './style.module.css'; // Usaremos os mesmos estilos
 
 export function RegisterTherapistPage() {
   const [name, setName] = useState('');
@@ -73,7 +73,7 @@ const formatPhone = (value: string): string => {
     
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
-      const response = await axios.post(`${apiUrl}/register`, {
+      const response = await axios.post(`${apiUrl}/api/auth/registerTerapeuta`, {
         nome: name,
         email: email,
         senha: password,
@@ -110,10 +110,10 @@ const formatPhone = (value: string): string => {
   };
 
   return (
-    <div className="container">
+    <div className={styles.RegisterTherapistcontainer}>
       <form onSubmit={handleSubmit}>
         <h2>Registrar Novo Usuário</h2>
-        <div className="input-group">
+        <div className={styles.inputGroup}>
           <label>Nome:</label>
           <input
             type="text"
@@ -122,7 +122,7 @@ const formatPhone = (value: string): string => {
             required
           />
         </div>
-        <div className="input-group">
+        <div className={styles.inputGroup}>
           <label>E-mail:</label>
           <input
             type="email"
@@ -131,9 +131,9 @@ const formatPhone = (value: string): string => {
             required
           />
         </div>
-        <div className="input-group">
+        <div className={styles.inputGroup}>
             <label>
-              CPF: <span className="input-helper"> (apenas números) </span>
+              CPF: <span className={styles.inpuHelper}> (apenas números) </span>
             </label>
           <input
             type="text"
@@ -143,9 +143,9 @@ const formatPhone = (value: string): string => {
             maxLength={14}
           />
         </div>
-        <div className="input-group">
+        <div className={styles.inputGroup}>
             <label>
-              CRP/CRM: <span className="input-helper"> (apenas números) </span>
+              CRP/CRM: <span className={styles.inputHelper}> (apenas números) </span>
             </label>
           <input
             type="text"
@@ -155,9 +155,9 @@ const formatPhone = (value: string): string => {
             maxLength={8}
           />
         </div>
-        <div className="input-group">
+        <div className={styles.inputGroup}>
           <label>
-              Telefone: <span className="input-helper"> (apenas números) </span>
+              Telefone: <span className={styles.inpuHelper}> (apenas números) </span>
             </label>
           <input
             type="tel"
@@ -166,7 +166,7 @@ const formatPhone = (value: string): string => {
             required
           />
         </div>
-        <div className="input-group">
+        <div className={styles.inputGroup}>
             <label>Sexo:</label>
           <select
             value={sexo}
@@ -178,7 +178,7 @@ const formatPhone = (value: string): string => {
             <option value="Outro">Outro</option>
           </select>
         </div>
-          <div className="input-group">
+          <div className={styles.inputGroup}>
           <label>Data de Nascimento:</label>
           <input
             type="date"
@@ -187,9 +187,9 @@ const formatPhone = (value: string): string => {
             required
           />
         </div>
-        <div className="input-group">
+        <div className={styles.inputGroup}>
           <label>Senha:</label>
-          <div className="password-input">
+          <div className={styles.passwordInput}>
             <input
               type={showPassword ? "text" : "password"}
               value={password}
@@ -199,7 +199,7 @@ const formatPhone = (value: string): string => {
             />
             <button
               type="button"
-              className="password-toggle"
+              className={styles.passwordToggle}
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Esconder senha" : "Mostrar senha"}
             >
@@ -207,9 +207,9 @@ const formatPhone = (value: string): string => {
             </button>
           </div>
         </div>
-        <div className="input-group">
+        <div className={styles.inputGroup}>
           <label>Confirmar Senha:</label>
-          <div className="password-input">
+          <div className={styles.passwordInput}>
             <input
               type={showConfirmPassword ? "text" : "password"}
               value={confirmPassword}
@@ -219,7 +219,7 @@ const formatPhone = (value: string): string => {
             />
             <button
               type="button"
-              className="password-toggle"
+              className={styles.passwordToggle}
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               aria-label={showConfirmPassword ? "Esconder senha" : "Mostrar senha"}
             >
@@ -230,12 +230,12 @@ const formatPhone = (value: string): string => {
         <button type="submit">Registrar</button>
         
         {message && (
-          <p className={isError ? 'feedback-message error' : 'feedback-message success'}>
+          <p className={isError ? styles.feedbackMessageError : styles.FeedbackMessageSuccess}>
               {message}
           </p>
         )}
 
-        <p className="toggle-link">
+        <p className={styles.toggleLink}>
           Já tem uma conta? <Link to="/login">Faça o login</Link>
         </p>
       </form>

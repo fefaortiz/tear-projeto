@@ -1,7 +1,8 @@
 // src/pages/register-caregiver/index.tsx
 import React, { useState } from 'react';
 import { formatCPF, formatPhone } from '../../utils/masking';
-import './style.css'; // Crie este CSS
+import styles from './style.module.css'; // Crie este CSS
+import { useNavigate } from 'react-router-dom'; // Importe useNavigate
 
 function RegisterCaregiverPage() {
 
@@ -12,6 +13,11 @@ function RegisterCaregiverPage() {
   const [dataNascimento, setDataNascimento] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+
+  const navigate = useNavigate(); // Hook para navegação
 
   const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCpf(formatCPF(e.target.value));
@@ -21,22 +27,56 @@ function RegisterCaregiverPage() {
     setTelefone(formatPhone(e.target.value));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    // Prepara os dados para envio
+    const caregiverData = {
       nome,
-      cpf: cpf.replace(/\D/g, ''),
-      telefone: telefone.replace(/\D/g, ''),
-      sexo,
-      dataNascimento,
+      cpf: cpf.replace(/\D/g, ''), // Envia apenas números
+      telefone: telefone.replace(/\D/g, '') || null, // Envia apenas números ou null
+      sexo: sexo || null, // Garante null se não selecionado
+      dataNascimento: dataNascimento || null, // Garante null se vazio
       email,
-      senha,
-    });
-    alert('Cadastro de Cuidador (simulado)');
+      senha, // Backend fará o hash
+    };
+
+    console.log('Enviando dados do cuidador:', caregiverData); // Para debug
+
+    try {
+      const response = await fetch('http://localhost:3333/register/caregiver', { // URL da API
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(caregiverData),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.error || `Erro ${response.status}: ${response.statusText}`);
+      }
+
+      // Sucesso!
+      console.log('Cadastro de Cuidador realizado:', responseData);
+      alert('Cuidador cadastrado com sucesso! ID: ' + responseData.id);
+
+      // Opcional: Redirecionar para login
+      navigate('/login');
+
+    } catch (error: any) {
+      console.error('Erro ao cadastrar cuidador:', error);
+      setSubmitError(error.message || 'Ocorreu um erro desconhecido.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="register-container"> {/* Reutilize ou crie estilos */}
+    <div className={styles.registerCaregiverContainer}> {/* Reutilize ou crie estilos */}
       <h2>Cadastro de Cuidador</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -74,7 +114,11 @@ function RegisterCaregiverPage() {
           </select>
         </div>
 
-        <button type="submit">Cadastrar</button>
+       {submitError && <p style={{ color: 'red', marginTop: '10px' }}>Erro: {submitError}</p>}
+
+        <button type="submit" disabled={isSubmitting}> {/* Desabilita botão */}
+          {isSubmitting ? 'Cadastrando...' : 'Cadastrar'} {/* Muda texto do botão */}
+        </button>
       </form>
     </div>
   );

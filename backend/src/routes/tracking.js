@@ -8,8 +8,8 @@ const verifyToken = require('../middleware/authMiddleware');
 // ==========================================================
 router.post('/', verifyToken, async (req, res) => {
   try {
-    // 1. Pega os dados do corpo da requisição (dia_de_registro REMOVIDO)
-    const { nome, intensidade, idtraits } = req.body;
+    // 1. Pega os dados do corpo da requisição
+    const { nome, intensidade, idtraits, descricao, dia_de_registro } = req.body;
 
     // 2. Pega os dados do usuário LOGADO (o "Criador")
     const { id: creatorId, email: creatorEmail } = req.user;
@@ -21,13 +21,15 @@ router.post('/', verifyToken, async (req, res) => {
       });
     }
 
-    const hoje = new Date().toISOString().split('T')[0];
+    if (!dia_de_registro) {
+      const dia_de_registro = new Date().toISOString().split('T')[0];
+    }
 
     // 3.2
     const existingTracking = await db('tracking')
       .where({
         idtraits: idtraits,
-        dia_de_registro: hoje // Usa a data gerada
+        dia_de_registro: dia_de_registro // Usa a data gerada
       })
       .first(); 
 
@@ -42,8 +44,9 @@ router.post('/', verifyToken, async (req, res) => {
     const newTrackingData = {
       nome,
       intensidade,
-      dia_de_registro: hoje, // Salva a data de hoje
-      idtraits, // O "pai" deste tracking
+      descricao,
+      dia_de_registro,
+      idtraits,
     };
 
     // 5. Lógica do Criador (igual)
@@ -110,12 +113,13 @@ router.get('/', verifyToken, async (req, res) => {
 router.put('/:id', verifyToken, async (req, res) => {
   try {
     const { id: idtracking } = req.params;
-    const { nome, intensidade, dia_de_registro } = req.body;
+    const { nome, intensidade, dia_de_registro, descricao } = req.body;
 
     const updateData = {};
     if (nome !== undefined) updateData.nome = nome;
     if (intensidade !== undefined) updateData.intensidade = intensidade;
     if (dia_de_registro !== undefined) updateData.dia_de_registro = dia_de_registro;
+    if (descricao !== undefined) updateData.descricao = descricao;
 
     if (Object.keys(updateData).length === 0) {
       return res.status(400).json({ error: 'Nenhum campo para atualizar foi fornecido.' });

@@ -1,16 +1,151 @@
-
+.registerCaregiverBackground {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  /* Fundo com gradiente suave roxo */
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+}
 .registerCaregiverContainer {
+  background: var(--white);
+  padding: 2.5rem; /* 40px */
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   width: 100%;
-  margin: 0 auto;
-  background-color: #ffffff;
-  padding: 2.5rem;
+  max-width: 600px; /* 28rem */
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.75rem; /* 28px */
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 0.5rem 0;
+}
+
+.subtitle {
+  font-size: 1rem; /* 16px */
+  color: var(--text-light);
+  margin: 0 0 2rem 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* 16px */
+  text-align: left;
+  width: 100%;
+  margin-top: 0.8rem;
+}
+
+.inputField {
+  width: 100%;
+  padding: 0.875rem 1rem; /* 14px 16px */
+  border: 1px solid var(--border-color);
+  border-radius: 10px !important;
+  font-size: 1rem;
+  color: var(--text-dark);
+  box-sizing: border-box; /* Garante que o padding não estoure a largura */
+}
+
+.inputField::placeholder {
+  color: var(--text-light);
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  /* Sombra suave roxa ao focar */
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1); 
+}
+
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem 1.25rem; /* 12px 20px */
+  font-size: 0.875rem; /* 14px */
+  font-weight: 600;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none; /* Para o <Link> parecer um botão */
+  white-space: nowrap; /* Impede que o texto quebre */
+  min-width: 150px;
+  box-shadow: 0 3px 18px rgba(0, 0, 0, 0.1);
+  border-radius: 30px;
+  background: linear-gradient(to right, #8B5CF6, #7C3AED);
+  color: var(--white);
+  border-color: var(--primary-purple);
+  align-self: center;
+
+}
+
+.button:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+}
+
+.toggleLink {
+  font-size: 0.875rem; /* 14px */
+  color: var(--text-light);
+  margin-top: 1.5rem;
+}
+
+.login {
+  font-size: 1; /* 14px */
+  color: var(--text-light);
+  text-decoration: none;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.login:hover {
+  text-decoration: underline;
+  color: var(--primary-purple);
 }
 
 
+.passwordContainer {
+  position: relative;
+  width: 100%;
+}
 
+.inputField {
+  padding-right: 2.5rem; /* Espaço para o botão */
+}
 
+.togglePassword {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  padding: 0.5rem;
+}
 
+.togglePassword:hover {
+  color: var(--primary-purple);
+}
 
 

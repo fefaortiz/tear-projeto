@@ -2,7 +2,9 @@
 import React, { useState } from 'react';
 import { formatCPF, formatPhone } from '../../utils/masking';
 import styles from './style.module.css'; // Crie este CSS
-import { useNavigate } from 'react-router-dom'; // Importe useNavigate
+import { Link, useNavigate } from 'react-router-dom'; // Importe useNavigate
+import logoImage from '../../assets/logo_preenchido.png';  // Importe a imagem do logo
+import { Eye, EyeOff } from 'lucide-react';
 
 function RegisterCaregiverPage() {
 
@@ -16,6 +18,9 @@ function RegisterCaregiverPage() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
 
   const navigate = useNavigate(); // Hook para navegação
 
@@ -76,51 +81,65 @@ function RegisterCaregiverPage() {
   };
 
   return (
-    <div className={styles.registerCaregiverContainer}> {/* Reutilize ou crie estilos */}
-      <h2>Cadastro de Cuidador</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="nome">Nome Completo:</label>
-          <input type="text" id="nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-        <div>
-          <label htmlFor="senha">Senha:</label>
-          <input type="password" id="senha" value={senha} onChange={(e) => setSenha(e.target.value)} required />
-        </div>
-        <div>
-          <label htmlFor="cpf">CPF:</label>
-          <input type="text" id="cpf" value={cpf} onChange={handleCpfChange} placeholder="000.000.000-00" maxLength={14} required />
-        </div>
-        <div>
-          <label htmlFor="telefone">Telefone:</label>
-          <input type="tel" id="telefone" value={telefone} onChange={handleTelefoneChange} placeholder="(00) 00000-0000" maxLength={15} />
-        </div>
-        <div>
-          <label htmlFor="dataNascimento">Data de Nascimento:</label>
-          <input type="date" id="dataNascimento" value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} />
-        </div>
-        <div>
-          <label htmlFor="sexo">Sexo:</label>
-          <select id="sexo" value={sexo} onChange={(e) => setSexo(e.target.value)}>
-             <option value="">Selecione...</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Feminino">Feminino</option>
-            <option value="Outro">Outro</option>
-            <option value="PrefiroNaoInformar">Prefiro não informar</option>
-          </select>
-        </div>
+    <div className={styles.registerCaregiverBackground}>
+      <div className={styles.registerCaregiverContainer}> 
+        <img src={logoImage} alt="Logo Tear" className={styles.logo} />
+        <h1 className={styles.title}>Seja bem-vindo!</h1>
+        <p className={styles.subtitle}>crie uma conta</p>
+        
+          {message && (
+            <p className={isError ? styles.feedbackErrorMessage : styles.feedbackSuccessMessage}>
+                {message}
+            </p>
+          )}
 
-       {submitError && <p style={{ color: 'red', marginTop: '10px' }}>Erro: {submitError}</p>}
+        <form onSubmit={handleSubmit} className={styles.form}>
+            <input className={styles.inputField} type="text" id="nome" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
+            <input className={styles.inputField} type="email" id="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <div className={styles.passwordContainer}>
+              <input 
+                placeholder="Senha" 
+                className={styles.inputField} 
+                type={showPassword ? "text" : "password"}
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className={styles.togglePassword}
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Esconder senha" : "Mostrar senha"}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>            
+            <input className={styles.inputField} type="text" id="cpf" value={cpf} onChange={handleCpfChange} placeholder="CPF" maxLength={14} required />
+            <input className={styles.inputField} type="tel" id="telefone" placeholder="telefone" value={telefone} onChange={handleTelefoneChange} maxLength={15} />
+            <input className={styles.inputField} type="date" id="dataNascimento" value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} />
+            <div>
+              <select className={styles.inputField}  id="sexo" value={sexo} onChange={(e) => setSexo(e.target.value)}>
+                <option value="">Selecione seu sexo</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Outro">Outro</option>
+                <option value="PrefiroNaoInformar">Prefiro não informar</option>
+              </select>
+            </div>
 
-        <button type="submit" disabled={isSubmitting}> {/* Desabilita botão */}
-          {isSubmitting ? 'Cadastrando...' : 'Cadastrar'} {/* Muda texto do botão */}
-        </button>
-      </form>
+        {submitError && <p style={{ color: 'red', marginTop: '10px' }}>Erro: {submitError}</p>}
+
+          <button type="submit" disabled={isSubmitting} className={styles.button}> {/* Desabilita botão */}
+            {isSubmitting ? 'Cadastrando...' : 'Cadastrar'} {/* Muda texto do botão */}
+          </button>
+        </form>
+
+          <p className={styles.toggleLink}>
+            Já tem uma conta? <Link to="/login"> <span className={styles.login} >Entrar</span></Link>
+          </p>
+      </div>
     </div>
+
   );
 }
 

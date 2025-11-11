@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './style.module.css'; // Usaremos os mesmos estilos
+import logoImage from '../../assets/logo_preenchido.png';  // Importe a imagem do logo
+import { Eye, EyeOff } from 'lucide-react';
 
 export function RegisterTherapistPage() {
   const [name, setName] = useState('');
@@ -110,135 +112,93 @@ const formatPhone = (value: string): string => {
   };
 
   return (
-    <div className={styles.RegisterTherapistcontainer}>
-      <form onSubmit={handleSubmit}>
-        <h2>Registrar Novo Usuário</h2>
-        <div className={styles.inputGroup}>
-          <label>Nome:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div className={styles.inputGroup}>
-          <label>E-mail:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className={styles.inputGroup}>
-            <label>
-              CPF: <span className={styles.inpuHelper}> (apenas números) </span>
-            </label>
-          <input
-            type="text"
-            value={cpf}
-            onChange={handleCpfChange}
-            required
-            maxLength={14}
-          />
-        </div>
-        <div className={styles.inputGroup}>
-            <label>
-              CRP/CRM: <span className={styles.inputHelper}> (apenas números) </span>
-            </label>
-          <input
-            type="text"
-            value={crpCrm}
-            onChange={(e) => setCrpCrm(e.target.value)}
-            required
-            maxLength={8}
-          />
-        </div>
-        <div className={styles.inputGroup}>
-          <label>
-              Telefone: <span className={styles.inpuHelper}> (apenas números) </span>
-            </label>
-          <input
-            type="tel"
-            value={telefone}
-            onChange={handlePhoneChange}
-            required
-          />
-        </div>
-        <div className={styles.inputGroup}>
-            <label>Sexo:</label>
-          <select
-            value={sexo}
-            onChange={(e) => setSexo(e.target.value)}
-          >
-            <option value="">Selecione</option>
-              <option value="Masculino">Masculino</option>
-              <option value="Feminino">Feminino</option>
-            <option value="Outro">Outro</option>
-          </select>
-        </div>
-          <div className={styles.inputGroup}>
-          <label>Data de Nascimento:</label>
-          <input
-            type="date"
-            value={dataNascimento}
-            onChange={(e) => setDataNascimento(e.target.value)}
-            required
-          />
-        </div>
-        <div className={styles.inputGroup}>
-          <label>Senha:</label>
-          <div className={styles.passwordInput}>
+    <div className={styles.registerTherapistBackground}> 
+      <div className={styles.registerTherapistcontainer}>
+        <img src={logoImage} alt="Logo Tear" className={styles.logo} />
+        <h1 className={styles.title}>Seja bem-vindo!</h1>
+        <p className={styles.subtitle}>crie uma conta</p>
+        {message && (
+          <p className={isError ? styles.feedbackErrorMessage : styles.feedbackSuccessMessage}>
+              {message}
+          </p>
+        )}
+        <form onSubmit={handleSubmit} className={styles.form}>
             <input
+              placeholder='Nome'
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+            <input
+              placeholder='Email'
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input
+              placeholder='CPF'
+              type="text"
+              value={cpf}
+              onChange={handleCpfChange}
+              required
+              maxLength={14}
+            />
+            <input
+              placeholder='CRP/CRM'
+              type="text"
+              value={crpCrm}
+              onChange={(e) => setCrpCrm(e.target.value)}
+              required
+              maxLength={8}
+            />
+            <input
+              placeholder='Telefone'
+              type="tel"
+              value={telefone}
+              onChange={handlePhoneChange}
+              required
+            />
+          <select className={styles.inputField} id="sexo" value={sexo} onChange={(e) => setSexo(e.target.value)}>
+            <option value="">Selecione seu sexo</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Feminino">Feminino</option>
+            <option value="Outro">Outro</option>
+            <option value="PrefiroNaoInformar">Prefiro não informar</option>
+          </select>
+            <input
+              type="date"
+              value={dataNascimento}
+              onChange={(e) => setDataNascimento(e.target.value)}
+              required
+            />
+          <div className={styles.passwordContainer}>
+            <input 
+              placeholder="Senha" 
+              className={styles.inputField} 
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              minLength={8}
             />
             <button
               type="button"
-              className={styles.passwordToggle}
+              className={styles.togglePassword}
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Esconder senha" : "Mostrar senha"}
             >
-              {showPassword ? "👁️" : "👁️‍🗨️"}
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
-          </div>
-        </div>
-        <div className={styles.inputGroup}>
-          <label>Confirmar Senha:</label>
-          <div className={styles.passwordInput}>
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              minLength={6}
-            />
-            <button
-              type="button"
-              className={styles.passwordToggle}
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              aria-label={showConfirmPassword ? "Esconder senha" : "Mostrar senha"}
-            >
-              {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
-            </button>
-          </div>
-        </div>
-        <button type="submit">Registrar</button>
-        
-        {message && (
-          <p className={isError ? styles.feedbackMessageError : styles.FeedbackMessageSuccess}>
-              {message}
-          </p>
-        )}
+          </div> 
+          <button type="submit" className={styles.button}>Registrar</button>
 
-        <p className={styles.toggleLink}>
-          Já tem uma conta? <Link to="/login">Faça o login</Link>
-        </p>
-      </form>
+
+          <p className={styles.toggleLink}>
+            Já tem uma conta? <Link to="/login"> <span className={styles.login} >Entrar</span></Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

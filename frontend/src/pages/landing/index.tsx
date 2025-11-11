@@ -220,7 +220,7 @@ const Mission = () => (
           Nossa Missão
         </h2>
         <p className="mt-6 text-lg text-indigo-800">
-          O <strong>Elo.TEA</strong> nasceu como um projeto acadêmico com o objetivo de usar a tecnologia para criar pontes reais.
+          O <strong>TEAR</strong> nasceu como um projeto acadêmico com o objetivo de usar a tecnologia para criar pontes reais.
         </p>
          <p className="mt-4 text-lg text-indigo-800">
           Acreditamos que um cuidado integrado e baseado em dados pode transformar a qualidade de vida de pessoas no espectro autista e suas redes de apoio.
@@ -232,7 +232,7 @@ const Mission = () => (
           "Desenvolvido com a consultoria de terapeutas ocupacionais e psicólogos especializados em autismo."
         </p>
         <p className="mt-4 font-bold text-indigo-900">
-          Equipe do Projeto Elo.TEA
+          Equipe do Projeto TEAR
         </p>
       </div>
     </div>
@@ -264,7 +264,7 @@ const Footer = () => (
   <footer className="py-16 text-center">
     <div className="max-w-6xl mx-auto px-6">
       <div className="text-2xl font-bold text-indigo-900 mb-6">
-        Elo<span className="text-violet-500">.TEA</span>
+        Tear
       </div>
       <div className="flex justify-center gap-6 mb-8 text-indigo-700 font-medium">
         <a href="#" className="hover:text-violet-500">Privacidade</a>
@@ -272,7 +272,7 @@ const Footer = () => (
         <a href="#" className="hover:text-violet-500">Contato</a>
       </div>
       <p className="text-indigo-600">
-        © 2025 Elo.TEA - Um Projeto Acadêmico Fictício.
+        © 2025 Tear - Um Projeto Acadêmico.
       </p>
     </div>
   </footer>

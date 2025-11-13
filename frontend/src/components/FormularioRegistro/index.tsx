@@ -1,0 +1,97 @@
+// src/componentes/FormularioRegistro/index.tsx
+import React, { useState } from 'react';
+import '../modal-trackmood/Form.css'; 
+import IntensityRating from '../intensityRating'; 
+
+interface FormularioRegistroProps {
+  onSave: () => void;
+}
+
+const FormularioRegistro: React.FC<FormularioRegistroProps> = ({ onSave }) => {
+  
+  // 1. Estados para guardar TODOS os valores
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedMood, setSelectedMood] = useState(''); // 👈 ADICIONADO DE VOLTA
+  const [selectedIntensity, setSelectedIntensity] = useState<number | null>(null);
+  const [notes, setNotes] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // 3. Agora o log inclui o 'mood'
+    console.log({
+      date: selectedDate,
+      mood: selectedMood, // 👈 ADICIONADO DE VOLTA
+      intensity: selectedIntensity,
+      notes: notes
+    });
+    alert('Dados salvos!');
+    onSave(); // Fecha o modal
+  };
+
+  return (
+    <form className="meu-form" onSubmit={handleSubmit}>
+      <h2>Como foi seu dia?</h2>
+
+      {/* --- CAMPO DE DATA --- */}
+      <div className="form-group">
+        <label htmlFor="date-input">Data</label>
+        <input 
+          type="date" 
+          id="date-input" 
+          className="form-input" 
+          required 
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+        />
+      </div>
+
+      {/* --- CAMPO DE MOOD (DROPDOWN) --- */}
+      {/* 2. ADICIONADO DE VOLTA */}
+      <div className="form-group">
+        <label htmlFor="mood-select">Mood (Humor)</label>
+        <select 
+          id="mood-select" 
+          className="form-input" 
+          required
+          value={selectedMood}
+          onChange={(e) => setSelectedMood(e.target.value)}
+        >
+          <option value="">Selecione um humor...</option>
+          <option value="feliz">Feliz</option>
+          <option value="neutro">Neutro</option>
+          <option value="triste">Triste</option>
+          <option value="produtivo">Produtivo</option>
+          <option value="cansado">Cansado</option>
+        </select>
+      </div>
+
+      {/* --- CAMPO DE INTENSIDADE (BOLINHAS) --- */}
+      <div className="form-group">
+        <label>Intensidade</label>
+        <IntensityRating 
+          onChange={(value) => setSelectedIntensity(value)}
+        />
+      </div>
+
+      {/* --- CAMPO DE NOTAS --- */}
+      <div className="form-group">
+        <label htmlFor="notes-area">Notas</label>
+        <textarea
+          id="notes-area"
+          className="form-textarea"
+          rows={4}
+          placeholder="Descreva seu dia..."
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+        ></textarea>
+      </div>
+
+      <button type="submit" className="form-submit-btn">
+        Salvar
+      </button>
+    </form>
+  );
+};
+
+export default FormularioRegistro;

@@ -1,0 +1,82 @@
+/* * O "card" que envolve tudo.
+ * É ele quem cuida da borda, sombra e da margem superior.
+ */
+.form-card {
+  border: 1px solid #ccc;       /* Borda sutil */
+  border-radius: 8px;            /* Cantos arredondados */
+  overflow: hidden;              /* ESSENCIAL: força os filhos a respeitarem o radius */
+  margin-top: 1.0rem;            /* A margem que antes estava no .meu-form */
+  background-color: #fff;        /* Cor de fundo padrão para o form */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Sombra suave (opcional) */
+}
+
+/* * O seu cabeçalho.
+ * Agora ele é a barra colorida no topo.
+ */
+.top-form {
+  background-color: #3498db;  /* <-- SUA COR DIFERENTE AQUI */
+  color: white;                 /* Cor do texto do cabeçalho */
+  padding: 1rem 1.5rem;         /* Espaçamento interno */
+}
+
+.meu-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem; 
+  padding-top: 1.5rem; /* <-- MUDANÇA: 'padding' ao invés de 'margin-top' */
+}
+
+.form-textarea {
+  font-family: inherit; 
+  font-size: 1rem;
+  padding: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  min-height: 40px; 
+  color: #333333; 
+  resize: vertical;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Estilo base do input */
+.form-input {
+  font-family: inherit; 
+  font-size: 1rem;
+  padding: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  min-height: 40px; 
+  resize: vertical;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  /* Cor para a data DEPOIS de selecionada (ex: preto) */
+  color: #333333; 
+}
+
+/* * QUANDO o campo estiver inválido (ou seja, vazio/mostrando placeholder)
+ * ele usará esta cor.
+ */
+.form-input:invalid {
+  color: #9ca3af; /* A sua cor cinza para o "dd/mm/aaaa" */
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none; 
+  border-color: #007bff; 
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.form-submit-btn {
+  background-color: aqua;
+  box-shadow: 0 0 0 1px rgba(39, 38, 38, 0.112);
+  min-height: 40px;
+  width: 70%;
+  align-self: center;
+}

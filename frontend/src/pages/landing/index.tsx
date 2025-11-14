@@ -264,7 +264,7 @@ const Footer = () => (
   <footer className="py-16 text-center">
     <div className="max-w-6xl mx-auto px-6">
       <div className="text-2xl font-bold text-indigo-900 mb-6">
-        Tear
+        <span className="text-violet-500">TEAR</span>
       </div>
       <div className="flex justify-center gap-6 mb-8 text-indigo-700 font-medium">
         <a href="#" className="hover:text-violet-500">Privacidade</a>
@@ -272,7 +272,7 @@ const Footer = () => (
         <a href="#" className="hover:text-violet-500">Contato</a>
       </div>
       <p className="text-indigo-600">
-        © 2025 Tear - Um Projeto Acadêmico.
+        © 2025 TEAR - Um Projeto Acadêmico Fictício.
       </p>
     </div>
   </footer>

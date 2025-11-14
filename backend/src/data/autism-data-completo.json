@@ -1,0 +1,2889 @@
+{
+  "total_brasil": 2405337,
+  "porcentagem_populacao": 1.2,
+  "pirâmide_etária": [
+    {
+      "faixa": "0–4",
+      "homens": 120000,
+      "mulheres": 80000
+    },
+    {
+      "faixa": "5–9",
+      "homens": 150000,
+      "mulheres": 100000
+    },
+    {
+      "faixa": "10–14",
+      "homens": 130000,
+      "mulheres": 95000
+    },
+    {
+      "faixa": "15–19",
+      "homens": 100000,
+      "mulheres": 85000
+    },
+    {
+      "faixa": "20–24",
+      "homens": 70000,
+      "mulheres": 60000
+    },
+    {
+      "faixa": "25–29",
+      "homens": 60000,
+      "mulheres": 55000
+    },
+    {
+      "faixa": "30–34",
+      "homens": 50000,
+      "mulheres": 45000
+    },
+    {
+      "faixa": "35–39",
+      "homens": 45000,
+      "mulheres": 40000
+    },
+    {
+      "faixa": "40–44",
+      "homens": 40000,
+      "mulheres": 38000
+    },
+    {
+      "faixa": "45–49",
+      "homens": 35000,
+      "mulheres": 34000
+    },
+    {
+      "faixa": "50–54",
+      "homens": 30000,
+      "mulheres": 30000
+    },
+    {
+      "faixa": "55–59",
+      "homens": 25000,
+      "mulheres": 25000
+    },
+    {
+      "faixa": "60–64",
+      "homens": 20000,
+      "mulheres": 20000
+    },
+    {
+      "faixa": "65–69",
+      "homens": 15000,
+      "mulheres": 15000
+    },
+    {
+      "faixa": "70–74",
+      "homens": 10000,
+      "mulheres": 11000
+    },
+    {
+      "faixa": "75–79",
+      "homens": 8000,
+      "mulheres": 9000
+    },
+    {
+      "faixa": "80–84",
+      "homens": 6000,
+      "mulheres": 7000
+    },
+    {
+      "faixa": "85–89",
+      "homens": 4000,
+      "mulheres": 5000
+    },
+    {
+      "faixa": "90–94",
+      "homens": 2000,
+      "mulheres": 3000
+    },
+    {
+      "faixa": "95+",
+      "homens": 1000,
+      "mulheres": 2000
+    }
+  ],
+  "por_estado": [
+    {
+      "uf": "Acre",
+      "sigla": "AC",
+      "percentual": 0.8,
+      "total_estado": 13224,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 1410,
+          "mulheres": 661
+        },
+        {
+          "faixa": "5–9",
+          "homens": 2321,
+          "mulheres": 769
+        },
+        {
+          "faixa": "10–14",
+          "homens": 1593,
+          "mulheres": 476
+        },
+        {
+          "faixa": "15–19",
+          "homens": 826,
+          "mulheres": 402
+        },
+        {
+          "faixa": "20–24",
+          "homens": 576,
+          "mulheres": 381
+        },
+        {
+          "faixa": "25–29",
+          "homens": 363,
+          "mulheres": 305
+        },
+        {
+          "faixa": "30–34",
+          "homens": 348,
+          "mulheres": 197
+        },
+        {
+          "faixa": "35–39",
+          "homens": 242,
+          "mulheres": 196
+        },
+        {
+          "faixa": "40–44",
+          "homens": 224,
+          "mulheres": 214
+        },
+        {
+          "faixa": "45–49",
+          "homens": 141,
+          "mulheres": 230
+        },
+        {
+          "faixa": "50–54",
+          "homens": 148,
+          "mulheres": 141
+        },
+        {
+          "faixa": "55–59",
+          "homens": 141,
+          "mulheres": 157
+        },
+        {
+          "faixa": "60–64",
+          "homens": 111,
+          "mulheres": 146
+        },
+        {
+          "faixa": "65–69",
+          "homens": 68,
+          "mulheres": 74
+        },
+        {
+          "faixa": "70–74",
+          "homens": 103,
+          "mulheres": 104
+        },
+        {
+          "faixa": "75–79",
+          "homens": 54,
+          "mulheres": 37
+        },
+        {
+          "faixa": "80–84",
+          "homens": 16,
+          "mulheres": 14
+        },
+        {
+          "faixa": "85–89",
+          "homens": 0,
+          "mulheres": 16
+        },
+        {
+          "faixa": "95+",
+          "homens": 6,
+          "mulheres": 0
+        }
+      ]
+    },
+    {
+      "uf": "Alagoas",
+      "sigla": "AL",
+      "percentual": 0.9,
+      "total_estado": 33143,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 2792,
+          "mulheres": 968
+        },
+        {
+          "faixa": "5–9",
+          "homens": 4168,
+          "mulheres": 1233
+        },
+        {
+          "faixa": "10–14",
+          "homens": 2819,
+          "mulheres": 1236
+        },
+        {
+          "faixa": "15–19",
+          "homens": 1815,
+          "mulheres": 1017
+        },
+        {
+          "faixa": "20–24",
+          "homens": 1230,
+          "mulheres": 913
+        },
+        {
+          "faixa": "25–29",
+          "homens": 852,
+          "mulheres": 779
+        },
+        {
+          "faixa": "30–34",
+          "homens": 906,
+          "mulheres": 879
+        },
+        {
+          "faixa": "35–39",
+          "homens": 842,
+          "mulheres": 894
+        },
+        {
+          "faixa": "40–44",
+          "homens": 906,
+          "mulheres": 917
+        },
+        {
+          "faixa": "45–49",
+          "homens": 611,
+          "mulheres": 795
+        },
+        {
+          "faixa": "50–54",
+          "homens": 506,
+          "mulheres": 759
+        },
+        {
+          "faixa": "55–59",
+          "homens": 704,
+          "mulheres": 738
+        },
+        {
+          "faixa": "60–64",
+          "homens": 591,
+          "mulheres": 883
+        },
+        {
+          "faixa": "65–69",
+          "homens": 409,
+          "mulheres": 596
+        },
+        {
+          "faixa": "70–74",
+          "homens": 231,
+          "mulheres": 381
+        },
+        {
+          "faixa": "75–79",
+          "homens": 121,
+          "mulheres": 190
+        },
+        {
+          "faixa": "80–84",
+          "homens": 118,
+          "mulheres": 174
+        },
+        {
+          "faixa": "85–89",
+          "homens": 68,
+          "mulheres": 60
+        },
+        {
+          "faixa": "95+",
+          "homens": 22,
+          "mulheres": 15
+        }
+      ]
+    },
+    {
+      "uf": "Amapá",
+      "sigla": "AP",
+      "percentual": 1.2,
+      "total_estado": 11081,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 1171,
+          "mulheres": 531
+        },
+        {
+          "faixa": "5–9",
+          "homens": 1848,
+          "mulheres": 529
+        },
+        {
+          "faixa": "10–14",
+          "homens": 1077,
+          "mulheres": 555
+        },
+        {
+          "faixa": "15–19",
+          "homens": 639,
+          "mulheres": 351
+        },
+        {
+          "faixa": "20–24",
+          "homens": 404,
+          "mulheres": 305
+        },
+        {
+          "faixa": "25–29",
+          "homens": 543,
+          "mulheres": 282
+        },
+        {
+          "faixa": "30–34",
+          "homens": 140,
+          "mulheres": 230
+        },
+        {
+          "faixa": "35–39",
+          "homens": 355,
+          "mulheres": 272
+        },
+        {
+          "faixa": "40–44",
+          "homens": 224,
+          "mulheres": 238
+        },
+        {
+          "faixa": "45–49",
+          "homens": 236,
+          "mulheres": 189
+        },
+        {
+          "faixa": "50–54",
+          "homens": 143,
+          "mulheres": 131
+        },
+        {
+          "faixa": "55–59",
+          "homens": 135,
+          "mulheres": 51
+        },
+        {
+          "faixa": "60–64",
+          "homens": 93,
+          "mulheres": 71
+        },
+        {
+          "faixa": "65–69",
+          "homens": 80,
+          "mulheres": 45
+        },
+        {
+          "faixa": "70–74",
+          "homens": 34,
+          "mulheres": 29
+        },
+        {
+          "faixa": "75–79",
+          "homens": 32,
+          "mulheres": 58
+        },
+        {
+          "faixa": "80–84",
+          "homens": 28,
+          "mulheres": 6
+        },
+        {
+          "faixa": "85–89",
+          "homens": 0,
+          "mulheres": 9
+        },
+        {
+          "faixa": "95+",
+          "homens": 19,
+          "mulheres": 0
+        }
+      ]
+    },
+    {
+      "uf": "Amazonas",
+      "sigla": "AM",
+      "percentual": 1.1,
+      "total_estado": 43983,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 3982,
+          "mulheres": 1712
+        },
+        {
+          "faixa": "5–9",
+          "homens": 6080,
+          "mulheres": 1734
+        },
+        {
+          "faixa": "10–14",
+          "homens": 4450,
+          "mulheres": 1603
+        },
+        {
+          "faixa": "15–19",
+          "homens": 3610,
+          "mulheres": 1199
+        },
+        {
+          "faixa": "20–24",
+          "homens": 1950,
+          "mulheres": 1474
+        },
+        {
+          "faixa": "25–29",
+          "homens": 1346,
+          "mulheres": 1141
+        },
+        {
+          "faixa": "30–34",
+          "homens": 1084,
+          "mulheres": 945
+        },
+        {
+          "faixa": "35–39",
+          "homens": 1060,
+          "mulheres": 1146
+        },
+        {
+          "faixa": "40–44",
+          "homens": 866,
+          "mulheres": 873
+        },
+        {
+          "faixa": "45–49",
+          "homens": 720,
+          "mulheres": 850
+        },
+        {
+          "faixa": "50–54",
+          "homens": 879,
+          "mulheres": 793
+        },
+        {
+          "faixa": "55–59",
+          "homens": 534,
+          "mulheres": 604
+        },
+        {
+          "faixa": "60–64",
+          "homens": 590,
+          "mulheres": 513
+        },
+        {
+          "faixa": "65–69",
+          "homens": 438,
+          "mulheres": 330
+        },
+        {
+          "faixa": "70–74",
+          "homens": 422,
+          "mulheres": 301
+        },
+        {
+          "faixa": "75–79",
+          "homens": 117,
+          "mulheres": 166
+        },
+        {
+          "faixa": "80–84",
+          "homens": 106,
+          "mulheres": 121
+        },
+        {
+          "faixa": "85–89",
+          "homens": 48,
+          "mulheres": 37
+        },
+        {
+          "faixa": "95+",
+          "homens": 77,
+          "mulheres": 40
+        }
+      ]
+    },
+    {
+      "uf": "Bahia",
+      "sigla": "BA",
+      "percentual": 0.9,
+      "total_estado": 144928,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 10574,
+          "mulheres": 4317
+        },
+        {
+          "faixa": "5–9",
+          "homens": 15362,
+          "mulheres": 4668
+        },
+        {
+          "faixa": "10–14",
+          "homens": 10729,
+          "mulheres": 4270
+        },
+        {
+          "faixa": "15–19",
+          "homens": 8277,
+          "mulheres": 3834
+        },
+        {
+          "faixa": "20–24",
+          "homens": 5644,
+          "mulheres": 3916
+        },
+        {
+          "faixa": "25–29",
+          "homens": 4664,
+          "mulheres": 3662
+        },
+        {
+          "faixa": "30–34",
+          "homens": 4192,
+          "mulheres": 3543
+        },
+        {
+          "faixa": "35–39",
+          "homens": 4292,
+          "mulheres": 4398
+        },
+        {
+          "faixa": "40–44",
+          "homens": 4026,
+          "mulheres": 4753
+        },
+        {
+          "faixa": "45–49",
+          "homens": 3701,
+          "mulheres": 4317
+        },
+        {
+          "faixa": "50–54",
+          "homens": 3048,
+          "mulheres": 3887
+        },
+        {
+          "faixa": "55–59",
+          "homens": 3699,
+          "mulheres": 3864
+        },
+        {
+          "faixa": "60–64",
+          "homens": 2390,
+          "mulheres": 2721
+        },
+        {
+          "faixa": "65–69",
+          "homens": 1838,
+          "mulheres": 2025
+        },
+        {
+          "faixa": "70–74",
+          "homens": 1625,
+          "mulheres": 1848
+        },
+        {
+          "faixa": "75–79",
+          "homens": 988,
+          "mulheres": 1207
+        },
+        {
+          "faixa": "80–84",
+          "homens": 616,
+          "mulheres": 828
+        },
+        {
+          "faixa": "85–89",
+          "homens": 328,
+          "mulheres": 401
+        },
+        {
+          "faixa": "95+",
+          "homens": 101,
+          "mulheres": 243
+        }
+      ]
+    },
+    {
+      "uf": "Ceará",
+      "sigla": "CE",
+      "percentual": 1,
+      "total_estado": 126548,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 12760,
+          "mulheres": 5030
+        },
+        {
+          "faixa": "5–9",
+          "homens": 18161,
+          "mulheres": 5325
+        },
+        {
+          "faixa": "10–14",
+          "homens": 11521,
+          "mulheres": 3941
+        },
+        {
+          "faixa": "15–19",
+          "homens": 7053,
+          "mulheres": 3007
+        },
+        {
+          "faixa": "20–24",
+          "homens": 4491,
+          "mulheres": 2921
+        },
+        {
+          "faixa": "25–29",
+          "homens": 3423,
+          "mulheres": 2949
+        },
+        {
+          "faixa": "30–34",
+          "homens": 3331,
+          "mulheres": 2894
+        },
+        {
+          "faixa": "35–39",
+          "homens": 3390,
+          "mulheres": 3026
+        },
+        {
+          "faixa": "40–44",
+          "homens": 2889,
+          "mulheres": 2731
+        },
+        {
+          "faixa": "45–49",
+          "homens": 2447,
+          "mulheres": 2807
+        },
+        {
+          "faixa": "50–54",
+          "homens": 2173,
+          "mulheres": 2574
+        },
+        {
+          "faixa": "55–59",
+          "homens": 2190,
+          "mulheres": 3040
+        },
+        {
+          "faixa": "60–64",
+          "homens": 1632,
+          "mulheres": 1953
+        },
+        {
+          "faixa": "65–69",
+          "homens": 1275,
+          "mulheres": 1551
+        },
+        {
+          "faixa": "70–74",
+          "homens": 952,
+          "mulheres": 1314
+        },
+        {
+          "faixa": "75–79",
+          "homens": 727,
+          "mulheres": 995
+        },
+        {
+          "faixa": "80–84",
+          "homens": 339,
+          "mulheres": 630
+        },
+        {
+          "faixa": "85–89",
+          "homens": 314,
+          "mulheres": 374
+        },
+        {
+          "faixa": "95+",
+          "homens": 147,
+          "mulheres": 149
+        }
+      ]
+    },
+    {
+      "uf": "Distrito Federal",
+      "sigla": "DF",
+      "percentual": 1.4,
+      "total_estado": 34136,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 2568,
+          "mulheres": 945
+        },
+        {
+          "faixa": "5–9",
+          "homens": 4199,
+          "mulheres": 1023
+        },
+        {
+          "faixa": "10–14",
+          "homens": 2365,
+          "mulheres": 929
+        },
+        {
+          "faixa": "15–19",
+          "homens": 1940,
+          "mulheres": 822
+        },
+        {
+          "faixa": "20–24",
+          "homens": 1302,
+          "mulheres": 1069
+        },
+        {
+          "faixa": "25–29",
+          "homens": 1241,
+          "mulheres": 941
+        },
+        {
+          "faixa": "30–34",
+          "homens": 1131,
+          "mulheres": 907
+        },
+        {
+          "faixa": "35–39",
+          "homens": 1085,
+          "mulheres": 780
+        },
+        {
+          "faixa": "40–44",
+          "homens": 1010,
+          "mulheres": 1299
+        },
+        {
+          "faixa": "45–49",
+          "homens": 864,
+          "mulheres": 923
+        },
+        {
+          "faixa": "50–54",
+          "homens": 1005,
+          "mulheres": 865
+        },
+        {
+          "faixa": "55–59",
+          "homens": 776,
+          "mulheres": 682
+        },
+        {
+          "faixa": "60–64",
+          "homens": 545,
+          "mulheres": 576
+        },
+        {
+          "faixa": "65–69",
+          "homens": 291,
+          "mulheres": 499
+        },
+        {
+          "faixa": "70–74",
+          "homens": 360,
+          "mulheres": 223
+        },
+        {
+          "faixa": "75–79",
+          "homens": 111,
+          "mulheres": 265
+        },
+        {
+          "faixa": "80–84",
+          "homens": 221,
+          "mulheres": 141
+        },
+        {
+          "faixa": "85–89",
+          "homens": 55,
+          "mulheres": 132
+        },
+        {
+          "faixa": "95+",
+          "homens": 0,
+          "mulheres": 46
+        }
+      ]
+    },
+    {
+      "uf": "Espírito Santo",
+      "sigla": "ES",
+      "percentual": 1.1,
+      "total_estado": 51328,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 3789,
+          "mulheres": 1476
+        },
+        {
+          "faixa": "5–9",
+          "homens": 6720,
+          "mulheres": 2020
+        },
+        {
+          "faixa": "10–14",
+          "homens": 4611,
+          "mulheres": 1311
+        },
+        {
+          "faixa": "15–19",
+          "homens": 2709,
+          "mulheres": 1321
+        },
+        {
+          "faixa": "20–24",
+          "homens": 1981,
+          "mulheres": 1477
+        },
+        {
+          "faixa": "25–29",
+          "homens": 1833,
+          "mulheres": 1381
+        },
+        {
+          "faixa": "30–34",
+          "homens": 1547,
+          "mulheres": 1383
+        },
+        {
+          "faixa": "35–39",
+          "homens": 1672,
+          "mulheres": 1447
+        },
+        {
+          "faixa": "40–44",
+          "homens": 1537,
+          "mulheres": 1470
+        },
+        {
+          "faixa": "45–49",
+          "homens": 1128,
+          "mulheres": 1202
+        },
+        {
+          "faixa": "50–54",
+          "homens": 864,
+          "mulheres": 1091
+        },
+        {
+          "faixa": "55–59",
+          "homens": 792,
+          "mulheres": 1110
+        },
+        {
+          "faixa": "60–64",
+          "homens": 680,
+          "mulheres": 918
+        },
+        {
+          "faixa": "65–69",
+          "homens": 823,
+          "mulheres": 586
+        },
+        {
+          "faixa": "70–74",
+          "homens": 433,
+          "mulheres": 661
+        },
+        {
+          "faixa": "75–79",
+          "homens": 317,
+          "mulheres": 352
+        },
+        {
+          "faixa": "80–84",
+          "homens": 118,
+          "mulheres": 211
+        },
+        {
+          "faixa": "85–89",
+          "homens": 91,
+          "mulheres": 170
+        },
+        {
+          "faixa": "95+",
+          "homens": 10,
+          "mulheres": 54
+        }
+      ]
+    },
+    {
+      "uf": "Goiás",
+      "sigla": "GO",
+      "percentual": 1.2,
+      "total_estado": 75040,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 5771,
+          "mulheres": 2099
+        },
+        {
+          "faixa": "5–9",
+          "homens": 7462,
+          "mulheres": 2453
+        },
+        {
+          "faixa": "10–14",
+          "homens": 5026,
+          "mulheres": 1706
+        },
+        {
+          "faixa": "15–19",
+          "homens": 3867,
+          "mulheres": 1991
+        },
+        {
+          "faixa": "20–24",
+          "homens": 3058,
+          "mulheres": 2067
+        },
+        {
+          "faixa": "25–29",
+          "homens": 3029,
+          "mulheres": 2319
+        },
+        {
+          "faixa": "30–34",
+          "homens": 2303,
+          "mulheres": 1882
+        },
+        {
+          "faixa": "35–39",
+          "homens": 2403,
+          "mulheres": 1857
+        },
+        {
+          "faixa": "40–44",
+          "homens": 2581,
+          "mulheres": 2137
+        },
+        {
+          "faixa": "45–49",
+          "homens": 1943,
+          "mulheres": 2211
+        },
+        {
+          "faixa": "50–54",
+          "homens": 1955,
+          "mulheres": 2109
+        },
+        {
+          "faixa": "55–59",
+          "homens": 1622,
+          "mulheres": 1889
+        },
+        {
+          "faixa": "60–64",
+          "homens": 1412,
+          "mulheres": 1500
+        },
+        {
+          "faixa": "65–69",
+          "homens": 956,
+          "mulheres": 1202
+        },
+        {
+          "faixa": "70–74",
+          "homens": 875,
+          "mulheres": 965
+        },
+        {
+          "faixa": "75–79",
+          "homens": 502,
+          "mulheres": 723
+        },
+        {
+          "faixa": "80–84",
+          "homens": 281,
+          "mulheres": 340
+        },
+        {
+          "faixa": "85–89",
+          "homens": 178,
+          "mulheres": 194
+        },
+        {
+          "faixa": "95+",
+          "homens": 66,
+          "mulheres": 60
+        }
+      ]
+    },
+    {
+      "uf": "Maranhão",
+      "sigla": "MA",
+      "percentual": 0.8,
+      "total_estado": 75283,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 6060,
+          "mulheres": 2115
+        },
+        {
+          "faixa": "5–9",
+          "homens": 8579,
+          "mulheres": 3211
+        },
+        {
+          "faixa": "10–14",
+          "homens": 6575,
+          "mulheres": 2707
+        },
+        {
+          "faixa": "15–19",
+          "homens": 4356,
+          "mulheres": 2415
+        },
+        {
+          "faixa": "20–24",
+          "homens": 3160,
+          "mulheres": 2098
+        },
+        {
+          "faixa": "25–29",
+          "homens": 2303,
+          "mulheres": 1662
+        },
+        {
+          "faixa": "30–34",
+          "homens": 2205,
+          "mulheres": 2007
+        },
+        {
+          "faixa": "35–39",
+          "homens": 2149,
+          "mulheres": 2248
+        },
+        {
+          "faixa": "40–44",
+          "homens": 2101,
+          "mulheres": 2280
+        },
+        {
+          "faixa": "45–49",
+          "homens": 1626,
+          "mulheres": 1736
+        },
+        {
+          "faixa": "50–54",
+          "homens": 1256,
+          "mulheres": 1829
+        },
+        {
+          "faixa": "55–59",
+          "homens": 1385,
+          "mulheres": 1462
+        },
+        {
+          "faixa": "60–64",
+          "homens": 969,
+          "mulheres": 1138
+        },
+        {
+          "faixa": "65–69",
+          "homens": 964,
+          "mulheres": 1144
+        },
+        {
+          "faixa": "70–74",
+          "homens": 781,
+          "mulheres": 660
+        },
+        {
+          "faixa": "75–79",
+          "homens": 391,
+          "mulheres": 442
+        },
+        {
+          "faixa": "80–84",
+          "homens": 277,
+          "mulheres": 423
+        },
+        {
+          "faixa": "85–89",
+          "homens": 190,
+          "mulheres": 211
+        },
+        {
+          "faixa": "95+",
+          "homens": 52,
+          "mulheres": 62
+        }
+      ]
+    },
+    {
+      "uf": "Mato Grosso",
+      "sigla": "MT",
+      "percentual": 1,
+      "total_estado": 41247,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 3462,
+          "mulheres": 1142
+        },
+        {
+          "faixa": "5–9",
+          "homens": 4018,
+          "mulheres": 1497
+        },
+        {
+          "faixa": "10–14",
+          "homens": 2705,
+          "mulheres": 1095
+        },
+        {
+          "faixa": "15–19",
+          "homens": 2214,
+          "mulheres": 1232
+        },
+        {
+          "faixa": "20–24",
+          "homens": 1779,
+          "mulheres": 935
+        },
+        {
+          "faixa": "25–29",
+          "homens": 1433,
+          "mulheres": 1242
+        },
+        {
+          "faixa": "30–34",
+          "homens": 1142,
+          "mulheres": 1264
+        },
+        {
+          "faixa": "35–39",
+          "homens": 1449,
+          "mulheres": 1153
+        },
+        {
+          "faixa": "40–44",
+          "homens": 1218,
+          "mulheres": 1337
+        },
+        {
+          "faixa": "45–49",
+          "homens": 1043,
+          "mulheres": 1198
+        },
+        {
+          "faixa": "50–54",
+          "homens": 871,
+          "mulheres": 981
+        },
+        {
+          "faixa": "55–59",
+          "homens": 877,
+          "mulheres": 921
+        },
+        {
+          "faixa": "60–64",
+          "homens": 765,
+          "mulheres": 894
+        },
+        {
+          "faixa": "65–69",
+          "homens": 594,
+          "mulheres": 628
+        },
+        {
+          "faixa": "70–74",
+          "homens": 377,
+          "mulheres": 476
+        },
+        {
+          "faixa": "75–79",
+          "homens": 350,
+          "mulheres": 285
+        },
+        {
+          "faixa": "80–84",
+          "homens": 195,
+          "mulheres": 199
+        },
+        {
+          "faixa": "85–89",
+          "homens": 49,
+          "mulheres": 52
+        },
+        {
+          "faixa": "95+",
+          "homens": 53,
+          "mulheres": 78
+        }
+      ]
+    },
+    {
+      "uf": "Mato Grosso do Sul",
+      "sigla": "MS",
+      "percentual": 1.1,
+      "total_estado": 29088,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 2418,
+          "mulheres": 990
+        },
+        {
+          "faixa": "5–9",
+          "homens": 3088,
+          "mulheres": 1149
+        },
+        {
+          "faixa": "10–14",
+          "homens": 2538,
+          "mulheres": 879
+        },
+        {
+          "faixa": "15–19",
+          "homens": 1530,
+          "mulheres": 743
+        },
+        {
+          "faixa": "20–24",
+          "homens": 1115,
+          "mulheres": 813
+        },
+        {
+          "faixa": "25–29",
+          "homens": 1042,
+          "mulheres": 597
+        },
+        {
+          "faixa": "30–34",
+          "homens": 1021,
+          "mulheres": 804
+        },
+        {
+          "faixa": "35–39",
+          "homens": 753,
+          "mulheres": 831
+        },
+        {
+          "faixa": "40–44",
+          "homens": 738,
+          "mulheres": 705
+        },
+        {
+          "faixa": "45–49",
+          "homens": 648,
+          "mulheres": 837
+        },
+        {
+          "faixa": "50–54",
+          "homens": 634,
+          "mulheres": 559
+        },
+        {
+          "faixa": "55–59",
+          "homens": 462,
+          "mulheres": 648
+        },
+        {
+          "faixa": "60–64",
+          "homens": 496,
+          "mulheres": 670
+        },
+        {
+          "faixa": "65–69",
+          "homens": 446,
+          "mulheres": 473
+        },
+        {
+          "faixa": "70–74",
+          "homens": 303,
+          "mulheres": 289
+        },
+        {
+          "faixa": "75–79",
+          "homens": 233,
+          "mulheres": 208
+        },
+        {
+          "faixa": "80–84",
+          "homens": 69,
+          "mulheres": 165
+        },
+        {
+          "faixa": "85–89",
+          "homens": 66,
+          "mulheres": 72
+        },
+        {
+          "faixa": "95+",
+          "homens": 41,
+          "mulheres": 1
+        }
+      ]
+    },
+    {
+      "uf": "Minas Gerais",
+      "sigla": "MG",
+      "percentual": 1,
+      "total_estado": 228557,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 16943,
+          "mulheres": 6815
+        },
+        {
+          "faixa": "5–9",
+          "homens": 24059,
+          "mulheres": 8086
+        },
+        {
+          "faixa": "10–14",
+          "homens": 17180,
+          "mulheres": 6835
+        },
+        {
+          "faixa": "15–19",
+          "homens": 12004,
+          "mulheres": 5971
+        },
+        {
+          "faixa": "20–24",
+          "homens": 8840,
+          "mulheres": 5720
+        },
+        {
+          "faixa": "25–29",
+          "homens": 7572,
+          "mulheres": 5855
+        },
+        {
+          "faixa": "30–34",
+          "homens": 7150,
+          "mulheres": 6034
+        },
+        {
+          "faixa": "35–39",
+          "homens": 6772,
+          "mulheres": 5774
+        },
+        {
+          "faixa": "40–44",
+          "homens": 6413,
+          "mulheres": 6550
+        },
+        {
+          "faixa": "45–49",
+          "homens": 5521,
+          "mulheres": 5579
+        },
+        {
+          "faixa": "50–54",
+          "homens": 5133,
+          "mulheres": 5925
+        },
+        {
+          "faixa": "55–59",
+          "homens": 5348,
+          "mulheres": 5465
+        },
+        {
+          "faixa": "60–64",
+          "homens": 4334,
+          "mulheres": 5237
+        },
+        {
+          "faixa": "65–69",
+          "homens": 3686,
+          "mulheres": 4151
+        },
+        {
+          "faixa": "70–74",
+          "homens": 2255,
+          "mulheres": 3263
+        },
+        {
+          "faixa": "75–79",
+          "homens": 1397,
+          "mulheres": 2227
+        },
+        {
+          "faixa": "80–84",
+          "homens": 1096,
+          "mulheres": 1330
+        },
+        {
+          "faixa": "85–89",
+          "homens": 657,
+          "mulheres": 801
+        },
+        {
+          "faixa": "95+",
+          "homens": 158,
+          "mulheres": 288
+        }
+      ]
+    },
+    {
+      "uf": "Pará",
+      "sigla": "PA",
+      "percentual": 1,
+      "total_estado": 91230,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 6676,
+          "mulheres": 2461
+        },
+        {
+          "faixa": "5–9",
+          "homens": 9942,
+          "mulheres": 3471
+        },
+        {
+          "faixa": "10–14",
+          "homens": 8211,
+          "mulheres": 3442
+        },
+        {
+          "faixa": "15–19",
+          "homens": 6045,
+          "mulheres": 3021
+        },
+        {
+          "faixa": "20–24",
+          "homens": 4315,
+          "mulheres": 2557
+        },
+        {
+          "faixa": "25–29",
+          "homens": 3158,
+          "mulheres": 2679
+        },
+        {
+          "faixa": "30–34",
+          "homens": 3228,
+          "mulheres": 2508
+        },
+        {
+          "faixa": "35–39",
+          "homens": 2786,
+          "mulheres": 2610
+        },
+        {
+          "faixa": "40–44",
+          "homens": 2375,
+          "mulheres": 2561
+        },
+        {
+          "faixa": "45–49",
+          "homens": 2303,
+          "mulheres": 1709
+        },
+        {
+          "faixa": "50–54",
+          "homens": 1875,
+          "mulheres": 1662
+        },
+        {
+          "faixa": "55–59",
+          "homens": 1625,
+          "mulheres": 1597
+        },
+        {
+          "faixa": "60–64",
+          "homens": 1417,
+          "mulheres": 1452
+        },
+        {
+          "faixa": "65–69",
+          "homens": 1098,
+          "mulheres": 1021
+        },
+        {
+          "faixa": "70–74",
+          "homens": 770,
+          "mulheres": 877
+        },
+        {
+          "faixa": "75–79",
+          "homens": 384,
+          "mulheres": 631
+        },
+        {
+          "faixa": "80–84",
+          "homens": 241,
+          "mulheres": 147
+        },
+        {
+          "faixa": "85–89",
+          "homens": 121,
+          "mulheres": 94
+        },
+        {
+          "faixa": "95+",
+          "homens": 71,
+          "mulheres": 90
+        }
+      ]
+    },
+    {
+      "uf": "Paraíba",
+      "sigla": "PB",
+      "percentual": 0.9,
+      "total_estado": 46560,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 4873,
+          "mulheres": 1881
+        },
+        {
+          "faixa": "5–9",
+          "homens": 6570,
+          "mulheres": 2156
+        },
+        {
+          "faixa": "10–14",
+          "homens": 4388,
+          "mulheres": 1313
+        },
+        {
+          "faixa": "15–19",
+          "homens": 2541,
+          "mulheres": 1354
+        },
+        {
+          "faixa": "20–24",
+          "homens": 1500,
+          "mulheres": 1054
+        },
+        {
+          "faixa": "25–29",
+          "homens": 1290,
+          "mulheres": 1039
+        },
+        {
+          "faixa": "30–34",
+          "homens": 1175,
+          "mulheres": 1216
+        },
+        {
+          "faixa": "35–39",
+          "homens": 1064,
+          "mulheres": 1150
+        },
+        {
+          "faixa": "40–44",
+          "homens": 1022,
+          "mulheres": 1152
+        },
+        {
+          "faixa": "45–49",
+          "homens": 1016,
+          "mulheres": 989
+        },
+        {
+          "faixa": "50–54",
+          "homens": 637,
+          "mulheres": 913
+        },
+        {
+          "faixa": "55–59",
+          "homens": 778,
+          "mulheres": 924
+        },
+        {
+          "faixa": "60–64",
+          "homens": 626,
+          "mulheres": 821
+        },
+        {
+          "faixa": "65–69",
+          "homens": 488,
+          "mulheres": 545
+        },
+        {
+          "faixa": "70–74",
+          "homens": 418,
+          "mulheres": 442
+        },
+        {
+          "faixa": "75–79",
+          "homens": 241,
+          "mulheres": 332
+        },
+        {
+          "faixa": "80–84",
+          "homens": 155,
+          "mulheres": 175
+        },
+        {
+          "faixa": "85–89",
+          "homens": 67,
+          "mulheres": 164
+        },
+        {
+          "faixa": "95+",
+          "homens": 15,
+          "mulheres": 67
+        }
+      ]
+    },
+    {
+      "uf": "Paraná",
+      "sigla": "PR",
+      "percentual": 1.2,
+      "total_estado": 132604,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 11979,
+          "mulheres": 4355
+        },
+        {
+          "faixa": "5–9",
+          "homens": 14726,
+          "mulheres": 4716
+        },
+        {
+          "faixa": "10–14",
+          "homens": 10655,
+          "mulheres": 3768
+        },
+        {
+          "faixa": "15–19",
+          "homens": 6989,
+          "mulheres": 3230
+        },
+        {
+          "faixa": "20–24",
+          "homens": 5023,
+          "mulheres": 3377
+        },
+        {
+          "faixa": "25–29",
+          "homens": 4011,
+          "mulheres": 3482
+        },
+        {
+          "faixa": "30–34",
+          "homens": 4095,
+          "mulheres": 3299
+        },
+        {
+          "faixa": "35–39",
+          "homens": 3552,
+          "mulheres": 2895
+        },
+        {
+          "faixa": "40–44",
+          "homens": 3606,
+          "mulheres": 3251
+        },
+        {
+          "faixa": "45–49",
+          "homens": 2872,
+          "mulheres": 3364
+        },
+        {
+          "faixa": "50–54",
+          "homens": 3040,
+          "mulheres": 3131
+        },
+        {
+          "faixa": "55–59",
+          "homens": 2654,
+          "mulheres": 3205
+        },
+        {
+          "faixa": "60–64",
+          "homens": 2576,
+          "mulheres": 2892
+        },
+        {
+          "faixa": "65–69",
+          "homens": 2065,
+          "mulheres": 2327
+        },
+        {
+          "faixa": "70–74",
+          "homens": 1389,
+          "mulheres": 1680
+        },
+        {
+          "faixa": "75–79",
+          "homens": 998,
+          "mulheres": 1317
+        },
+        {
+          "faixa": "80–84",
+          "homens": 538,
+          "mulheres": 663
+        },
+        {
+          "faixa": "85–89",
+          "homens": 219,
+          "mulheres": 371
+        },
+        {
+          "faixa": "95+",
+          "homens": 88,
+          "mulheres": 146
+        }
+      ]
+    },
+    {
+      "uf": "Pernambuco",
+      "sigla": "PE",
+      "percentual": 1.1,
+      "total_estado": 105852,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 9150,
+          "mulheres": 3521
+        },
+        {
+          "faixa": "5–9",
+          "homens": 13490,
+          "mulheres": 4367
+        },
+        {
+          "faixa": "10–14",
+          "homens": 9911,
+          "mulheres": 3383
+        },
+        {
+          "faixa": "15–19",
+          "homens": 6227,
+          "mulheres": 2693
+        },
+        {
+          "faixa": "20–24",
+          "homens": 3684,
+          "mulheres": 2508
+        },
+        {
+          "faixa": "25–29",
+          "homens": 2731,
+          "mulheres": 2773
+        },
+        {
+          "faixa": "30–34",
+          "homens": 2717,
+          "mulheres": 2778
+        },
+        {
+          "faixa": "35–39",
+          "homens": 2638,
+          "mulheres": 2942
+        },
+        {
+          "faixa": "40–44",
+          "homens": 2870,
+          "mulheres": 3006
+        },
+        {
+          "faixa": "45–49",
+          "homens": 2222,
+          "mulheres": 2754
+        },
+        {
+          "faixa": "50–54",
+          "homens": 1750,
+          "mulheres": 2125
+        },
+        {
+          "faixa": "55–59",
+          "homens": 1634,
+          "mulheres": 2330
+        },
+        {
+          "faixa": "60–64",
+          "homens": 1562,
+          "mulheres": 2082
+        },
+        {
+          "faixa": "65–69",
+          "homens": 1098,
+          "mulheres": 1545
+        },
+        {
+          "faixa": "70–74",
+          "homens": 809,
+          "mulheres": 1374
+        },
+        {
+          "faixa": "75–79",
+          "homens": 606,
+          "mulheres": 838
+        },
+        {
+          "faixa": "80–84",
+          "homens": 484,
+          "mulheres": 504
+        },
+        {
+          "faixa": "85–89",
+          "homens": 184,
+          "mulheres": 315
+        },
+        {
+          "faixa": "95+",
+          "homens": 51,
+          "mulheres": 122
+        }
+      ]
+    },
+    {
+      "uf": "Piauí",
+      "sigla": "PI",
+      "percentual": 0.9,
+      "total_estado": 37856,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 3279,
+          "mulheres": 1149
+        },
+        {
+          "faixa": "5–9",
+          "homens": 5370,
+          "mulheres": 1491
+        },
+        {
+          "faixa": "10–14",
+          "homens": 3732,
+          "mulheres": 1333
+        },
+        {
+          "faixa": "15–19",
+          "homens": 2154,
+          "mulheres": 1094
+        },
+        {
+          "faixa": "20–24",
+          "homens": 1552,
+          "mulheres": 972
+        },
+        {
+          "faixa": "25–29",
+          "homens": 1164,
+          "mulheres": 822
+        },
+        {
+          "faixa": "30–34",
+          "homens": 987,
+          "mulheres": 980
+        },
+        {
+          "faixa": "35–39",
+          "homens": 991,
+          "mulheres": 910
+        },
+        {
+          "faixa": "40–44",
+          "homens": 927,
+          "mulheres": 883
+        },
+        {
+          "faixa": "45–49",
+          "homens": 859,
+          "mulheres": 708
+        },
+        {
+          "faixa": "50–54",
+          "homens": 670,
+          "mulheres": 658
+        },
+        {
+          "faixa": "55–59",
+          "homens": 539,
+          "mulheres": 838
+        },
+        {
+          "faixa": "60–64",
+          "homens": 584,
+          "mulheres": 741
+        },
+        {
+          "faixa": "65–69",
+          "homens": 369,
+          "mulheres": 399
+        },
+        {
+          "faixa": "70–74",
+          "homens": 326,
+          "mulheres": 324
+        },
+        {
+          "faixa": "75–79",
+          "homens": 197,
+          "mulheres": 255
+        },
+        {
+          "faixa": "80–84",
+          "homens": 214,
+          "mulheres": 117
+        },
+        {
+          "faixa": "85–89",
+          "homens": 34,
+          "mulheres": 132
+        },
+        {
+          "faixa": "95+",
+          "homens": 32,
+          "mulheres": 45
+        }
+      ]
+    },
+    {
+      "uf": "Rio de Janeiro",
+      "sigla": "RJ",
+      "percentual": 1.3,
+      "total_estado": 214637,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 14139,
+          "mulheres": 6113
+        },
+        {
+          "faixa": "5–9",
+          "homens": 21327,
+          "mulheres": 7593
+        },
+        {
+          "faixa": "10–14",
+          "homens": 14869,
+          "mulheres": 5377
+        },
+        {
+          "faixa": "15–19",
+          "homens": 10539,
+          "mulheres": 5062
+        },
+        {
+          "faixa": "20–24",
+          "homens": 8547,
+          "mulheres": 5631
+        },
+        {
+          "faixa": "25–29",
+          "homens": 7116,
+          "mulheres": 5576
+        },
+        {
+          "faixa": "30–34",
+          "homens": 5947,
+          "mulheres": 6210
+        },
+        {
+          "faixa": "35–39",
+          "homens": 5978,
+          "mulheres": 6130
+        },
+        {
+          "faixa": "40–44",
+          "homens": 6211,
+          "mulheres": 6526
+        },
+        {
+          "faixa": "45–49",
+          "homens": 5850,
+          "mulheres": 5906
+        },
+        {
+          "faixa": "50–54",
+          "homens": 4842,
+          "mulheres": 5531
+        },
+        {
+          "faixa": "55–59",
+          "homens": 4901,
+          "mulheres": 5636
+        },
+        {
+          "faixa": "60–64",
+          "homens": 4247,
+          "mulheres": 5626
+        },
+        {
+          "faixa": "65–69",
+          "homens": 3045,
+          "mulheres": 4695
+        },
+        {
+          "faixa": "70–74",
+          "homens": 2927,
+          "mulheres": 3892
+        },
+        {
+          "faixa": "75–79",
+          "homens": 1579,
+          "mulheres": 2462
+        },
+        {
+          "faixa": "80–84",
+          "homens": 1070,
+          "mulheres": 1760
+        },
+        {
+          "faixa": "85–89",
+          "homens": 389,
+          "mulheres": 854
+        },
+        {
+          "faixa": "95+",
+          "homens": 102,
+          "mulheres": 349
+        }
+      ]
+    },
+    {
+      "uf": "Rio Grande do Norte",
+      "sigla": "RN",
+      "percentual": 1,
+      "total_estado": 37625,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 3173,
+          "mulheres": 1315
+        },
+        {
+          "faixa": "5–9",
+          "homens": 4778,
+          "mulheres": 1296
+        },
+        {
+          "faixa": "10–14",
+          "homens": 3572,
+          "mulheres": 1151
+        },
+        {
+          "faixa": "15–19",
+          "homens": 2730,
+          "mulheres": 1106
+        },
+        {
+          "faixa": "20–24",
+          "homens": 1266,
+          "mulheres": 883
+        },
+        {
+          "faixa": "25–29",
+          "homens": 1281,
+          "mulheres": 1007
+        },
+        {
+          "faixa": "30–34",
+          "homens": 902,
+          "mulheres": 851
+        },
+        {
+          "faixa": "35–39",
+          "homens": 993,
+          "mulheres": 1130
+        },
+        {
+          "faixa": "40–44",
+          "homens": 1101,
+          "mulheres": 1004
+        },
+        {
+          "faixa": "45–49",
+          "homens": 733,
+          "mulheres": 837
+        },
+        {
+          "faixa": "50–54",
+          "homens": 695,
+          "mulheres": 824
+        },
+        {
+          "faixa": "55–59",
+          "homens": 720,
+          "mulheres": 836
+        },
+        {
+          "faixa": "60–64",
+          "homens": 439,
+          "mulheres": 539
+        },
+        {
+          "faixa": "65–69",
+          "homens": 339,
+          "mulheres": 439
+        },
+        {
+          "faixa": "70–74",
+          "homens": 300,
+          "mulheres": 390
+        },
+        {
+          "faixa": "75–79",
+          "homens": 232,
+          "mulheres": 266
+        },
+        {
+          "faixa": "80–84",
+          "homens": 122,
+          "mulheres": 161
+        },
+        {
+          "faixa": "85–89",
+          "homens": 39,
+          "mulheres": 60
+        },
+        {
+          "faixa": "95+",
+          "homens": 39,
+          "mulheres": 65
+        }
+      ]
+    },
+    {
+      "uf": "Rio Grande do Sul",
+      "sigla": "RS",
+      "percentual": 1.2,
+      "total_estado": 124241,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 9710,
+          "mulheres": 3590
+        },
+        {
+          "faixa": "5–9",
+          "homens": 12820,
+          "mulheres": 4408
+        },
+        {
+          "faixa": "10–14",
+          "homens": 8826,
+          "mulheres": 2974
+        },
+        {
+          "faixa": "15–19",
+          "homens": 6393,
+          "mulheres": 3254
+        },
+        {
+          "faixa": "20–24",
+          "homens": 5065,
+          "mulheres": 3233
+        },
+        {
+          "faixa": "25–29",
+          "homens": 4604,
+          "mulheres": 3092
+        },
+        {
+          "faixa": "30–34",
+          "homens": 3567,
+          "mulheres": 2880
+        },
+        {
+          "faixa": "35–39",
+          "homens": 3652,
+          "mulheres": 3374
+        },
+        {
+          "faixa": "40–44",
+          "homens": 3488,
+          "mulheres": 3683
+        },
+        {
+          "faixa": "45–49",
+          "homens": 2860,
+          "mulheres": 2897
+        },
+        {
+          "faixa": "50–54",
+          "homens": 2200,
+          "mulheres": 2800
+        },
+        {
+          "faixa": "55–59",
+          "homens": 2650,
+          "mulheres": 3056
+        },
+        {
+          "faixa": "60–64",
+          "homens": 2456,
+          "mulheres": 3439
+        },
+        {
+          "faixa": "65–69",
+          "homens": 2114,
+          "mulheres": 2682
+        },
+        {
+          "faixa": "70–74",
+          "homens": 1731,
+          "mulheres": 2075
+        },
+        {
+          "faixa": "75–79",
+          "homens": 971,
+          "mulheres": 1476
+        },
+        {
+          "faixa": "80–84",
+          "homens": 474,
+          "mulheres": 824
+        },
+        {
+          "faixa": "85–89",
+          "homens": 164,
+          "mulheres": 380
+        },
+        {
+          "faixa": "95+",
+          "homens": 113,
+          "mulheres": 227
+        }
+      ]
+    },
+    {
+      "uf": "Rondônia",
+      "sigla": "RO",
+      "percentual": 1,
+      "total_estado": 20209,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 1411,
+          "mulheres": 572
+        },
+        {
+          "faixa": "5–9",
+          "homens": 2071,
+          "mulheres": 801
+        },
+        {
+          "faixa": "10–14",
+          "homens": 1835,
+          "mulheres": 699
+        },
+        {
+          "faixa": "15–19",
+          "homens": 1235,
+          "mulheres": 598
+        },
+        {
+          "faixa": "20–24",
+          "homens": 774,
+          "mulheres": 624
+        },
+        {
+          "faixa": "25–29",
+          "homens": 716,
+          "mulheres": 637
+        },
+        {
+          "faixa": "30–34",
+          "homens": 493,
+          "mulheres": 592
+        },
+        {
+          "faixa": "35–39",
+          "homens": 602,
+          "mulheres": 738
+        },
+        {
+          "faixa": "40–44",
+          "homens": 685,
+          "mulheres": 601
+        },
+        {
+          "faixa": "45–49",
+          "homens": 407,
+          "mulheres": 657
+        },
+        {
+          "faixa": "50–54",
+          "homens": 369,
+          "mulheres": 383
+        },
+        {
+          "faixa": "55–59",
+          "homens": 352,
+          "mulheres": 481
+        },
+        {
+          "faixa": "60–64",
+          "homens": 243,
+          "mulheres": 382
+        },
+        {
+          "faixa": "65–69",
+          "homens": 205,
+          "mulheres": 168
+        },
+        {
+          "faixa": "70–74",
+          "homens": 207,
+          "mulheres": 219
+        },
+        {
+          "faixa": "75–79",
+          "homens": 86,
+          "mulheres": 87
+        },
+        {
+          "faixa": "80–84",
+          "homens": 78,
+          "mulheres": 111
+        },
+        {
+          "faixa": "85–89",
+          "homens": 13,
+          "mulheres": 54
+        },
+        {
+          "faixa": "95+",
+          "homens": 13,
+          "mulheres": 5
+        }
+      ]
+    },
+    {
+      "uf": "Roraima",
+      "sigla": "RR",
+      "percentual": 1.3,
+      "total_estado": 7374,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 855,
+          "mulheres": 358
+        },
+        {
+          "faixa": "5–9",
+          "homens": 868,
+          "mulheres": 304
+        },
+        {
+          "faixa": "10–14",
+          "homens": 671,
+          "mulheres": 262
+        },
+        {
+          "faixa": "15–19",
+          "homens": 442,
+          "mulheres": 233
+        },
+        {
+          "faixa": "20–24",
+          "homens": 272,
+          "mulheres": 170
+        },
+        {
+          "faixa": "25–29",
+          "homens": 261,
+          "mulheres": 205
+        },
+        {
+          "faixa": "30–34",
+          "homens": 151,
+          "mulheres": 178
+        },
+        {
+          "faixa": "35–39",
+          "homens": 175,
+          "mulheres": 242
+        },
+        {
+          "faixa": "40–44",
+          "homens": 287,
+          "mulheres": 141
+        },
+        {
+          "faixa": "45–49",
+          "homens": 83,
+          "mulheres": 141
+        },
+        {
+          "faixa": "50–54",
+          "homens": 152,
+          "mulheres": 166
+        },
+        {
+          "faixa": "55–59",
+          "homens": 132,
+          "mulheres": 100
+        },
+        {
+          "faixa": "60–64",
+          "homens": 84,
+          "mulheres": 44
+        },
+        {
+          "faixa": "65–69",
+          "homens": 84,
+          "mulheres": 95
+        },
+        {
+          "faixa": "70–74",
+          "homens": 61,
+          "mulheres": 17
+        },
+        {
+          "faixa": "75–79",
+          "homens": 45,
+          "mulheres": 19
+        },
+        {
+          "faixa": "80–84",
+          "homens": 26,
+          "mulheres": 0
+        },
+        {
+          "faixa": "85–89",
+          "homens": 30,
+          "mulheres": 12
+        },
+        {
+          "faixa": "95+",
+          "homens": 7,
+          "mulheres": 0
+        }
+      ]
+    },
+    {
+      "uf": "Santa Catarina",
+      "sigla": "SC",
+      "percentual": 1.3,
+      "total_estado": 91588,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 8041,
+          "mulheres": 2756
+        },
+        {
+          "faixa": "5–9",
+          "homens": 11256,
+          "mulheres": 3341
+        },
+        {
+          "faixa": "10–14",
+          "homens": 7507,
+          "mulheres": 2521
+        },
+        {
+          "faixa": "15–19",
+          "homens": 5257,
+          "mulheres": 2115
+        },
+        {
+          "faixa": "20–24",
+          "homens": 3622,
+          "mulheres": 2185
+        },
+        {
+          "faixa": "25–29",
+          "homens": 2982,
+          "mulheres": 2540
+        },
+        {
+          "faixa": "30–34",
+          "homens": 2935,
+          "mulheres": 2596
+        },
+        {
+          "faixa": "35–39",
+          "homens": 2530,
+          "mulheres": 2294
+        },
+        {
+          "faixa": "40–44",
+          "homens": 2399,
+          "mulheres": 2270
+        },
+        {
+          "faixa": "45–49",
+          "homens": 1753,
+          "mulheres": 1856
+        },
+        {
+          "faixa": "50–54",
+          "homens": 2126,
+          "mulheres": 1788
+        },
+        {
+          "faixa": "55–59",
+          "homens": 1689,
+          "mulheres": 2039
+        },
+        {
+          "faixa": "60–64",
+          "homens": 1888,
+          "mulheres": 1806
+        },
+        {
+          "faixa": "65–69",
+          "homens": 1409,
+          "mulheres": 1476
+        },
+        {
+          "faixa": "70–74",
+          "homens": 932,
+          "mulheres": 1167
+        },
+        {
+          "faixa": "75–79",
+          "homens": 526,
+          "mulheres": 691
+        },
+        {
+          "faixa": "80–84",
+          "homens": 288,
+          "mulheres": 447
+        },
+        {
+          "faixa": "85–89",
+          "homens": 204,
+          "mulheres": 189
+        },
+        {
+          "faixa": "95+",
+          "homens": 12,
+          "mulheres": 116
+        }
+      ]
+    },
+    {
+      "uf": "São Paulo",
+      "sigla": "SP",
+      "percentual": 1.3,
+      "total_estado": 547545,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 38658,
+          "mulheres": 15337
+        },
+        {
+          "faixa": "5–9",
+          "homens": 50297,
+          "mulheres": 16933
+        },
+        {
+          "faixa": "10–14",
+          "homens": 35047,
+          "mulheres": 13550
+        },
+        {
+          "faixa": "15–19",
+          "homens": 26352,
+          "mulheres": 12186
+        },
+        {
+          "faixa": "20–24",
+          "homens": 20838,
+          "mulheres": 14346
+        },
+        {
+          "faixa": "25–29",
+          "homens": 18226,
+          "mulheres": 15384
+        },
+        {
+          "faixa": "30–34",
+          "homens": 17019,
+          "mulheres": 15786
+        },
+        {
+          "faixa": "35–39",
+          "homens": 18270,
+          "mulheres": 16805
+        },
+        {
+          "faixa": "40–44",
+          "homens": 16784,
+          "mulheres": 17057
+        },
+        {
+          "faixa": "45–49",
+          "homens": 13204,
+          "mulheres": 16526
+        },
+        {
+          "faixa": "50–54",
+          "homens": 13073,
+          "mulheres": 15416
+        },
+        {
+          "faixa": "55–59",
+          "homens": 12263,
+          "mulheres": 14132
+        },
+        {
+          "faixa": "60–64",
+          "homens": 10581,
+          "mulheres": 14498
+        },
+        {
+          "faixa": "65–69",
+          "homens": 9055,
+          "mulheres": 12902
+        },
+        {
+          "faixa": "70–74",
+          "homens": 7442,
+          "mulheres": 9002
+        },
+        {
+          "faixa": "75–79",
+          "homens": 4185,
+          "mulheres": 6079
+        },
+        {
+          "faixa": "80–84",
+          "homens": 2248,
+          "mulheres": 3585
+        },
+        {
+          "faixa": "85–89",
+          "homens": 1248,
+          "mulheres": 1734
+        },
+        {
+          "faixa": "95+",
+          "homens": 397,
+          "mulheres": 743
+        }
+      ]
+    },
+    {
+      "uf": "Sergipe",
+      "sigla": "SE",
+      "percentual": 0.9,
+      "total_estado": 25696,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 2639,
+          "mulheres": 869
+        },
+        {
+          "faixa": "5–9",
+          "homens": 3464,
+          "mulheres": 1205
+        },
+        {
+          "faixa": "10–14",
+          "homens": 2551,
+          "mulheres": 925
+        },
+        {
+          "faixa": "15–19",
+          "homens": 1486,
+          "mulheres": 509
+        },
+        {
+          "faixa": "20–24",
+          "homens": 876,
+          "mulheres": 678
+        },
+        {
+          "faixa": "25–29",
+          "homens": 658,
+          "mulheres": 527
+        },
+        {
+          "faixa": "30–34",
+          "homens": 498,
+          "mulheres": 823
+        },
+        {
+          "faixa": "35–39",
+          "homens": 688,
+          "mulheres": 618
+        },
+        {
+          "faixa": "40–44",
+          "homens": 622,
+          "mulheres": 555
+        },
+        {
+          "faixa": "45–49",
+          "homens": 527,
+          "mulheres": 648
+        },
+        {
+          "faixa": "50–54",
+          "homens": 468,
+          "mulheres": 507
+        },
+        {
+          "faixa": "55–59",
+          "homens": 546,
+          "mulheres": 467
+        },
+        {
+          "faixa": "60–64",
+          "homens": 324,
+          "mulheres": 506
+        },
+        {
+          "faixa": "65–69",
+          "homens": 395,
+          "mulheres": 226
+        },
+        {
+          "faixa": "70–74",
+          "homens": 196,
+          "mulheres": 164
+        },
+        {
+          "faixa": "75–79",
+          "homens": 65,
+          "mulheres": 157
+        },
+        {
+          "faixa": "80–84",
+          "homens": 30,
+          "mulheres": 116
+        },
+        {
+          "faixa": "85–89",
+          "homens": 35,
+          "mulheres": 53
+        },
+        {
+          "faixa": "95+",
+          "homens": 12,
+          "mulheres": 45
+        }
+      ]
+    },
+    {
+      "uf": "Tocantins",
+      "sigla": "TO",
+      "percentual": 0.9,
+      "total_estado": 14734,
+      "piramide_local": [
+        {
+          "faixa": "0–4",
+          "homens": 1342,
+          "mulheres": 402
+        },
+        {
+          "faixa": "5–9",
+          "homens": 1573,
+          "mulheres": 542
+        },
+        {
+          "faixa": "10–14",
+          "homens": 1087,
+          "mulheres": 527
+        },
+        {
+          "faixa": "15–19",
+          "homens": 795,
+          "mulheres": 398
+        },
+        {
+          "faixa": "20–24",
+          "homens": 380,
+          "mulheres": 407
+        },
+        {
+          "faixa": "25–29",
+          "homens": 514,
+          "mulheres": 411
+        },
+        {
+          "faixa": "30–34",
+          "homens": 383,
+          "mulheres": 353
+        },
+        {
+          "faixa": "35–39",
+          "homens": 577,
+          "mulheres": 394
+        },
+        {
+          "faixa": "40–44",
+          "homens": 549,
+          "mulheres": 475
+        },
+        {
+          "faixa": "45–49",
+          "homens": 397,
+          "mulheres": 331
+        },
+        {
+          "faixa": "50–54",
+          "homens": 291,
+          "mulheres": 359
+        },
+        {
+          "faixa": "55–59",
+          "homens": 290,
+          "mulheres": 346
+        },
+        {
+          "faixa": "60–64",
+          "homens": 242,
+          "mulheres": 290
+        },
+        {
+          "faixa": "65–69",
+          "homens": 164,
+          "mulheres": 128
+        },
+        {
+          "faixa": "70–74",
+          "homens": 168,
+          "mulheres": 131
+        },
+        {
+          "faixa": "75–79",
+          "homens": 116,
+          "mulheres": 91
+        },
+        {
+          "faixa": "80–84",
+          "homens": 74,
+          "mulheres": 72
+        },
+        {
+          "faixa": "85–89",
+          "homens": 19,
+          "mulheres": 57
+        },
+        {
+          "faixa": "95+",
+          "homens": 26,
+          "mulheres": 22
+        }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const ibgeAutismData = require('../data/autism-data.json');
+const ibgeAutismData = require('../data/autism-data-completo.json');
 
 // ==========================================================
 // GET /api/dataviz/ibge-stats (Dados do IBGE sobre Autismo no Brasil)

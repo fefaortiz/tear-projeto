@@ -5,14 +5,18 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
+  Tooltip as RechartsTooltip,
   Legend,
   ResponsiveContainer
 } from 'recharts';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { scaleLinear } from 'd3-scale'; // <-- 1. Importar D3 Scale
+import { Tooltip } from 'react-tooltip'; // <-- 2. Importar React Tooltip
+import 'react-tooltip/dist/react-tooltip.css'; // <-- 3. Importar CSS do Tooltip
 import styles from './style.module.css';
 
 // --- Tipagem ---
+// (Recomendação: Mova estas interfaces para um arquivo .types.ts)
 interface IPiramideData {
   faixa: string;
   homens: number;
@@ -23,6 +27,8 @@ interface IEstadoData {
   uf: string;
   sigla: string;
   percentual: number;
+  total_estado: number; // [NOVO] Dado necessário para o filtro
+  piramide_local: IPiramideData[]; // [NOVO] Dado necessário para o filtro
 }
 
 interface IStatsData {
@@ -36,11 +42,15 @@ const DatavizPage: React.FC = () => {
   const [stats, setStats] = useState<IStatsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // --- 4. Estado de Seleção ---
+  const [selectedUf, setSelectedUf] = useState<string | null>(null);
 
   // --- Busca de dados ---
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        // Assume que o endpoint agora retorna os dados detalhados por estado
         const res = await fetch('http://localhost:3333/api/dataviz/ibge-stats');
         if (!res.ok) throw new Error('Erro ao carregar dados.');
         const data: IStatsData = await res.json();
@@ -62,6 +72,28 @@ const DatavizPage: React.FC = () => {
   if (error) return <div className={styles.error}>{error}</div>;
   if (!stats) return <div>Nenhum dado encontrado.</div>;
 
+  // --- 5. Lógica de Filtro (Cross-Filtering) ---
+  const estadoSelecionado = stats.por_estado.find(e => e.uf === selectedUf);
+
+  const kpiTotal = estadoSelecionado?.total_estado || stats.total_brasil;
+  const kpiLabel = estadoSelecionado ? `Pessoas com TEA em ${estadoSelecionado.sigla}` : 'Pessoas com TEA (Brasil)';
+  
+  const kpiPercent = estadoSelecionado ? estadoSelecionado.percentual : stats.porcentagem_populacao;
+  const kpiPercentLabel = estadoSelecionado ? `% da População de ${estadoSelecionado.sigla}` : 'da População Total';
+  
+  const dadosPiramide = estadoSelecionado ? estadoSelecionado.piramide_local : stats.pirâmide_etária;
+  const tituloHeader = estadoSelecionado 
+    ? `Panorama — ${estadoSelecionado.uf} (Censo 2022)` 
+    : 'Panorama Geral — Autismo no Brasil (Censo 2022)';
+
+  // --- 6. Lógica da Escala de Cor (Mapa) ---
+  const minPercent = Math.min(...stats.por_estado.map(e => e.percentual));
+  const maxPercent = Math.max(...stats.por_estado.map(e => e.percentual));
+
+  const colorScale = scaleLinear<string>()
+    .domain([minPercent, maxPercent])
+    .range(["#E3F2FD", "#0D47A1"]); // De: Azul bem claro -> Para: Azul escuro
+
   // --- Mapa: geometria simplificada do Brasil ---
   const geoUrl =
     'https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson';
@@ -69,38 +101,49 @@ const DatavizPage: React.FC = () => {
   return (
     <div className={styles.pageContainer}>
       <header className={styles.header}>
-        <h1>Panorama Geral — Autismo no Brasil (Censo 2022)</h1>
+        <h1>{tituloHeader}</h1> {/* Título dinâmico */}
         <p>Distribuição da população diagnosticada com TEA por faixa etária, sexo e estado.</p>
+        {estadoSelecionado && (
+          <button 
+            className={styles.clearButton} // (Adicione este estilo no seu CSS)
+            onClick={() => setSelectedUf(null)}
+          >
+            Limpar seleção (Ver Brasil)
+          </button>
+        )}
       </header>
+      
+      {/* 7. Tooltip Global para o Mapa */}
+      <Tooltip id="map-tooltip" />
 
-      {/* KPIs principais */}
+      {/* KPIs principais (agora dinâmicos) */}
       <section className={styles.kpiContainer}>
         <div className={styles.kpiCard}>
           <span className={styles.kpiValue}>
-            {stats.total_brasil.toLocaleString('pt-BR')}
+            {kpiTotal.toLocaleString('pt-BR')}
           </span>
-          <span className={styles.kpiLabel}>Pessoas com TEA</span>
+          <span className={styles.kpiLabel}>{kpiLabel}</span>
         </div>
         <div className={styles.kpiCard}>
           <span className={styles.kpiValue}>
-            {stats.porcentagem_populacao.toFixed(2)}%
+            {kpiPercent.toFixed(2)}%
           </span>
-          <span className={styles.kpiLabel}>da População Total</span>
+          <span className={styles.kpiLabel}>{kpiPercentLabel}</span>
         </div>
       </section>
 
       {/* === Gráficos === */}
       <section className={styles.chartsGrid}>
 
-        {/* Pirâmide Etária */}
+        {/* Pirâmide Etária (agora dinâmica) */}
         <div className={styles.chartWrapper}>
           <h3>Distribuição Etária por Sexo</h3>
           <ResponsiveContainer width="100%" height={400}>
             <BarChart
               layout="vertical"
-              data={(stats.pirâmide_etária ?? []).map(d => ({
+              data={(dadosPiramide ?? []).map(d => ({
                 faixa: d.faixa,
-                homens: d.homens, // negativo para espelhar no eixo X
+                homens: d.homens, // <-- 8. CORREÇÃO DA PIRÂMIDE
                 mulheres: d.mulheres
               }))}
             >
@@ -109,25 +152,23 @@ const DatavizPage: React.FC = () => {
                 type="number"
                 tickFormatter={(value) => Math.abs(value).toLocaleString('pt-BR')}
               />
-              <YAxis type="category" dataKey="faixa" />
-              <Tooltip formatter={(v: number) => Math.abs(v).toLocaleString('pt-BR')} />
+              <YAxis type="category" dataKey="faixa" width={80} />
+              <RechartsTooltip formatter={(v: number) => Math.abs(v).toLocaleString('pt-BR')} />
               <Legend />
               <Bar dataKey="homens" fill="#38a2ff" name="Homens" stackId="a" />
               <Bar dataKey="mulheres" fill="#ff6efd" name="Mulheres" stackId="a" />
             </BarChart>
           </ResponsiveContainer>
-
-
         </div>
 
-        {/* Mapa por Estado */}
+        {/* Mapa por Estado (agora interativo) */}
         <div className={styles.chartWrapper}>
           <h3>Proporção de Pessoas com TEA por Estado</h3>
           <ComposableMap
             projection="geoMercator"
             projectionConfig={{
-              scale: 650,     // aumenta o zoom do mapa
-              center: [-55, -15] // centraliza o Brasil
+              scale: 650,
+              center: [-55, -15]
             }}
             width={800}
             height={600}
@@ -137,16 +178,33 @@ const DatavizPage: React.FC = () => {
                 geographies.map((geo) => {
                   const uf = geo.properties.name;
                   const estado = stats.por_estado.find(e => e.uf === uf);
-                  const cor = estado
-                    ? `rgba(0, 136, 254, ${estado.percentual / 1.5})`
-                    : '#EEE';
+                  
+                  // 9. Lógica de Cor e Interação
+                  const cor = estado ? colorScale(estado.percentual) : '#EEE';
+                  const isSelected = selectedUf === uf;
+
                   return (
                     <Geography
                       key={geo.rsmKey}
                       geography={geo}
                       fill={cor}
-                      stroke="#FFF"
-                      strokeWidth={0.5}
+                      stroke={isSelected ? '#20009f' : '#FFF'} // Destaque se selecionado
+                      strokeWidth={isSelected ? 2 : 0.5}
+                      // --- 10. ATRIBUTOS DE INTERAÇÃO ---
+                      data-tooltip-id="map-tooltip"
+                      data-tooltip-content={
+                        estado 
+                          ? `${estado.uf}: ${estado.percentual.toFixed(2)}%` 
+                          : `${uf}: Sem dados`
+                      }
+                      onClick={() => {
+                        setSelectedUf(selectedUf === uf ? null : uf);
+                      }}
+                      style={{
+                        default: { outline: 'none' },
+                        hover: { fill: '#20009f', stroke: '#333', strokeWidth: 1.5, outline: 'none', cursor: 'pointer' },
+                        pressed: { fill: '#20009f', outline: 'none' },
+                      }}
                     />
                   );
                 })

@@ -4,16 +4,30 @@
 
 .pageContainer {
   width: 100%;
-  max-width: 1200px; /* Limita a largura máxima em desktops */
   margin: 0 auto; /* Centraliza o container */
   padding: 2rem;
   font-family: 'Inter', sans-serif; /* Use uma fonte moderna (adicione ao seu index.css) */
   color: #333;
-  background-color: #f9faff; /* Um fundo levemente azulado/cinza */
+  background-color: #f7f9fb; /* Um fundo levemente azulado/cinza */
   min-height: 100vh;
   box-sizing: border-box; /* Garante que o padding não estoure a largura */
+  margin-bottom: 4rem;
+  margin-top: 4rem;
 }
 
+.titleSection{
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.datavizPage {
+  margin: 0 auto;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 /* --- Cabeçalho --- */
 .header {
   margin-bottom: 2rem;
@@ -35,15 +49,19 @@
 
 /* --- KPIs (Key Performance Indicators) --- */
 .kpiContainer {
+  max-width: 1100px;
   display: flex;
+  width: 100%;
   flex-wrap: wrap; /* Permite quebrar a linha em telas menores */
   gap: 1.5rem; /* Espaço entre os cards */
   margin-bottom: 2rem;
+  align-self: center;
 }
 
 .kpiCard {
   flex: 1; /* Faz com que os cards dividam o espaço */
   min-width: 250px; /* Largura mínima antes de quebrar */
+  width: 100%;
   background-color: #ffffff;
   border-radius: 12px;
   padding: 1.5rem;
@@ -58,7 +76,7 @@
 .kpiValue {
   font-size: 2.5rem; /* 40px */
   font-weight: 700;
-  color: #007BFF; /* Azul de destaque */
+  color: rgb(132, 94, 238); /* Azul de destaque */
 }
 
 .kpiLabel {
@@ -67,8 +85,16 @@
   text-align: center;
 }
 
+.backgroundWhite{
+  padding-top: 7rem;
+  padding-bottom: 7rem;
+  background-color: #ffffff;
+  width: 100%;
+}
 /* --- Grid dos Gráficos --- */
 .chartsGrid {
+  max-width: 1100px;
+  width: 100%;
   display: grid;
   /* Cria duas colunas de tamanho igual */
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));

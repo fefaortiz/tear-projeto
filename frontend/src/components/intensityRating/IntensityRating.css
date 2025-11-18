@@ -1,0 +1,49 @@
+.intensity-rating-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
+  align-items: flex-start;
+  margin-top: 0.75rem; 
+}
+
+.rating-option {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.rating-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; 
+  margin-bottom: 0.5rem; 
+  
+  border: 2px solid transparent; 
+  
+  transition: all 0.2s ease;
+}
+
+.rating-label {
+  font-size: 0.75rem;
+  color: #666;
+  font-weight: 500;
+  transition: font-weight 0.2s ease, color 0.2s ease;
+}
+
+.rating-option.selected .rating-circle {
+  transform: scale(1.15); 
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.rating-option.selected .rating-label {
+  font-weight: bold;
+  color: #000;
+}

@@ -57,7 +57,7 @@ CREATE TABLE Traits (
     IDTraits SERIAL PRIMARY KEY,
     Nome VARCHAR(255) NOT NULL,
     Descricao TEXT,
-    Intensidade INT,
+    Intensidade INT NOT NULL CHECK (Intensidade BETWEEN 1 AND 5),
     Data_de_Criacao DATE NOT NULL,
     
     -- Coluna "DONO": A qual paciente esta Trait pertence.
@@ -97,8 +97,9 @@ CREATE TABLE Traits (
 -- Tabela para rastrear a evolução de uma característica (trait) ao longo do tempo.
 CREATE TABLE Tracking (
     IDTracking SERIAL PRIMARY KEY,
-    Nome VARCHAR(255),
-    Intensidade INT,
+    Nome VARCHAR(255) NOT NULL,
+    Intensidade INT NOT NULL CHECK (Intensidade BETWEEN 1 AND 5),
+    Descricao TEXT,
     Dia_de_Registro DATE NOT NULL,
     IDTraits INT NOT NULL,
 

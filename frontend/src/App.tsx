@@ -8,6 +8,7 @@ import { RegisterSelectPage } from './pages/register-select';
 import { RegisterTherapistPage } from './pages/register-therapist';
 import  RegisterCaregiverPage  from './pages/register-caregiver';
 import RegisterPatientPage from './pages/register-patient';
+import PaginaTesteModal from './PaginaTesteModal';
 import LandingPage from './pages/landing';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/register/therapist" element={<RegisterTherapistPage />} />
           <Route path="/register/caregiver" element={<RegisterCaregiverPage />} />
           <Route path="/register/patient" element={<RegisterPatientPage />} />
+          <Route path="/teste-modal" element={<PaginaTesteModal />} />
           <Route path="/initial" element={
           <RequireAuth>
             <InitialPage />

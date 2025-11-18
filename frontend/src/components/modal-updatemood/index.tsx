@@ -1,13 +1,12 @@
-// src/componentes/FormularioRegistro/index.tsx
 import React, { useState } from 'react';
-import '../modal-trackmood/Form.css'; 
+import '../modal/Form.css'; 
 import IntensityRating from '../intensityRating'; 
 
-interface FormularioRegistroProps {
+interface UpdateMoodProps {
   onSave: () => void;
 }
 
-const FormularioRegistro: React.FC<FormularioRegistroProps> = ({ onSave }) => {
+const UpdateMood: React.FC<UpdateMoodProps> = ({ onSave }) => {
   
   // 1. Estados para guardar TODOS os valores
   const [selectedDate, setSelectedDate] = useState('');
@@ -88,10 +87,10 @@ const FormularioRegistro: React.FC<FormularioRegistroProps> = ({ onSave }) => {
       </div>
 
       <button type="submit" className="form-submit-btn">
-        Salvar
+        Update
       </button>
     </form>
   );
 };
 
-export default FormularioRegistro;
+export default UpdateMood;

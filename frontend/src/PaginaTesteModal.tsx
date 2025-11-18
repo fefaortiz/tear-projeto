@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
 // 1. O caminho do modal que você está usando
-import Modal from './components/modal-trackmood'; 
+import Modal from './components/modal'; 
 
 // 2. Importar o componente de formulário que criamos
-import FormularioRegistro from './components/FormularioRegistro'; 
-import './components/modal-trackmood/Form.css';
+import UpdateFormularioRegistro from './components/modal-updatetrack'; 
+import './components/modal/Form.css';
 
 function PaginaTesteModal() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,7 +31,7 @@ function PaginaTesteModal() {
       >
         {/* 6. Substituímos seu formulário antigo 
             pelo componente que já tem tudo */}
-        <FormularioRegistro 
+        <UpdateFormularioRegistro 
           onSave={() => setIsModalOpen(false)} 
         />
         

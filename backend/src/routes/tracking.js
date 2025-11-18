@@ -6,10 +6,11 @@ const verifyToken = require('../middleware/authMiddleware');
 // ==========================================================
 // POST /api/tracking (Criar novo Tracking) - LÓGICA DE EMAIL
 // ==========================================================
-router.post('/', verifyToken, async (req, res) => {
+router.post('/:idtraits', verifyToken, async (req, res) => {
   try {
     // 1. Pega os dados do corpo da requisição (dia_de_registro REMOVIDO)
-    const { nome, intensidade, idtraits } = req.body;
+    const { nome, intensidade } = req.body;
+    const { idtraits } = req.params;
 
     // 2. Pega os dados do usuário LOGADO (o "Criador")
     const { id: creatorId, email: creatorEmail } = req.user;

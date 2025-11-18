@@ -83,26 +83,55 @@ router.post('/:idpaciente', verifyToken, async (req, res) => {
 });
 
 // ==========================================================
-// GET /api/traits (Buscar Traits por Paciente)
+// GET /api/traits/:idpaciente (Buscar Traits com Status de Tracking Diário)
 // ==========================================================
 router.get('/:idpaciente', verifyToken, async (req, res) => {
   try {
     const { idpaciente } = req.params;
 
     if (!idpaciente) {
+      // Este erro deve ser ajustado, pois 'idpaciente' vem de req.params, não de query.
       return res.status(400).json({ 
-        error: 'O parâmetro de query "idpaciente" é obrigatório.' 
+        error: 'O parâmetro de rota "idpaciente" é obrigatório.' 
       });
     }
 
-    const traits = await db('traits')
-      .where({ idpaciente: idpaciente })
-      .orderBy('data_de_criacao', 'desc');
+    // Pega a data de hoje no formato YYYY-MM-DD
+    const hoje = new Date().toISOString().split('T')[0];
 
-    res.status(200).json(traits);
+    // 1. Buscar todas as Traits para o IDPaciente
+    let traits = await db('traits')
+      .where({ idpaciente: idpaciente })
+      .orderBy('data_de_criacao', 'desc')
+      .select('idtraits', 'nome', 'descricao', 'intensidade', 'data_de_criacao'); // Seleciona campos para clareza
+
+    if (traits.length === 0) {
+        return res.status(200).json([]); // Retorna array vazio se não houver traits
+    }
+
+    // 2. Para cada Trait, verificar se existe um registro de Tracking para hoje
+    // Usamos Promise.all para executar todas as verificações de forma paralela.
+    const traitsWithStatus = await Promise.all(traits.map(async (trait) => {
+      // Verifica se existe um registro de tracking para esta Trait e esta data
+      const existingTracking = await db('tracking')
+        .where({
+          idtraits: trait.idtraits,
+          dia_de_registro: hoje
+        })
+        .first(); 
+
+      return {
+        ...trait,
+        // Adiciona o flag booleano
+        tracking_registrado_hoje: !!existingTracking, 
+      };
+    }));
+
+
+    res.status(200).json(traitsWithStatus);
 
   } catch (error) {
-    console.error('Erro ao buscar Traits:', error);
+    console.error('Erro ao buscar Traits e status de Tracking:', error);
     res.status(500).json({ error: 'Erro interno ao buscar Traits.' });
   }
 });

@@ -11,9 +11,7 @@ const Header = () => (
         <a href="#solucao" className="hover:text-violet-500 transition-colors">Como Funciona</a>
         <a href="#features" className="hover:text-violet-500 transition-colors">Funcionalidades</a>
         <a href="#missao" className="hover:text-violet-500 transition-colors">Nossa Missão</a>
-        <Link to="/dataviz" className="hover:text-violet-500 transition-colors">
-          TEA no Brasil
-        </Link>
+        <a href="#dataviz" className="hover:text-violet-500 transition-colors">TEA no Brasil</a>
       </nav>
       {/* Botões de Ação */}
       <div className="flex items-center gap-4">

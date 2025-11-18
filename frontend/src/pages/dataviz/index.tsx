@@ -14,9 +14,8 @@ import { scaleLinear } from 'd3-scale';
 import { Tooltip } from 'react-tooltip'; 
 // import 'react-tooltip/dist/react-tooltip.css'; // CSS removido para evitar erros de compilação
 import styles from './style.module.css';
-import Header from '../../components/header';
 import DataVizComponent from '../../components/datavizComponent';
-import { ArrowDown, ArrowRight } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 
 // --- Tipagem ---
 interface IPiramideData {
@@ -110,7 +109,7 @@ const DatavizPage: React.FC = () => {
     'https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson';
 
   return (
-    <div className={styles.pageContainer}>
+    <div id="dataviz" className={styles.pageContainer}>
         <div className={styles.datavizPage}>
             <section className={styles.titleSection}>
             <h2 className="text-4xl font-bold text-indigo-900 text-center mb-4">
@@ -187,8 +186,8 @@ const DatavizPage: React.FC = () => {
                     <Legend />
                     
                     {/* --- MUDANÇA 3: Atribui as barras aos eixos --- */}
-                    <Bar dataKey="homens" fill="#38a2ff" name="Homens" yAxisId="0" />
-                    <Bar dataKey="mulheres" fill="#ff6efd" name="Mulheres" yAxisId="1" />
+                    <Bar dataKey="homens" fill="#55b685" name="Homens" yAxisId="0" />
+                    <Bar dataKey="mulheres" fill="#7C3AED" name="Mulheres" yAxisId="1" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

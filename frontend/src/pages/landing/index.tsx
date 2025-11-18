@@ -184,7 +184,7 @@ const Features = () => (
 );
 
 // --- Componente: Mission (Nossa Missão) ---
-const Mission = () => (
+const Mission = () => ( 
   <section id="missao" className="py-24">
     <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
       <div>

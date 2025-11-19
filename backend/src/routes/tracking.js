@@ -4,32 +4,32 @@ const db = require('../database/connection');
 const verifyToken = require('../middleware/authMiddleware');
 
 // ==========================================================
-// POST /api/tracking (Criar novo Tracking) - LÓGICA DE EMAIL
+// POST /api/tracking (Criar novo Tracking) - USANDO ROLE DO JWT
 // ==========================================================
 router.post('/:idtraits', verifyToken, async (req, res) => {
   try {
-    // 1. Pega os dados do corpo da requisição
-    const { nome, intensidade, idtraits, descricao, dia_de_registro } = req.body;
+    // 1. Pega os dados do corpo da requisição, incluindo a nova 'descricao'
+    const { idtraits } = req.params;
+    const { nome, intensidade } = req.body;
 
-    // 2. Pega os dados do usuário LOGADO (o "Criador")
-    const { id: creatorId, email: creatorEmail } = req.user;
+    // 2. Determina a data de registro
+    dia_de_registro = new Date().toISOString().split('T')[0];
+    
+    // 3. Pega ID e ROLE diretamente do Token (payload)
+    const { id: creatorId, role } = req.user; 
 
-    // 3. Validação básica (verificação de dia_de_registro REMOVIDA)
+    // 4. Validação básica
     if (!idtraits) {
       return res.status(400).json({ 
         error: 'Campo idtraits (a qual trait pertence) é obrigatório.' 
       });
     }
 
-    if (!dia_de_registro) {
-      const dia_de_registro = new Date().toISOString().split('T')[0];
-    }
-
-    // 3.2
+    // 5. Verifica se já existe um tracking para esta trait na data determinada
     const existingTracking = await db('tracking')
       .where({
         idtraits: idtraits,
-        dia_de_registro: dia_de_registro // Usa a data gerada
+        dia_de_registro: dia_de_registro 
       })
       .first(); 
 
@@ -40,39 +40,33 @@ router.post('/:idtraits', verifyToken, async (req, res) => {
       });
     }
 
-    // 4. Prepara o objeto para inserção [MODIFICADO]
+    // 6. Prepara o objeto para inserção
     const newTrackingData = {
       nome,
       intensidade,
-      descricao,
-      dia_de_registro,
-      idtraits,
+      dia_de_registro, // Usando a data gerada
+      idtraits, 
+      idpaciente_criador: null,
+      idcuidador_criador: null,
     };
 
-    // 5. Lógica do Criador (igual)
-    const paciente = await db('paciente').where({ email: creatorEmail }).first();
-
-    if (paciente) {
+    // 7. Lógica do Criador (Atribui o ID com base no Papel - ROLE)
+    if (role === 'paciente') {
         newTrackingData.idpaciente_criador = creatorId;
+    } else if (role === 'cuidador') {
+        newTrackingData.idcuidador_criador = creatorId;
     } else {
-        const cuidador = await db('cuidador').where({ email: creatorEmail }).first();
-        if (cuidador) {
-            newTrackingData.idcuidador_criador = creatorId;
-        } else {
-            return res.status(401).json({ error: 'Usuário (criador) inválido ou não autorizado a criar.' });
-        }
+        // Terapeutas ou outros papéis não devem criar tracking diretamente
+        return res.status(403).json({ error: 'Apenas pacientes ou cuidadores podem criar trackings.' });
     }
 
-    // 6. Insere no banco
+    // 8. Insere no banco
     const [createdTracking] = await db('tracking').insert(newTrackingData).returning('*');
 
     res.status(201).json(createdTracking);
 
   } catch (error) {
     console.error('Erro ao criar Tracking:', error);
-    if (error.code === '23505') { // 23505 = unique_violation
-        return res.status(409).json({ error: 'Já existe um registro de tracking para esta característica neste dia.' });
-    }
 
     // Erro de FK (ex: IDTraits (pai) não existe)
     if (error.code === '23503') {

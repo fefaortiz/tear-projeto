@@ -4,103 +4,103 @@
   "pirâmide_etária": [
     {
       "faixa": "0–4",
-      "homens": 120000,
-      "mulheres": 80000
+      "homens": 189626,
+      "mulheres": 73481
     },
     {
       "faixa": "5–9",
-      "homens": 150000,
-      "mulheres": 100000
+      "homens": 264621,
+      "mulheres": 86322
     },
     {
       "faixa": "10–14",
-      "homens": 130000,
-      "mulheres": 95000
+      "homens": 186053,
+      "mulheres": 68768
     },
     {
       "faixa": "15–19",
-      "homens": 100000,
-      "mulheres": 85000
+      "homens": 130027,
+      "mulheres": 61158
     },
     {
       "faixa": "20–24",
-      "homens": 70000,
-      "mulheres": 60000
+      "homens": 93244,
+      "mulheres": 62716
     },
     {
       "faixa": "25–29",
-      "homens": 60000,
-      "mulheres": 55000
+      "homens": 78359,
+      "mulheres": 63287
     },
     {
       "faixa": "30–34",
-      "homens": 50000,
-      "mulheres": 45000
+      "homens": 70597,
+      "mulheres": 64018
     },
     {
       "faixa": "35–39",
-      "homens": 45000,
-      "mulheres": 40000
+      "homens": 70963,
+      "mulheres": 66255
     },
     {
       "faixa": "40–44",
-      "homens": 40000,
-      "mulheres": 38000
+      "homens": 67659,
+      "mulheres": 68671
     },
     {
       "faixa": "45–49",
-      "homens": 35000,
-      "mulheres": 34000
+      "homens": 55715,
+      "mulheres": 62195
     },
     {
       "faixa": "50–54",
-      "homens": 30000,
-      "mulheres": 30000
+      "homens": 50802,
+      "mulheres": 57909
     },
     {
       "faixa": "55–59",
-      "homens": 25000,
-      "mulheres": 25000
+      "homens": 49440,
+      "mulheres": 56619
     },
     {
       "faixa": "60–64",
-      "homens": 20000,
-      "mulheres": 20000
+      "homens": 41878,
+      "mulheres": 52339
     },
     {
       "faixa": "65–69",
-      "homens": 15000,
-      "mulheres": 15000
+      "homens": 33798,
+      "mulheres": 41950
     },
     {
       "faixa": "70–74",
-      "homens": 10000,
-      "mulheres": 11000
+      "homens": 26425,
+      "mulheres": 32268
     },
     {
       "faixa": "75–79",
-      "homens": 8000,
-      "mulheres": 9000
+      "homens": 15571,
+      "mulheres": 21856
     },
     {
       "faixa": "80–84",
-      "homens": 6000,
-      "mulheres": 7000
+      "homens": 9524,
+      "mulheres": 13267
     },
     {
       "faixa": "85–89",
-      "homens": 4000,
-      "mulheres": 5000
+      "homens": 4810,
+      "mulheres": 6997
     },
     {
       "faixa": "90–94",
-      "homens": 2000,
-      "mulheres": 3000
+      "homens": 1589,
+      "mulheres": 2882
     },
     {
       "faixa": "95+",
-      "homens": 1000,
-      "mulheres": 2000
+      "homens": 508,
+      "mulheres": 1174
     }
   ],
   "por_estado": [

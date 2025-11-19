@@ -15,40 +15,63 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
     }
 
+    // 1. Busca em todas as tabelas e determina o papel (role)
+    let usuario = null;
+    let role = null;
+    let idDoUsuario = null;
+
     const terapeuta = await db('terapeuta').where({ email: email }).first();
-    const paciente = await db('paciente').where({ email: email }).first();
-    const cuidador = await db('cuidador').where({ email: email }).first();
-
-    const usuario = terapeuta || paciente || cuidador;
-
-    const idDoUsuario = usuario.idterapeuta || usuario.idpaciente || usuario.idcuidador;
+    if (terapeuta) {
+      usuario = terapeuta;
+      role = 'terapeuta';
+      idDoUsuario = terapeuta.idterapeuta;
+    }
 
     if (!usuario) {
-      console.log("oi");
+      const paciente = await db('paciente').where({ email: email }).first();
+      if (paciente) {
+        usuario = paciente;
+        role = 'paciente';
+        idDoUsuario = paciente.idpaciente;
+      }
+    }
+
+    if (!usuario) {
+      const cuidador = await db('cuidador').where({ email: email }).first();
+      if (cuidador) {
+        usuario = cuidador;
+        role = 'cuidador';
+        idDoUsuario = cuidador.idcuidador;
+      }
+    }
+    
+    // Se o usuário ainda for null, as credenciais estão inválidas
+    if (!usuario) {
       return res.status(401).json({ error: 'Credenciais inválidas.' });
     }
 
-    console.log(senha);
-    console.log(usuario.senha);
-
+    // 2. Verifica a senha
     const isPasswordCorrect = await bcrypt.compare(senha, usuario.senha);
 
-    console.log(isPasswordCorrect)
-
     if (!isPasswordCorrect) {
-      console.log("tchau");
       return res.status(401).json({ error: 'Senha inválida.' });
     }
-
+    
+    // 3. Assina o Token com o ID, Email e AGORA o ROLE!
     const token = jwt.sign(
-      { id: idDoUsuario, email: usuario.email },
+      { 
+        id: idDoUsuario, 
+        email: usuario.email,
+        role: role // <-- CAMPO ADICIONADO AQUI
+      },
       process.env.JWT_SECRET,
       { expiresIn: '8h' }
     );
 
     return res.status(200).json({
       message: 'Login bem-sucedido!',
-      token: token
+      token: token,
+      role: role // É bom retornar o role diretamente na resposta também, para uso imediato no frontend
     });
 
   } catch (error) {

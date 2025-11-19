@@ -5,70 +5,64 @@ const db = require('../database/connection');
 const verifyToken = require('../middleware/authMiddleware'); 
 
 // ==========================================================
-// POST /api/traits (Criar nova Trait)
+// POST /api/traits/:idpaciente (Criar nova Trait)
 // ==========================================================
 router.post('/:idpaciente', verifyToken, async (req, res) => {
   try {
     const { idpaciente } = req.params;
 
-    // [MODIFICADO] 'data_de_criacao' removida do body
+    // Campos do corpo da requisição
     const { nome, descricao, intensidade } = req.body;
 
-    const { id: creatorId, email: creatorEmail } = req.user;
+    // 1. Pega ID e ROLE diretamente do Token (payload)
+    // O middleware verifyToken já injetou estes dados em req.user
+    const { id: creatorId, role } = req.user; 
 
-    let role = null;
-
-    // [MODIFICADO] Validação de 'data_de_criacao' removida
+    // 2. Validação básica
     if (!nome || !idpaciente) {
       return res.status(400).json({ 
-        // Mensagem de erro atualizada
         error: 'Campos Nome e IDPaciente (dono) são obrigatórios.' 
       });
     }
 
-    // [NOVO] Gera a data de hoje
+    // Gera a data de hoje
     const hoje = new Date().toISOString().split('T')[0];
 
-    // (O restante da sua lógica de autorização permanece)
-    const paciente = await db('paciente').where({ email: creatorEmail }).first();
+    // 3. Busca o Paciente DONO do trait (Necessário para a verificação do cuidador)
     const pacienteDoTrait = await db('paciente').where({ idpaciente: idpaciente }).first();
     
-    if (paciente) {
-      role = 'paciente';
-    } else {
-      const cuidador = await db('cuidador').where({ email: creatorEmail }).first();
-      if (cuidador) {
-          role = 'cuidador';
-          if (pacienteDoTrait.idcuidador !== creatorId) {
-            return res.status(403).json({ error: 'Usuário do token não autorizado a criar um trait pelo paciente.' });
-          }
-      }
+    if (!pacienteDoTrait) {
+      return res.status(404).json({ error: 'O paciente (dono) especificado não foi encontrado.' });
     }
 
-    if (role) {
-      console.log('O papel (role) do usuário é:', role);
-    } else {
-      return res.status(404).json({ error: 'Usuário do token não encontrado.' });
-    }
-
-    // [MODIFICADO] Objeto usa a data 'hoje'
+    // 4. Lógica de Autorização e Atribuição do Criador
     const newTraitData = {
       nome,
       descricao,
       intensidade,
-      data_de_criacao: hoje, // <-- Alterado
-      idpaciente,
+      data_de_criacao: hoje,
+      idpaciente, // Dono da Trait (o paciente)
     };
-
+    
     if (role === 'paciente') {
+      // Regra de segurança: Paciente só pode criar traits para si mesmo
+      // Converte para Number para garantir comparação correta (ID do token é number, idpaciente de params é string)
+      if (Number(idpaciente) !== creatorId) { 
+          return res.status(403).json({ error: 'Paciente só pode criar traits para si mesmo.' });
+      }
       newTraitData.idpaciente_criador = creatorId;
     } else if (role === 'cuidador') {
+      // Regra de autorização: Cuidador só pode criar traits para pacientes vinculados
+      if (pacienteDoTrait.idcuidador !== creatorId) {
+        return res.status(403).json({ error: 'Cuidador não autorizado a criar Trait para este paciente.' });
+      }
       newTraitData.idcuidador_criador = creatorId;
     } else {
-      // (Esta mensagem de erro está copiada do seu código)
-      return res.status(403).json({ error: 'Apenas pacientes ou cuidadores podem criar trackings.' });
+      // Terapeutas ou outros papéis não devem criar traits
+      return res.status(403).json({ error: 'Apenas pacientes ou cuidadores podem criar traits.' });
     }
 
+    // 5. Insere no banco
     const [createdTrait] = await db('traits').insert(newTraitData).returning('*');
 
     res.status(201).json(createdTrait);
@@ -76,6 +70,7 @@ router.post('/:idpaciente', verifyToken, async (req, res) => {
   } catch (error) {
     console.error('Erro ao criar Trait:', error);
     if (error.code === '23503') {
+      // Este erro de FK já está coberto pela checagem do pacienteDoTrait, mas é bom manter
       return res.status(404).json({ error: 'O paciente (dono) especificado não foi encontrado.' });
     }
     res.status(500).json({ error: 'Erro interno ao criar Trait.' });

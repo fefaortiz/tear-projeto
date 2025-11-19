@@ -62,7 +62,7 @@ router.post('/login', async (req, res) => {
       { 
         id: idDoUsuario, 
         email: usuario.email,
-        role: role // <-- CAMPO ADICIONADO AQUI
+        role: role
       },
       process.env.JWT_SECRET,
       { expiresIn: '8h' }

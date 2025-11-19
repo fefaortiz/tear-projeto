@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './style.module.css';
 
-export function InitialPage() {
+export function HomePageCaregiver() {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -23,4 +23,4 @@ export function InitialPage() {
   );
 }
 
-export default InitialPage;
+export default HomePageCaregiver;

@@ -1,0 +1,204 @@
+/* Variáveis para facilitar a manutenção */
+:root {
+    --sidebar-width-min: 80px; /* Largura mínima (recolhida) */
+    --sidebar-width-max: 250px; /* Largura máxima (expandida) */
+    --primary-color: #7C3AED; /* Índigo 600 */
+    --primary-light: #eef2ff; /* Índigo 50 */
+    --text-color-light: #f9fafb; /* Cinza 50 */
+    --text-color-dark: #1f2937; /* Cinza 800 */
+    --border-radius: 0.75rem;
+}
+
+/* ------------------ Layout Principal ------------------ */
+.container {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--primary-light); /* Fundo suave */
+}
+
+/* ------------------ Sidebar ------------------ */
+.sidebar {
+    width: var(--sidebar-width-min);
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.15);
+    position: fixed; /* Fixo na lateral */
+    top: 0;
+    left: 0;
+    height: 100%;
+    transition: width 0.3s ease-in-out; /* Transição suave para o hover */
+    z-index: 1000; /* Garante que fique acima do conteúdo */
+}
+
+/* Classe de expansão controlada pelo estado do React */
+.sidebarExpanded,
+.sidebar:hover {
+    width: var(--sidebar-width-max);
+}
+
+.sidebarHeader {
+    text-align: center;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+    overflow: hidden; /* Oculta logo completa ao encolher */
+    height: 60px; /* Altura fixa para o logo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logoImage {
+    width: 40px; /* Tamanho do logo (recolhido) */
+    height: 40px;
+    object-fit: contain;
+    transition: width 0.3s ease-in-out;
+}
+
+/* Ajuste o logo quando expandido, se necessário (ex: para usar o logo completo) */
+.sidebarExpanded .logoImage {
+    width: auto; /* Deixa o logo usar sua largura natural */
+    max-width: 80%; /* Garante que não ultrapasse a sidebar */
+}
+
+/* ------------------ Navegação ------------------ */
+.navigation {
+    flex-grow: 1; /* Ocupa o espaço restante */
+    padding: 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    color: var(--text-color-light);
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: pointer;
+    border: none;
+    background: none;
+    text-align: left;
+}
+
+.navItem:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Um leve destaque no hover */
+}
+
+.navItemActive {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navIcon {
+    min-width: 24px; /* Garante que o ícone tenha espaço */
+}
+
+.navText {
+    margin-left: 1rem;
+    /* Inicialmente oculto */
+    opacity: 0; 
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, margin-left 0.3s ease-in-out;
+}
+
+/* Mostra o texto quando a sidebar está expandida */
+.sidebarExpanded .navText {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ------------------ Botão de Logout ------------------ */
+.logoutButton {
+    margin-top: auto; /* Empurra para o final */
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    color: var(--text-color-light);
+}
+
+.logoutButton:hover {
+    background-color: #dc2626; /* Cor vermelha para indicar saída */
+    color: white;
+}
+
+/* ------------------ Conteúdo Principal ------------------ */
+.mainContent {
+    /* O mainContent deve começar após a largura mínima da sidebar */
+    margin-left: var(--sidebar-width-min);
+    flex-grow: 1;
+    padding: 2rem;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+/* CLASSE DE CORREÇÃO: Aplica o deslocamento APENAS quando o estado React ativa esta classe */
+.mainContentShifted {
+    margin-left: var(--sidebar-width-max);
+}
+
+.pageHeader {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.pageTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color-dark);
+}
+
+.subtitle {
+    color: #6b7280; /* Cinza 500 */
+}
+
+.contentArea {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+}
+
+.card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.cardTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+/* Responsividade Básica */
+@media (max-width: 768px) {
+    /* Em telas menores, a sidebar pode ser ainda menor */
+    .sidebar {
+        width: 60px;
+        padding: 0.5rem 0;
+    }
+    .mainContent {
+        margin-left: 60px;
+        padding: 1rem;
+    }
+    .sidebarExpanded {
+        width: 200px;
+    }
+    .mainContentShifted {
+        margin-left: 200px;
+    }
+    .pageTitle {
+        font-size: 1.5rem;
+    }
+}

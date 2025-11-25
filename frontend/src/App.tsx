@@ -34,6 +34,11 @@ function App() {
               <HomePagePatient />
             </RequireAuth>
           } />
+          <Route path="/home/paciente/acompanhamento" element={
+            <RequireAuth>
+              <HomePagePatient />
+            </RequireAuth>
+          } />
           <Route path="/home/cuidador" element={
             <RequireAuth>
               <HomePageCaregiver />

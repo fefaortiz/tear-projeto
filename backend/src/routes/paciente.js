@@ -142,10 +142,10 @@ router.get('/por-cuidador', verifyToken, async (req, res) => {
 // NOVO: Rota PUT /api/pacientes/:idpaciente
 // Atualiza o perfil do paciente LOGADO
 // ==========================================================
-router.put('/:idpaciente', verifyToken, async (req, res) => {
+router.put('/:idpaciente', async (req, res) => {
   const { idpaciente } = req.params;
 
-  const { nome, telefone, sexo, data_de_nascimento, email, senha } = req.body;
+  const { nome, telefone, sexo, data_de_nascimento } = req.body;
 
   const updateData = {};
 
@@ -153,29 +153,9 @@ router.put('/:idpaciente', verifyToken, async (req, res) => {
   if (telefone !== undefined) updateData.telefone = telefone;
   if (sexo !== undefined) updateData.sexo = sexo;
   if (data_de_nascimento !== undefined) updateData.data_de_nascimento = data_de_nascimento;
-  if (email) updateData.email = email;
-
-  // Lógica especial para a SENHA
-  // Se uma nova senha foi fornecida, hasheamos ela.
-  if (senha) {
-    try {
-      const salt = await bcrypt.genSalt(10);
-      updateData.senha = await bcrypt.hash(senha, salt);
-    } catch (hashError) {
-      console.error("Erro ao hashear nova senha:", hashError);
-      return res.status(500).json({ error: 'Erro ao processar a senha.' });
-    }
-  }
-
-  if (Object.keys(updateData).length === 0) {
-    return res.status(400).json({ 
-      error: 'Nenhum campo para atualizar foi fornecido.' 
-    });
-  }
 
   try {
     const [updatedPaciente] = await db.transaction(async (trx) => {
-      // Passo A: Precisamos do email *antigo* antes de atualizar
       const pacienteAtual = await trx('paciente')
         .where({ idpaciente })
         .first();

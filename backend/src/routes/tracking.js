@@ -6,14 +6,18 @@ const verifyToken = require('../middleware/authMiddleware');
 // ==========================================================
 // POST /api/tracking (Criar novo Tracking) - USANDO ROLE DO JWT
 // ==========================================================
+
+// ==========================================================
+// POST /api/tracking/:idtraits (Criar novo Tracking)
+// ==========================================================
 router.post('/:idtraits', verifyToken, async (req, res) => {
   try {
-    // 1. Pega os dados do corpo da requisição, incluindo a nova 'descricao'
+    // 1. Pega o ID da URL e dados do corpo
     const { idtraits } = req.params;
-    const { nome, intensidade } = req.body;
+    const { intensidade, descricao } = req.body;
 
-    // 2. Determina a data de registro
-    dia_de_registro = new Date().toISOString().split('T')[0];
+    // 2. Determina a data de registro (Data do servidor para consistência)
+    const dia_de_registro = new Date().toISOString().split('T')[0];
     
     // 3. Pega ID e ROLE diretamente do Token (payload)
     const { id: creatorId, role } = req.user; 
@@ -21,11 +25,11 @@ router.post('/:idtraits', verifyToken, async (req, res) => {
     // 4. Validação básica
     if (!idtraits) {
       return res.status(400).json({ 
-        error: 'Campo idtraits (a qual trait pertence) é obrigatório.' 
+        error: 'O ID da trait é obrigatório na URL.' 
       });
     }
 
-    // 5. Verifica se já existe um tracking para esta trait na data determinada
+    // 5. Verifica se já existe um tracking para esta trait na data de hoje
     const existingTracking = await db('tracking')
       .where({
         idtraits: idtraits,
@@ -34,29 +38,27 @@ router.post('/:idtraits', verifyToken, async (req, res) => {
       .first(); 
 
     if (existingTracking) {
-      // 409 Conflict é o status correto para "recurso já existe"
       return res.status(409).json({ 
-        error: 'Já existe um registro de tracking para esta característica neste dia.' 
+        error: 'Já existe um registro de tracking para esta característica hoje.' 
       });
     }
 
     // 6. Prepara o objeto para inserção
     const newTrackingData = {
-      nome,
       intensidade,
-      dia_de_registro, // Usando a data gerada
+      descricao, // Incluindo a descrição solicitada
+      dia_de_registro,
       idtraits, 
       idpaciente_criador: null,
       idcuidador_criador: null,
     };
 
-    // 7. Lógica do Criador (Atribui o ID com base no Papel - ROLE)
+    // 7. Lógica do Criador
     if (role === 'paciente') {
         newTrackingData.idpaciente_criador = creatorId;
     } else if (role === 'cuidador') {
         newTrackingData.idcuidador_criador = creatorId;
     } else {
-        // Terapeutas ou outros papéis não devem criar tracking diretamente
         return res.status(403).json({ error: 'Apenas pacientes ou cuidadores podem criar trackings.' });
     }
 
@@ -68,9 +70,8 @@ router.post('/:idtraits', verifyToken, async (req, res) => {
   } catch (error) {
     console.error('Erro ao criar Tracking:', error);
 
-    // Erro de FK (ex: IDTraits (pai) não existe)
     if (error.code === '23503') {
-      return res.status(404).json({ error: 'A Trait (característica) especificada não foi encontrada.' });
+      return res.status(404).json({ error: 'A Trait especificada não foi encontrada.' });
     }
     res.status(500).json({ error: 'Erro interno ao criar Tracking.' });
   }
@@ -107,10 +108,9 @@ router.get('/', verifyToken, async (req, res) => {
 router.put('/:id', verifyToken, async (req, res) => {
   try {
     const { id: idtracking } = req.params;
-    const { nome, intensidade, dia_de_registro, descricao } = req.body;
+    const { intensidade, dia_de_registro, descricao } = req.body;
 
     const updateData = {};
-    if (nome !== undefined) updateData.nome = nome;
     if (intensidade !== undefined) updateData.intensidade = intensidade;
     if (dia_de_registro !== undefined) updateData.dia_de_registro = dia_de_registro;
     if (descricao !== undefined) updateData.descricao = descricao;

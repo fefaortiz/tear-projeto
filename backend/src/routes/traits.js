@@ -193,4 +193,69 @@ router.delete('/:id', verifyToken, async (req, res) => {
   }
 });
 
+// ==========================================================
+// GET /api/traits/daily-tracking/:idpaciente 
+// ==========================================================
+router.get('/daily-tracking/:idpaciente', verifyToken, async (req, res) => {
+  try {
+    const { idpaciente } = req.params;
+    const today = new Date().toISOString().split('T')[0]; 
+
+    // 1. Busca inicial das Traits com o Tracking de HOJE
+    const traitsWithTracking = await db('traits as t')
+      .select(
+        't.idtraits',
+        't.nome',
+        't.descricao',
+        't.intensidade as intensidade_default',
+        'tr.idtracking',
+        'tr.intensidade as nota_hoje',
+        // [CORREÇÃO] Pega os criadores da tabela 'traits' (t), não 'tracking' (tr)
+        't.idpaciente_criador',
+        't.idcuidador_criador'
+      )
+      .where('t.idpaciente', idpaciente)
+      .leftJoin('tracking as tr', function() {
+        this.on('tr.idtraits', '=', 't.idtraits').andOn('tr.dia_de_registro', '=', db.raw('?', [today]));
+      })
+      .orderBy('t.idtraits', 'asc');
+
+    // 2. Processar os resultados para adicionar o nome do criador
+    const result = await Promise.all(traitsWithTracking.map(async (trait) => {
+      let nomeCriador = null;
+      let roleCriador = null;
+      const atualizadoHoje = !!trait.idtracking; 
+
+      if (trait.idpaciente_criador) {
+        const paciente = await db('paciente').select('nome').where('idpaciente', trait.idpaciente_criador).first();
+        if (paciente) {
+          nomeCriador = paciente.nome;
+          roleCriador = 'Paciente';
+        }
+      } else if (trait.idcuidador_criador) {
+        const cuidador = await db('cuidador').select('nome').where('idcuidador', trait.idcuidador_criador).first();
+        if (cuidador) {
+          nomeCriador = cuidador.nome;
+          roleCriador = 'Cuidador';
+        }
+      }
+
+      return {
+        idtraits: trait.idtraits,
+        nome: trait.nome,
+        nota: atualizadoHoje ? trait.nota_hoje : trait.intensidade_default || 'Não registrado', 
+        atualizadoHoje: atualizadoHoje,
+        criador: nomeCriador,
+        criadorRole: roleCriador,
+      };
+    }));
+
+    res.status(200).json(result);
+
+  } catch (error) {
+    console.error('Erro ao listar traits com tracking:', error);
+    res.status(500).json({ error: 'Erro interno ao buscar dados de tracking diário.' });
+  }
+});
+
 module.exports = router;

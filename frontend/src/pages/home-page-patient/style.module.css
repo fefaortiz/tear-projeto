@@ -1,204 +1,230 @@
-/* Variáveis para facilitar a manutenção */
+/* Variáveis para facilitar manutenção */
 :root {
-    --sidebar-width-min: 80px; /* Largura mínima (recolhida) */
-    --sidebar-width-max: 250px; /* Largura máxima (expandida) */
-    --primary-color: #7C3AED; /* Índigo 600 */
-    --primary-light: #eef2ff; /* Índigo 50 */
-    --text-color-light: #f9fafb; /* Cinza 50 */
-    --text-color-dark: #1f2937; /* Cinza 800 */
-    --border-radius: 0.75rem;
+  --sidebar-width-min: 80px;
+  --sidebar-width-max: 250px;
+  --primary-color: #7C3AED;
+  --primary-light: #eef2ff;
+  --text-color-light: #f9fafb;
+  --text-color-dark: #1f2937;
+  --border-radius: 0.75rem;
 }
 
-/* ------------------ Layout Principal ------------------ */
 .container {
-    display: flex;
-    min-height: 100vh;
-    background-color: var(--primary-light); /* Fundo suave */
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--primary-light);
 }
 
-/* ------------------ Sidebar ------------------ */
+/* --- Sidebar --- */
 .sidebar {
-    width: var(--sidebar-width-min);
-    background-color: var(--primary-color);
-    color: var(--text-color-light);
-    display: flex;
-    flex-direction: column;
-    padding: 1rem 0;
-    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.15);
-    position: fixed; /* Fixo na lateral */
-    top: 0;
-    left: 0;
-    height: 100%;
-    transition: width 0.3s ease-in-out; /* Transição suave para o hover */
-    z-index: 1000; /* Garante que fique acima do conteúdo */
+  width: 80px; /* valor fixo para evitar problemas com variáveis CSS Modules em alguns setups */
+  background-color: #7C3AED;
+  color: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.15);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+  z-index: 1000;
 }
 
-/* Classe de expansão controlada pelo estado do React */
-.sidebarExpanded,
-.sidebar:hover {
-    width: var(--sidebar-width-max);
+.sidebarExpanded {
+  width: 250px;
 }
 
 .sidebarHeader {
-    text-align: center;
-    padding: 1rem 0;
-    margin-bottom: 2rem;
-    overflow: hidden; /* Oculta logo completa ao encolher */
-    height: 60px; /* Altura fixa para o logo */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  margin-bottom: 2rem;
+  overflow: hidden;
 }
 
 .logoImage {
-    width: 40px; /* Tamanho do logo (recolhido) */
-    height: 40px;
-    object-fit: contain;
-    transition: width 0.3s ease-in-out;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  transition: width 0.3s ease;
 }
 
-/* Ajuste o logo quando expandido, se necessário (ex: para usar o logo completo) */
 .sidebarExpanded .logoImage {
-    width: auto; /* Deixa o logo usar sua largura natural */
-    max-width: 80%; /* Garante que não ultrapasse a sidebar */
+  width: auto;
+  max-width: 80%;
 }
 
-/* ------------------ Navegação ------------------ */
 .navigation {
-    flex-grow: 1; /* Ocupa o espaço restante */
-    padding: 0 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  flex-grow: 1;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .navItem {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    border-radius: var(--border-radius);
-    color: var(--text-color-light);
-    text-decoration: none;
-    transition: background-color 0.2s ease, color 0.2s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    cursor: pointer;
-    border: none;
-    background: none;
-    text-align: left;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  color: #f9fafb;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  border: none;
+  background: none;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .navItem:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* Um leve destaque no hover */
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .navItemActive {
-    background-color: var(--primary-light);
-    color: var(--primary-color);
-    font-weight: 600;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #eef2ff;
+  color: #7C3AED;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .navIcon {
-    min-width: 24px; /* Garante que o ícone tenha espaço */
+  min-width: 24px;
 }
 
 .navText {
-    margin-left: 1rem;
-    /* Inicialmente oculto */
-    opacity: 0; 
-    visibility: hidden;
-    transition: opacity 0.3s ease-in-out, margin-left 0.3s ease-in-out;
+  margin-left: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, margin-left 0.3s ease-in-out;
 }
 
-/* Mostra o texto quando a sidebar está expandida */
 .sidebarExpanded .navText {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
-/* ------------------ Botão de Logout ------------------ */
 .logoutButton {
-    margin-top: auto; /* Empurra para o final */
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    color: var(--text-color-light);
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 1.5rem;
+  padding-top: 1rem;
 }
 
 .logoutButton:hover {
-    background-color: #dc2626; /* Cor vermelha para indicar saída */
-    color: white;
+  background-color: #dc2626;
 }
 
-/* ------------------ Conteúdo Principal ------------------ */
+/* --- Conteúdo Principal --- */
 .mainContent {
-    /* O mainContent deve começar após a largura mínima da sidebar */
-    margin-left: var(--sidebar-width-min);
-    flex-grow: 1;
-    padding: 2rem;
-    transition: margin-left 0.3s ease-in-out;
+  margin-left: 80px;
+  flex-grow: 1;
+  padding: 2rem;
+  transition: margin-left 0.3s ease-in-out;
 }
 
-/* CLASSE DE CORREÇÃO: Aplica o deslocamento APENAS quando o estado React ativa esta classe */
 .mainContentShifted {
-    margin-left: var(--sidebar-width-max);
+  margin-left: 250px;
 }
 
 .pageHeader {
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 2rem;
 }
 
 .pageTitle {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-color-dark);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
 }
 
-.subtitle {
-    color: #6b7280; /* Cinza 500 */
-}
-
+/* --- Área de Conteúdo --- */
 .contentArea {
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.card {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+.trackingContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionHeader {
+  margin-bottom: 1.5rem;
 }
 
 .cardTitle {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #7C3AED;
+  margin: 0 0 0.5rem 0;
 }
 
-/* Responsividade Básica */
+.subtitle {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+/* --- Cards Grid --- */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* --- Estados --- */
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: #7C3AED;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.errorState {
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  text-align: center;
+}
+
+.emptyState {
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 3rem;
+  text-align: center;
+  color: #6b7280;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
 @media (max-width: 768px) {
-    /* Em telas menores, a sidebar pode ser ainda menor */
-    .sidebar {
-        width: 60px;
-        padding: 0.5rem 0;
-    }
-    .mainContent {
-        margin-left: 60px;
-        padding: 1rem;
-    }
-    .sidebarExpanded {
-        width: 200px;
-    }
-    .mainContentShifted {
-        margin-left: 200px;
-    }
-    .pageTitle {
-        font-size: 1.5rem;
-    }
+  .sidebar { width: 60px; }
+  .mainContent { margin-left: 60px; }
+  .sidebarExpanded { width: 200px; }
+  .mainContentShifted { margin-left: 200px; }
+  .cardsGrid { grid-template-columns: 1fr; }
 }

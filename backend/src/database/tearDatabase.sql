@@ -97,7 +97,6 @@ CREATE TABLE Traits (
 -- Tabela para rastrear a evolução de uma característica (trait) ao longo do tempo.
 CREATE TABLE Tracking (
     IDTracking SERIAL PRIMARY KEY,
-    Nome VARCHAR(255) NOT NULL,
     Intensidade INT NOT NULL CHECK (Intensidade BETWEEN 1 AND 5),
     Descricao TEXT,
     Dia_de_Registro DATE NOT NULL,

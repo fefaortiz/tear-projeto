@@ -219,6 +219,97 @@ router.patch('/profile', verifyToken, async (req, res) => {
   }
 });
 
+router.patch('/paciente/:id', verifyToken, async (req, res) => {
+  const { id } = req.params; // ID do paciente a ser atualizado
+  const { emailTerapeuta, emailCuidador } = req.body;
+
+  // Validação básica: precisa enviar pelo menos um dos campos para atualizar
+  if (emailTerapeuta === undefined && emailCuidador === undefined) {
+    return res.status(400).json({ error: 'Nenhum campo para atualização foi fornecido.' });
+  }
+
+  try {
+    const pacienteAtualizado = await db.transaction(async (trx) => {
+      
+      // Objeto que acumulará as mudanças
+      const updateFields = {};
+
+      // --- Lógica para o TERAPEUTA ---
+      // Verifica se o campo foi enviado no body (mesmo que seja null para limpar)
+      if (emailTerapeuta !== undefined) {
+        if (emailTerapeuta === null || emailTerapeuta === '') {
+          // Caso o usuário queira remover o vínculo
+          updateFields.emailterapeuta = null;
+          updateFields.idterapeuta = null;
+        } else {
+          // Busca se o terapeuta existe no banco
+          const terapeuta = await trx('terapeuta')
+            .where({ email: emailTerapeuta })
+            .first();
+
+          updateFields.emailterapeuta = emailTerapeuta;
+          // Se existir, vincula o ID. Se não, deixa NULL (mas salva o email acima)
+          updateFields.idterapeuta = terapeuta ? terapeuta.idterapeuta : null;
+        }
+      }
+
+      // --- Lógica para o CUIDADOR ---
+      if (emailCuidador !== undefined) {
+        if (emailCuidador === null || emailCuidador === '') {
+          // Caso o usuário queira remover o vínculo
+          updateFields.emailcuidador = null;
+          updateFields.idcuidador = null;
+        } else {
+          // Busca se o cuidador existe no banco
+          const cuidador = await trx('cuidador')
+            .where({ email: emailCuidador })
+            .first();
+
+          updateFields.emailcuidador = emailCuidador;
+          // Se existir, vincula o ID. Se não, deixa NULL
+          updateFields.idcuidador = cuidador ? cuidador.idcuidador : null;
+        }
+      }
+
+      // Se não houver campos para atualizar após a lógica (ex: enviou undefined)
+      if (Object.keys(updateFields).length === 0) {
+        return null; 
+      }
+
+      // Executa o Update
+      const [atualizado] = await trx('paciente')
+        .where({ id: id }) // Ou idpaciente, dependendo da sua primary key
+        .update(updateFields)
+        .returning('*');
+
+      if (!atualizado) {
+        throw new Error('Paciente não encontrado.');
+      }
+
+      return atualizado;
+    });
+
+    if (!pacienteAtualizado && (emailTerapeuta || emailCuidador)) {
+       // Caso raro onde não achou o ID
+       return res.status(404).json({ error: 'Paciente não encontrado.' });
+    }
+
+    return res.status(200).json({
+      message: 'Vínculos atualizados com sucesso!',
+      paciente: pacienteAtualizado
+    });
+
+  } catch (error) {
+    console.error('Erro na atualização:', error);
+    
+    if (error.message === 'Paciente não encontrado.') {
+      return res.status(404).json({ error: error.message });
+    }
+
+    return res.status(500).json({ error: 'Erro interno ao atualizar dados do paciente.' });
+  }
+});
+
 // ==========================================================
 // NOVO: Rota DELETE /api/pacientes/:idpaciente
 // Deleta um paciente específico pelo ID

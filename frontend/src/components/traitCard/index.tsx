@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, XCircle, User, Activity } from 'lucide-react';
+import { CheckCircle, User, Activity, Trash2 } from 'lucide-react';
 import styles from './style.module.css';
 
 interface TraitCardProps {
@@ -9,8 +9,8 @@ interface TraitCardProps {
   atualizadoHoje: boolean;
   criador: string | null;
   criadorRole: 'Paciente' | 'Cuidador' | null;
-  // Esta função conecta o Card à Home Page, que abrirá o Modal
-  onRegisterClick: (id: number, nome: string) => void; 
+  onRegisterClick: (id: number, nome: string) => void;
+  onDeleteClick: (id: number) => void; // Nova prop para deletar
 }
 
 export const TraitCard: React.FC<TraitCardProps> = ({ 
@@ -19,23 +19,30 @@ export const TraitCard: React.FC<TraitCardProps> = ({
   nota, 
   atualizadoHoje, 
   criador, 
-  // criadorRole,
-  onRegisterClick 
+  //criadorRole,
+  onRegisterClick,
+  onDeleteClick
 }) => {
   const notaDisplay = typeof nota === 'number' ? `${nota}/5` : nota;
 
   return (
     <div className={styles.card}>
-      {/* Cabeçalho */}
       <div className={styles.header}>
         <h3 className={styles.title}>{nome}</h3>
-        <div className={`${styles.statusBadge} ${atualizadoHoje ? styles.statusUpdated : styles.statusPending}`}>
-          {atualizadoHoje ? <CheckCircle size={14} /> : <XCircle size={14} />}
-          <span>{atualizadoHoje ? 'Atualizado' : 'Pendente'}</span>
-        </div>
+        
+        {/* Botão de Deletar (Substitui o badge de status) */}
+        <button 
+          className={styles.deleteButton}
+          onClick={(e) => {
+            e.stopPropagation(); // Evita cliques acidentais no card se houver
+            onDeleteClick(idtraits);
+          }}
+          title="Excluir esta característica"
+        >
+          <Trash2 size={18} />
+        </button>
       </div>
 
-      {/* Informações */}
       <div className={styles.infoGrid}>
         <div className={styles.infoBlock}>
           <span className={styles.label}>Intensidade:</span>
@@ -55,7 +62,6 @@ export const TraitCard: React.FC<TraitCardProps> = ({
         </div>
       </div>
       
-      {/* Rodapé com Botão de Ação */}
       <div className={`${styles.footer} ${atualizadoHoje ? styles.footerSuccess : styles.footerPending}`}>
         {atualizadoHoje ? (
           <p className={styles.successMessage}>
@@ -64,7 +70,6 @@ export const TraitCard: React.FC<TraitCardProps> = ({
           </p>
         ) : (
           <button 
-            // Ao clicar, passamos o ID e Nome para a função pai (HomePage)
             onClick={() => onRegisterClick(idtraits, nome)}
             className={styles.actionButton}
             title="Clique para registrar como você se sente hoje"

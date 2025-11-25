@@ -11,7 +11,7 @@ interface TrackMoodProps {
   onSuccess: () => void; // Callback para atualizar a lista na Home
 }
 
-export const TrackMood: React.FC<TrackMoodProps> = ({ 
+export const TrackMoodModal: React.FC<TrackMoodProps> = ({ 
   isOpen, 
   onClose, 
   traitId, 

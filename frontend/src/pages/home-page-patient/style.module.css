@@ -1,4 +1,3 @@
-/* Variáveis para facilitar manutenção */
 :root {
   --sidebar-width-min: 80px;
   --sidebar-width-max: 250px;
@@ -17,7 +16,7 @@
 
 /* --- Sidebar --- */
 .sidebar {
-  width: 80px; /* valor fixo para evitar problemas com variáveis CSS Modules em alguns setups */
+  width: 80px;
   background-color: #7C3AED;
   color: #f9fafb;
   display: flex;
@@ -141,7 +140,6 @@
   color: #1f2937;
 }
 
-/* --- Área de Conteúdo --- */
 .contentArea {
   display: flex;
   flex-direction: column;
@@ -169,11 +167,55 @@
   font-size: 1rem;
 }
 
-/* --- Cards Grid --- */
+/* --- Grid de Cards --- */
 .cardsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
+}
+
+/* Novo Card de Adicionar (Estilo Roxo com Botão +) */
+.addCard {
+  background-color: #f5f3ff; /* Fundo lilás bem claro */
+  border: 2px dashed #7C3AED; /* Borda roxa tracejada */
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column; /* Garante que ícone e texto fiquem um sobre o outro */
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  gap: 1rem; /* Espaço entre o botão e o texto */
+}
+
+.addCard:hover {
+  background-color: #ede9fe;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px rgba(124, 58, 237, 0.15);
+}
+
+.addButton {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #7C3AED; /* Roxo principal */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.addCard:hover .addButton {
+  transform: scale(1.1);
+  background-color: #6d28d9;
+}
+
+.addCardText {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: #7C3AED;
 }
 
 /* --- Estados --- */

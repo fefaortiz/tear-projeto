@@ -22,10 +22,9 @@ router.get('/', verifyToken, async (req, res) => {
 // NOVO: Rota 2 (GET /api/pacientes/lookup)
 // Busca um paciente por ID, CPF ou Email
 // ==========================================================
-router.get('/lookup', verifyToken, async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
   try {
-    // 1. Pega os parâmetros da URL (ex: /lookup?cpf=123)
-    const { id, cpf, email } = req.query;
+    const { id } = req.params;
 
     let paciente;
     const query = db('paciente');
@@ -33,13 +32,9 @@ router.get('/lookup', verifyToken, async (req, res) => {
     // (Presumindo colunas minúsculas: 'idpaciente', 'cpf', 'email')
     if (id) {
       query.where({ idpaciente: id });
-    } else if (cpf) {
-      query.where({ cpf: cpf });
-    } else if (email) {
-      query.where({ email: email });
     } else {
       return res.status(400).json({ 
-        error: 'Parâmetro de busca (id, cpf ou email) é obrigatório.' 
+        error: 'Paciente não encontrado.' 
       });
     }
 
@@ -144,11 +139,11 @@ router.get('/por-cuidador', verifyToken, async (req, res) => {
 });
 
 // ==========================================================
-// NOVO: Rota PATCH /api/pacientes/profile
+// NOVO: Rota PUT /api/pacientes/:idpaciente
 // Atualiza o perfil do paciente LOGADO
 // ==========================================================
-router.patch('/profile', verifyToken, async (req, res) => {
-  const { id: idpaciente } = req.user;
+router.put('/:idpaciente', verifyToken, async (req, res) => {
+  const { idpaciente } = req.params;
 
   const { nome, telefone, sexo, data_de_nascimento, email, senha } = req.body;
 

@@ -1,21 +1,34 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
-import { LayoutDashboard, LogOut, User, Activity, Bell, Loader2 } from 'lucide-react';
-import styles from './style.module.css';
+import { useNavigate } from 'react-router-dom';
+import { LogOut, Plus, Loader2, AlertCircle, Activity, LayoutDashboard, User, Bell } from 'lucide-react';
+import { jwtDecode } from 'jwt-decode'; 
 import logoImage from '../../assets/logo_preenchido.png';
+import styles from './style.module.css';
 
 // Importação dos Componentes
 import { TraitCard } from '../../components/traitCard';
-import { TrackMood } from '../../components/trackmood';
+import { TrackMoodModal } from '../../components/modal-trackmood';
+import { CreateTraitModal } from '../../components/modal-createtrait';
+import { ProfilePage } from '../../components/profile-page';
 
+// Interface do Token Decodificado
 interface DecodedTokenPayload {
     id: number;
     role: string;
-    [key: string]: unknown;
+    email: string;
+    [key: string]: any;
 }
 
+// Interface para os dados do usuário
+interface UserData {
+  id: number;
+  nome: string;
+  email: string;
+  role: 'paciente' | 'terapeuta' | 'cuidador';
+}
+
+// Interface para as Traits
 interface DailyTrackingItem {
     idtraits: number;
     nome: string;
@@ -32,187 +45,280 @@ const patientNavigation = [
     { name: 'Notificações', href: '#notifications', icon: Bell },
 ];
 
-export function HomePagePatient() {
-    const navigate = useNavigate();
-    const [activeItem, setActiveItem] = useState('Tracking Diário');
-    const [isSidebarHovered, setIsSidebarHovered] = useState(false);
-    
-    // Estados de Dados da API
-    const [trackingData, setTrackingData] = useState<DailyTrackingItem[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [userId, setUserId] = useState<number | null>(null);
+export const HomePagePatient = () => {
+  const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState('Tracking Diário');
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+  
+  // Estados de Dados
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [trackingData, setTrackingData] = useState<DailyTrackingItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-    // --- ESTADOS DO MODAL TRACKMOOD ---
-    const [isTrackMoodOpen, setIsTrackMoodOpen] = useState(false);
-    const [selectedTraitId, setSelectedTraitId] = useState<number | null>(null);
-    const [selectedTraitName, setSelectedTraitName] = useState<string | null>(null);
+  // Estados para os Modais
+  const [isTrackModalOpen, setIsTrackModalOpen] = useState(false);
+  const [selectedTraitId, setSelectedTraitId] = useState<number | null>(null);
+  const [selectedTraitName, setSelectedTraitName] = useState<string | null>(null);
+  
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-    // 1. Obter ID do usuário (Auth)
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/login');
-            return;
+  // 1. Efeito Principal: Autenticação e Carga Inicial
+  useEffect(() => {
+    const initializePage = async () => {
+      setIsLoading(true);
+      setError(null);
+      
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const decoded = jwtDecode<DecodedTokenPayload>(token);
+        const userId = decoded.id;
+        
+        setUserData({
+            id: userId,
+            nome: 'Paciente', 
+            email: decoded.email,
+            role: 'paciente'
+        });
+
+        // Carrega tracking APENAS se estiver na aba de tracking
+        if (activeItem === 'Tracking Diário') {
+            await fetchTrackingData(userId, token);
+        } else {
+            // Se estiver em outra aba (ex: Perfil), remove o loading geral
+            setIsLoading(false); 
         }
-        try {
-            const decoded = jwtDecode<DecodedTokenPayload>(token);
-            setUserId(decoded.id);
-        } catch {
+
+      } catch (err: any) {
+        console.error("Erro na inicialização:", err);
+        if (err.name === 'InvalidTokenError') {
+            localStorage.removeItem('token');
             navigate('/login');
-        }
-    }, [navigate]);
-
-    // 2. Função para buscar dados (Memoizada para ser usada no reload)
-    const fetchDailyTracking = useCallback(async () => {
-        if (!userId) return;
-        setIsLoading(true);
-        setError(null);
-        try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
-            const token = localStorage.getItem('token');
-
-            const response = await axios.get<DailyTrackingItem[]>(
-                `${apiUrl}/api/traits/daily-tracking/${userId}`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            setTrackingData(response.data);
-        } catch (err) {
-            console.error(err);
-            setError("Não foi possível carregar seus dados.");
-        } finally {
+        } else {
+            setError('Falha ao carregar informações. Tente recarregar a página.');
             setIsLoading(false);
         }
-    }, [userId]);
+      } 
+    };
 
-    // 3. Carregar dados iniciais
-    useEffect(() => {
-        if (activeItem === 'Tracking Diário') {
-            fetchDailyTracking();
+    initializePage();
+  }, [navigate, activeItem]);
+
+  const fetchTrackingData = async (userId: number, token: string) => {
+    try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
+        const response = await axios.get<DailyTrackingItem[]>(
+            `${apiUrl}/api/traits/daily-tracking/${userId}`, 
+            { headers: { Authorization: `Bearer ${token}` }}
+        );
+        setTrackingData(response.data);
+    } catch (err) {
+        console.error("Erro ao buscar traits:", err);
+        throw err;
+    } finally {
+        setIsLoading(false); // Garante que o loading pare
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  // --- Handlers dos Modais e Ações ---
+
+  const handleOpenTrackModal = (id: number, nome: string) => {
+    setSelectedTraitId(id);
+    setSelectedTraitName(nome);
+    setIsTrackModalOpen(true);
+  };
+
+  const handleOpenCreateModal = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const handleDeleteTrait = async (id: number) => {
+    if (window.confirm("Tem certeza que deseja excluir esta característica? Todo o histórico associado será perdido.")) {
+        setIsLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
+            
+            await axios.delete(`${apiUrl}/api/traits/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (userData?.id) {
+                await fetchTrackingData(userData.id, token!);
+            }
+        } catch (err) {
+            console.error("Erro ao deletar trait:", err);
+            alert("Ocorreu um erro ao tentar excluir a característica.");
+            setIsLoading(false);
         }
-    }, [fetchDailyTracking, activeItem]);
+    }
+  };
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        navigate('/login');
-    };
+  const handleSuccessOperation = async () => {
+    if (userData?.id) {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setIsLoading(true);
+            try {
+                await fetchTrackingData(userData.id, token);
+            } catch (err) {
+                console.error("Erro ao atualizar lista:", err);
+                setIsLoading(false);
+            }
+        }
+    }
+  };
 
-    // --- LÓGICA DE ABERTURA DO MODAL ---
-    // Esta função é passada para o TraitCard
-    const handleRegisterClick = (idTrait: number, nomeTrait: string) => {
-        setSelectedTraitId(idTrait);
-        setSelectedTraitName(nomeTrait);
-        setIsTrackMoodOpen(true); // Abre o modal
-    };
-
-    // --- CALLBACK DE SUCESSO ---
-    // Esta função é passada para o TrackMood
-    const handleTrackingSuccess = () => {
-        // Atualiza a lista para refletir que o card agora está "Atualizado"
-        fetchDailyTracking();
-    };
-
-    const renderContent = () => {
-        switch (activeItem) {
-            case 'Tracking Diário':
-                return (
-                    <div className={styles.trackingContainer}>
-                        <div className={styles.sectionHeader}>
-                            <h2 className={styles.cardTitle}>Registro Diário</h2>
-                            <p className={styles.subtitle}>Registre como está a intensidade de cada característica hoje.</p>
+  const renderContent = () => {
+    switch (activeItem) {
+        case 'Tracking Diário':
+            return (
+                <div className={styles.trackingContainer}>
+                    <div className={styles.sectionHeader}>
+                        <h2 className={styles.cardTitle}>Monitoramento Diário</h2>
+                        <p className={styles.subtitle}>Acompanhe suas características e registre seu progresso.</p>
+                    </div>
+                    
+                    {isLoading && (
+                        <div className={styles.loadingState}>
+                            <Loader2 size={48} className={styles.spinner} />
+                            <p>Carregando suas informações...</p>
                         </div>
+                    )}
 
-                        {isLoading && (
-                            <div className={styles.loadingState}>
-                                <Loader2 className={styles.spinner} size={32} />
-                                <p>Carregando...</p>
-                            </div>
-                        )}
+                    {error && !isLoading && (
+                        <div className={styles.errorState}>
+                            <AlertCircle size={48} />
+                            <p>{error}</p>
+                        </div>
+                    )}
 
-                        {!isLoading && error && (
-                            <div className={styles.errorState}><p>{error}</p></div>
-                        )}
-
-                        {!isLoading && !error && trackingData.length === 0 && (
-                            <div className={styles.emptyState}>
-                                <p>Nenhuma característica encontrada. Solicite ao seu terapeuta ou cuidador o cadastro de traits.</p>
-                            </div>
-                        )}
-
+                    {!isLoading && !error && (
                         <div className={styles.cardsGrid}>
+                            <div 
+                                className={styles.addCard} 
+                                onClick={handleOpenCreateModal} 
+                                role="button" 
+                                aria-label="Adicionar nova característica"
+                                title="Criar nova Trait"
+                            >
+                                <div className={styles.addButton}>
+                                    <Plus size={40} color="#fff" strokeWidth={3} />
+                                </div>
+                                <span className={styles.addCardText}>Nova Trait</span> 
+                            </div>
+
                             {trackingData.map((item) => (
-                                <TraitCard 
+                                <TraitCard
                                     key={item.idtraits}
-                                    {...item}
-                                    // Conecta o evento do card à função que abre o modal
-                                    onRegisterClick={handleRegisterClick}
+                                    idtraits={item.idtraits}
+                                    nome={item.nome}
+                                    nota={item.nota}
+                                    atualizadoHoje={item.atualizadoHoje}
+                                    criador={item.criador}
+                                    criadorRole={item.criadorRole}
+                                    onRegisterClick={handleOpenTrackModal}
+                                    onDeleteClick={handleDeleteTrait}
                                 />
                             ))}
                         </div>
-                    </div>
-                );
-            case 'Dashboard':
-                return <div className={styles.card}><h2 className={styles.cardTitle}>Dashboard (Em breve)</h2></div>;
-            case 'Meu Perfil':
-                return <div className={styles.card}><h2 className={styles.cardTitle}>Perfil (Em breve)</h2></div>;
-            case 'Notificações':
-                return <div className={styles.card}><h2 className={styles.cardTitle}>Notificações (Em breve)</h2></div>;
-            default:
-                return null;
-        }
-    };
+                    )}
 
-    return (
-        <div className={styles.container}>
-            <aside 
-                className={`${styles.sidebar} ${isSidebarHovered ? styles.sidebarExpanded : ''}`} 
-                onMouseEnter={() => setIsSidebarHovered(true)}
-                onMouseLeave={() => setIsSidebarHovered(false)}
-            >
-                <div className={styles.sidebarHeader}>
-                    <img 
-                        src={logoImage}
-                        alt="Logo Tear"
-                        className={styles.logoImage}
-                        onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/40x40/7C3AED/ffffff?text=T'; }}
-                    />
+                    {!isLoading && !error && trackingData.length === 0 && (
+                        <div className={styles.emptyState}>
+                            <p>Você ainda não tem características cadastradas.</p>
+                            <p>Clique no card com "+" para começar a monitorar sua saúde!</p>
+                        </div>
+                    )}
                 </div>
-                <nav className={styles.navigation}>
-                    {patientNavigation.map((item) => (
-                        <a
-                            key={item.name}
-                            href={item.href}
-                            onClick={(e) => { e.preventDefault(); setActiveItem(item.name); }}
-                            className={`${styles.navItem} ${activeItem === item.name ? styles.navItemActive : ''}`}
-                        >
-                            <item.icon size={24} className={styles.navIcon} /> 
-                            <span className={styles.navText}>{item.name}</span>
-                        </a>
-                    ))}
-                </nav>
-                <button onClick={handleLogout} className={`${styles.navItem} ${styles.logoutButton}`}>
-                    <LogOut size={24} className={styles.navIcon} />
-                    <span className={styles.navText}>Sair</span>
-                </button>
-            </aside>
+            );
+        
+        case 'Dashboard':
+            return <div className={styles.card}><h2 className={styles.cardTitle}>Dashboard (Em breve)</h2></div>;
+        
+        case 'Meu Perfil':
+            // Renderiza o novo componente ProfilePage
+            return <ProfilePage userId={userData?.id || null} />;
+            
+        case 'Notificações':
+            return <div className={styles.card}><h2 className={styles.cardTitle}>Notificações (Em breve)</h2></div>;
+        default:
+            return null;
+    }
+  };
 
-            <main className={`${styles.mainContent} ${isSidebarHovered ? styles.mainContentShifted : ''}`}>
-                <div className={styles.pageHeader}>
-                    <h1 className={styles.pageTitle}>Bem-vindo(a), Paciente!</h1>
-                </div>
-                <div className={styles.contentArea}>
-                    {renderContent()}
-                </div>
-            </main>
-
-            {/* O Modal é renderizado aqui, flutuando sobre a página quando isOpen=true */}
-            <TrackMood 
-                isOpen={isTrackMoodOpen}
-                onClose={() => setIsTrackMoodOpen(false)}
-                traitId={selectedTraitId}
-                traitName={selectedTraitName}
-                onSuccess={handleTrackingSuccess}
-            />
+  return (
+    <div className={styles.container}>
+      <aside 
+        className={`${styles.sidebar} ${isSidebarExpanded ? styles.sidebarExpanded : ''}`}
+        onMouseEnter={() => setIsSidebarExpanded(true)}
+        onMouseLeave={() => setIsSidebarExpanded(false)}
+      >
+        <div className={styles.sidebarHeader}>
+          <img 
+            src={logoImage} 
+            alt="Logo Tear" 
+            className={styles.logoImage} 
+            onError={(e) => { (e.target as HTMLImageElement).src = 'https://placehold.co/40x40/7C3AED/ffffff?text=T'; }}
+          />
         </div>
-    );
-}
+        
+        <nav className={styles.navigation}>
+            {patientNavigation.map((item) => (
+                <button 
+                    key={item.name}
+                    className={`${styles.navItem} ${activeItem === item.name ? styles.navItemActive : ''}`}
+                    onClick={() => setActiveItem(item.name)}
+                >
+                    <item.icon size={24} className={styles.navIcon} />
+                    <span className={styles.navText}>{item.name}</span>
+                </button>
+            ))}
+        </nav>
+
+        <button className={`${styles.navItem} ${styles.logoutButton}`} onClick={handleLogout} title="Sair">
+          <LogOut size={24} className={styles.navIcon} />
+          <span className={styles.navText}>Sair</span>
+        </button>
+      </aside>
+
+      <main className={`${styles.mainContent} ${isSidebarExpanded ? styles.mainContentShifted : ''}`}>
+        <header className={styles.pageHeader}>
+          <h1 className={styles.pageTitle}>
+            Olá, {userData?.nome ? userData.nome.split(' ')[0] : 'Paciente'}!
+          </h1>
+          <p className={styles.subtitle}>Bem-vindo ao seu espaço de cuidado.</p>
+        </header>
+
+        <div className={styles.contentArea}>
+            {renderContent()}
+        </div>
+      </main>
+
+      <TrackMoodModal
+        isOpen={isTrackModalOpen}
+        onClose={() => setIsTrackModalOpen(false)}
+        traitId={selectedTraitId}
+        traitName={selectedTraitName}
+        onSuccess={handleSuccessOperation}
+      />
+
+      <CreateTraitModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        userId={userData?.id || null}
+        onSuccess={handleSuccessOperation}
+      />
+    </div>
+  );
+};

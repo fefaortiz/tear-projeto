@@ -1,0 +1,335 @@
+/* Container Principal - Ocupa 100% */
+.container {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 2.5rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.headerText {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin: 0;
+}
+
+.subtitle {
+    color: #6b7280;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+/* Botões de Ação (Header) */
+.editButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    background-color: #7c3aed;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.editButton:hover {
+    background-color: #6d28d9;
+    transform: translateY(-1px);
+}
+
+.cancelButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    background-color: white;
+    color: #ef4444;
+    border: 1px solid #ef4444;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cancelButton:hover {
+    background-color: #fef2f2;
+}
+
+/* Formulário */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    flex-grow: 1;
+}
+
+/* Seção de Avatar */
+.avatarSection {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #7c3aed;
+    box-shadow: 0 4px 6px rgba(124, 58, 237, 0.1);
+}
+
+.avatarInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.avatarName {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.avatarRole {
+    color: #6b7280;
+    font-size: 1rem;
+    background-color: #f3f4f6;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    align-self: flex-start;
+    font-weight: 500;
+}
+
+/* Grid de Campos */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.fieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+.label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #374151;
+    margin-left: 0.25rem;
+}
+
+/* --- CORREÇÃO DE ALINHAMENTO DOS ÍCONES E DATA --- */
+
+.inputWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.inputIcon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    pointer-events: none;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+}
+
+/* Inputs e Selects */
+.input, .select {
+    width: 100%;
+    height: 3.5rem;
+    /* O padding-left deve ser suficiente para o ícone não sobrepor o texto */
+    padding: 0 1rem 0 3rem; 
+    border: 1px solid #d1d5db;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    color: #1f2937;
+    transition: all 0.2s ease-in-out;
+    background-color: #fff;
+    line-height: normal; 
+}
+
+/* --- CORREÇÃO ESPECÍFICA PARA O INPUT DE DATA --- */
+/* Garante que o ícone nativo do calendário (se houver) não colida com o nosso */
+input[type="date"] {
+    /* Em alguns browsers, o texto pode ficar muito colado se o padding for pequeno */
+    padding-left: 3.5rem; /* Um pouco mais de espaço para datas */
+}
+
+/* Webkit (Chrome, Safari, Edge) - Ícone de calendário nativo */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    /* Podemos mover o ícone nativo para a direita ou deixá-lo visível */
+    cursor: pointer;
+    background: transparent;
+    color: transparent;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.5rem;
+    height: 1.5rem;
+    /* Você pode querer esconder o ícone nativo se o seu ícone customizado já servir de gatilho 
+       (mas inputs date nativos só abrem clicando no ícone nativo em alguns browsers) 
+       OU apenas garantir que ele não fique na esquerda. */
+    opacity: 0; /* Esconde o ícone nativo, mas mantém clicável em toda a área ou na direita */
+    width: 100%; /* Truque: faz o ícone nativo cobrir todo o input para abrir o calendário ao clicar em qualquer lugar */
+    height: 100%;
+    left: 0;
+    z-index: 5; /* Fica sobre o input mas abaixo do nosso ícone (z-index 10) se pointer-events none */
+}
+
+/* Inputs que não estão dentro de um wrapper com ícone */
+.select, 
+.input:not([type="date"]):not([type="tel"]):not([type="email"]):not([type="text"]),
+.fieldGroup > .input { 
+    padding-left: 1rem; 
+}
+
+/* Re-aplica o padding de 3rem quando dentro do wrapper */
+.inputWrapper > .input {
+    padding-left: 3rem;
+}
+
+/* Correção específica para Date dentro do Wrapper */
+.inputWrapper > input[type="date"] {
+    padding-left: 3rem; /* Mantém consistência visual */
+}
+
+
+/* Estados */
+.input:focus, .select:focus {
+    outline: none;
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+}
+
+.input:disabled, .select:disabled {
+    background-color: #f9fafb;
+    color: #6b7280;
+    border-color: #e5e7eb;
+    cursor: not-allowed;
+}
+
+.disabledInput {
+    background-color: #f3f4f6 !important;
+    color: #9ca3af !important;
+}
+
+/* Footer */
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+    padding-top: 2rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.saveButton {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 2rem;
+    background-color: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    box-shadow: 0 4px 6px rgba(22, 163, 74, 0.2);
+}
+
+.saveButton:hover {
+    background-color: #15803d;
+    transform: translateY(-1px);
+}
+
+.saveButton:disabled {
+    background-color: #86efac;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Loaders e Mensagens */
+.loadingContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #7c3aed;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.successMessage {
+    background-color: #dcfce7;
+    color: #166534;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #bbf7d0;
+}
+
+.errorMessage {
+    background-color: #fee2e2;
+    color: #991b1b;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #fca5a5;
+}

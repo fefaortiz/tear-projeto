@@ -230,12 +230,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     padding-left: 3rem;
 }
 
-/* Correção específica para Date dentro do Wrapper */
-.inputWrapper > input[type="date"] {
-    padding-left: 3rem; /* Mantém consistência visual */
-}
-
-
 /* Estados */
 .input:focus, .select:focus {
     outline: none;

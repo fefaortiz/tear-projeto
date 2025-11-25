@@ -188,7 +188,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ userId }) => {
                         disabled={!isEditing}
                         className={styles.input}
                         placeholder="(XX) XXXXX-XXXX"
-                    />  
+                    />
                 </div>
             </div>
 

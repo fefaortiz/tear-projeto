@@ -3,9 +3,12 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './style.module.css'; // Usaremos os mesmos estilos
 import logoImage from '../../assets/logo_preenchido.png';  // Importe a imagem do logo
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
 export function RegisterTherapistPage() {
+  const navigate = useNavigate();
+
+  // Estados do Formulário
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
@@ -14,190 +17,189 @@ export function RegisterTherapistPage() {
   const [sexo, setSexo] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  
+  // Estados de UI
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [message, setMessage] = useState('');
-  const [isError, setIsError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-const formatCPF = (value: string): string => {
-  const digitsOnly = value.replace(/\D/g, '');
-  const truncatedDigits = digitsOnly.substring(0, 11);
-  const len = truncatedDigits.length;
-  if (len <= 3) {
-    return truncatedDigits;
-  } else if (len <= 6) {
-    return truncatedDigits.replace(/^(\d{3})(\d{1,3})/, '$1.$2');
-  } else if (len <= 9) {
-    return truncatedDigits.replace(/^(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
-  } else {
-    return truncatedDigits.replace(/^(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
-  }
-};
-const formatPhone = (value: string): string => {
-    // 1. Remove tudo que não for dígito
-    const digitsOnly = value.replace(/\D/g, '');
-
-    // 2. Limita a 11 dígitos (máximo para celular com DDD)
-    const truncatedDigits = digitsOnly.substring(0, 11);
-    const len = truncatedDigits.length;
-
-    if (len <= 2) {
-      return truncatedDigits.replace(/^(\d{0,2})/, '($1');
-    } else if (len <= 6) {
-      return truncatedDigits.replace(/^(\d{2})(\d{0,4})/, '($1) $2');
-    } else if (len <= 10) {
-      return truncatedDigits.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-    } else {
-      return truncatedDigits.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
-    }
+  // Funções de formatação (iguais às do paciente para consistência)
+  const formatCPF = (value: string) => {
+    return value
+      .replace(/\D/g, '')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+      .replace(/(-\d{2})\d+?$/, '$1');
   };
 
-  const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const formattedValue = formatPhone(event.target.value);
-    setTelefone(formattedValue);
+  const formatPhone = (value: string) => {
+    return value
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d)/, '$1-$2')
+      .replace(/(-\d{4})\d+?$/, '$1');
   };
 
+  const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCpf(formatCPF(e.target.value));
+  };
 
-  const handleCpfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const formattedValue = formatCPF(event.target.value);
-    setCpf(formattedValue);
+  const handleTelefoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTelefone(formatPhone(e.target.value));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (password !== confirmPassword) {
-      setMessage('As senhas não coincidem!');
-      setIsError(true);
-      return;
+    setLoading(true);
+    setError(null);
+
+    // Validação básica
+    if (!name || !email || !cpf || !crpCrm || !password) {
+        setError('Por favor, preencha todos os campos obrigatórios.');
+        setLoading(false);
+        return;
     }
-    
+
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
-      const response = await axios.post(`${apiUrl}/api/auth/registerTerapeuta`, {
+      
+      // Envia os dados para o backend (rota de criação de terapeuta)
+      // Ajuste o endpoint conforme sua API (/api/terapeutas)
+      await axios.post(`${apiUrl}/api/auth/registerTerapeuta`, {
         nome: name,
-        email: email,
-        senha: password,
-        cpf: cpf,
+        email,
+        cpf: cpf.replace(/\D/g, ''), // Envia apenas números
         crp_crm: crpCrm,
-        telefone: telefone,
-        sexo: sexo,
-        data_de_nascimento: dataNascimento
+        telefone,
+        sexo,
+        data_de_nascimento: dataNascimento,
+        senha: password
       });
 
-      // Se o backend retornar um token, salvamos ele
-      const token = response.data.token;
-      if (token) {
-        localStorage.setItem('token', token);
-      }
+      // Sucesso: redireciona para login
+      navigate('/login');
 
-      setMessage(response.data.message || 'Usuário cadastrado com sucesso!');
-      setIsError(false);
-
-      // Redirecionar para a página de login após 1 segundo
-      setTimeout(() => {
-        window.location.href = '/login';
-      }, 1000);
-
-    } catch (error) {
-      console.error('Register error:', error);
-      if (axios.isAxiosError(error) && error.response?.data?.error) {
-        setMessage(`Erro: ${error.response.data.error}`);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        console.error(err);
+        setError(err.response?.data?.error || 'Erro ao realizar cadastro. Verifique os dados.');
       } else {
-        setMessage('Erro: Não foi possível registrar. Por favor, tente novamente.');
+        console.error(err);
+        setError('Erro ao realizar cadastro. Verifique os dados.');
       }
-      setIsError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className={styles.registerTherapistBackground}> 
+    <div className={styles.registerTherapistBackground}>
       <div className={styles.registerTherapistcontainer}>
+        
         <img src={logoImage} alt="Logo Tear" className={styles.logo} />
-        <h1 className={styles.title}>Seja bem-vindo!</h1>
-        <p className={styles.subtitle}>crie uma conta</p>
-        {message && (
-          <p className={isError ? styles.feedbackErrorMessage : styles.feedbackSuccessMessage}>
-              {message}
-          </p>
-        )}
+        
+        <h1 className={styles.title}>Cadastro de Terapeuta</h1>
+        <p className={styles.subtitle}>Junte-se à nossa rede de profissionais.</p>
+
+        {error && <div className={styles.errorMessage}>{error}</div>}
+
         <form onSubmit={handleSubmit} className={styles.form}>
-            <input
-              placeholder='Nome'
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
+          <input 
+            className={styles.inputField} 
+            placeholder="Nome Completo" 
+            type="text" 
+            value={name} 
+            onChange={(e) => setName(e.target.value)} 
+            required 
+          />
+          
+          <input 
+            className={styles.inputField} 
+            placeholder="E-mail Profissional" 
+            type="email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            required 
+          />
+
+          <div className={styles.row}>
+            <input 
+                className={styles.inputField} 
+                placeholder="CPF" 
+                type="text" 
+                value={cpf} 
+                onChange={handleCpfChange} 
+                maxLength={14}
+                required 
             />
-            <input
-              placeholder='Email'
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+            <input 
+                className={styles.inputField} 
+                placeholder="CRP/CRM" 
+                type="text" 
+                value={crpCrm} 
+                onChange={(e) => setCrpCrm(e.target.value)} 
+                required 
             />
-            <input
-              placeholder='CPF'
-              type="text"
-              value={cpf}
-              onChange={handleCpfChange}
-              required
-              maxLength={14}
+          </div>
+          
+          <div className={styles.row}>
+             <input 
+                className={styles.inputField} 
+                placeholder="Telefone" 
+                type="tel" 
+                value={telefone} 
+                onChange={handleTelefoneChange} 
+                maxLength={15} 
             />
-            <input
-              placeholder='CRP/CRM'
-              type="text"
-              value={crpCrm}
-              onChange={(e) => setCrpCrm(e.target.value)}
-              required
-              maxLength={8}
+            <select 
+                className={styles.inputField} 
+                value={sexo} 
+                onChange={(e) => setSexo(e.target.value)}
+            >
+                <option value="">Sexo</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Outro">Outro</option>
+            </select>
+          </div>
+
+          <div className={styles.inputLabelGroup}>
+            <input 
+                className={styles.inputField} 
+                type="date" 
+                value={dataNascimento} 
+                onChange={(e) => setDataNascimento(e.target.value)} 
             />
-            <input
-              placeholder='Telefone'
-              type="tel"
-              value={telefone}
-              onChange={handlePhoneChange}
-              required
-            />
-          <select className={styles.inputField} id="sexo" value={sexo} onChange={(e) => setSexo(e.target.value)}>
-            <option value="">Selecione seu sexo</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Feminino">Feminino</option>
-            <option value="Outro">Outro</option>
-            <option value="PrefiroNaoInformar">Prefiro não informar</option>
-          </select>
-            <input
-              type="date"
-              value={dataNascimento}
-              onChange={(e) => setDataNascimento(e.target.value)}
-              required
-            />
+          </div>
+
           <div className={styles.passwordContainer}>
             <input 
-              placeholder="Senha" 
-              className={styles.inputField} 
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+                className={styles.inputField} 
+                placeholder="Senha" 
+                type={showPassword ? "text" : "password"} 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                required 
+                minLength={6}
             />
             <button
-              type="button"
-              className={styles.togglePassword}
-              onClick={() => setShowPassword(!showPassword)}
-              aria-label={showPassword ? "Esconder senha" : "Mostrar senha"}
+                type="button"
+                className={styles.togglePassword}
+                onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
-          </div> 
-          <button type="submit" className={styles.button}>Registrar</button>
+          </div>
 
-
-          <p className={styles.toggleLink}>
-            Já tem uma conta? <Link to="/login"> <span className={styles.login} >Entrar</span></Link>
-          </p>
+          <button className={styles.button} type="submit" disabled={loading}> 
+            {loading ? <Loader2 className={styles.spinner} /> : 'Cadastrar'}
+          </button>
         </form>
+
+        <p className={styles.toggleLink}>
+          Já tem uma conta? <Link to="/login" className={styles.loginLink}>Faça login</Link>
+        </p>
       </div>
     </div>
   );

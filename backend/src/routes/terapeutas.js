@@ -19,13 +19,13 @@ router.get('/', verifyToken, async (req, res) => {
 });
 
 // ==========================================================
-// NOVO: Rota 2 (GET /api/terapeutas/lookup)
-// Busca um terapeuta por ID, CPF ou Email
+// NOVO: Rota 2 (GET /api/terapeutas/:id)
+// Busca um terapeuta por ID
 // ==========================================================
-router.get('/lookup', verifyToken, async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
   try {
     // 1. Pega os parâmetros da URL (ex: /lookup?cpf=123)
-    const { id, cpf, email } = req.query;
+    const { id } = req.params;
 
     let terapeuta;
     const query = db('terapeuta');
@@ -103,13 +103,13 @@ router.get('/por-paciente', verifyToken, async (req, res) => {
 });
 
 // ==========================================================
-// NOVO: Rota PATCH /api/terapeutas/profile
+// NOVO: Rota PATCH /api/terapeutas/:idterapeuta
 // Atualiza o perfil do terapeuta LOGADO
 // ==========================================================
-router.patch('/update', verifyToken, async (req, res) => {
-  const { id: idterapeuta } = req.user;
+router.put('/:idterapeuta', verifyToken, async (req, res) => {
+  const { idterapeuta } = req.params;
 
-  const { nome, telefone, sexo, data_de_nascimento, email, senha } = req.body;
+  const { nome, telefone, sexo, data_de_nascimento, crp_crm } = req.body;
 
   const updateData = {};
 
@@ -117,25 +117,7 @@ router.patch('/update', verifyToken, async (req, res) => {
   if (telefone !== undefined) updateData.telefone = telefone;
   if (sexo !== undefined) updateData.sexo = sexo;
   if (data_de_nascimento !== undefined) updateData.data_de_nascimento = data_de_nascimento;
-  if (email) updateData.email = email;
-
-  // Lógica especial para a SENHA
-  // Se uma nova senha foi fornecida, hasheamos ela.
-  if (senha) {
-    try {
-      const salt = await bcrypt.genSalt(10);
-      updateData.senha = await bcrypt.hash(senha, salt);
-    } catch (hashError) {
-      console.error("Erro ao hashear nova senha:", hashError);
-      return res.status(500).json({ error: 'Erro ao processar a senha.' });
-    }
-  }
-
-  if (Object.keys(updateData).length === 0) {
-    return res.status(400).json({ 
-      error: 'Nenhum campo para atualizar foi fornecido.' 
-    });
-  }
+  if (crp_crm !== undefined) updateData.crp_crm = crp_crm;
 
   try {
     const [updatedTerapeuta] = await db.transaction(async (trx) => {
@@ -154,15 +136,6 @@ router.patch('/update', verifyToken, async (req, res) => {
         .update(updateData)
         .returning('*'); // Retorna o objeto completo do terapeuta atualizado
 
-      // Passo C: Lógica especial para o EMAIL
-      // Se o email foi atualizado (e é diferente do antigo),
-      // devemos propagar essa mudança para a tabela 'paciente'.
-      if (email && email !== terapeutaAtual.email) {
-        await trx('paciente')
-          .where({ emailterapeuta: terapeutaAtual.email }) // Encontra pacientes com o email antigo
-          .update({ emailterapeuta: email }); // Atualiza para o email novo
-      }
-
       return [terapeuta]; // Finaliza e retorna o terapeuta
     });
 
@@ -174,11 +147,6 @@ router.patch('/update', verifyToken, async (req, res) => {
   } catch (error) {
     console.error('Erro ao atualizar terapeuta:', error);
     
-    // Erro comum: o novo email já existe no banco
-    if (error.code === '23505') {
-      return res.status(409).json({ error: 'O email fornecido já está em uso.' });
-    }
-
     if (error.message === 'Terapeuta não encontrado') {
         return res.status(404).json({ error: error.message });
     }

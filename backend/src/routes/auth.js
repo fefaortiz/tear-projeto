@@ -83,7 +83,7 @@ router.post('/login', async (req, res) => {
 // ==========================================================
 // ## Rota de Cadastro de Paciente ##
 // ==========================================================
-router.post('/register', async (req, res) => {
+router.post('/registerPaciente', async (req, res) => {
   const {
     nome,
     cpf,

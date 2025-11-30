@@ -56,13 +56,13 @@ router.get('/:id', verifyToken, async (req, res) => {
 // Rota 3 (GET /api/pacientes/por-terapeuta)
 // Busca os pacientes vinculados a um terapeuta
 // ==========================================================
-router.get('/por-terapeuta', verifyToken, async (req, res) => {
+router.get('/porTerapeuta/:id_terapeuta', verifyToken, async (req, res) => {
   try {
-    const { id_terapeuta, email_terapeuta, cpf_terapeuta } = req.query;
+    const { id_terapeuta } = req.params;
 
-    if (!id_terapeuta && !email_terapeuta && !cpf_terapeuta) {
+    if (!id_terapeuta) {
       return res.status(400).json({ 
-        error: 'Parâmetro de busca (id_terapeuta, email_terapeuta ou cpf_terapeuta) é obrigatório.' 
+        error: 'Parâmetro de busca "id_terapeuta" é obrigatório.' 
       });
     }
 
@@ -181,10 +181,6 @@ router.put('/:idpaciente', async (req, res) => {
   } catch (error) {
     console.error('Erro ao atualizar paciente:', error);
     
-    // Erro comum: o novo email já existe no banco
-    if (error.code === '23505') {
-      return res.status(409).json({ error: 'O email fornecido já está em uso.' });
-    }
 
     if (error.message === 'Paciente não encontrado') {
         return res.status(404).json({ error: error.message });

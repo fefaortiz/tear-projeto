@@ -1,32 +1,38 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import WeeklyTrackingChart from '../weeklyTackingChart';
-import TraitFrequencyChart from '../TraitFrequencyChart';
-import DailyCompletionChart from '../DailyCompletionChart';
-import AverageIntensityCard from '../AverageIntensityCard';
+import { Activity, BarChart2 } from 'lucide-react'; // Ícones para embelezar
+import WeeklyTrackingChart from '../../components/weeklyTrackingChart';
+import TraitFrequencyChart from '../../components/TraitFrequencyChart';
+import DailyCompletionChart from '../../components/DailyCompletionChart'; 
+import AverageIntensityCard from '../../components/AverageIntensityCard'; 
 import styles from './style.module.css';
 
 interface Trait {
-  idtraits: number; // Atenção: Verifique se no seu banco é 'id' ou 'idtraits'
-  descricao: string; // ou 'nome'
+  idtraits: number;
+  nome: string;
 }
 
 const DashboardPagePatient = () => {
   const [traits, setTraits] = useState<Trait[]>([]);
+  const [selectedTraitId, setSelectedTraitId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Cores para alternar nos gráficos
-  const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#0088FE"];
+  const chartColor = "#7C3AED"; 
 
   useEffect(() => {
     const fetchTraits = async () => {
       try {
         const token = localStorage.getItem('token');
-        // Rota para buscar as traits do usuário
-        const response = await axios.get('http://localhost:3333/api/traits', {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
+        const response = await axios.get(`${apiUrl}/api/traits/getAll`, {
             headers: { Authorization: `Bearer ${token}` }
         });
+        
         setTraits(response.data);
+        
+        if (response.data.length > 0) {
+            setSelectedTraitId(response.data[0].idtraits);
+        }
       } catch (error) {
         console.error("Erro ao buscar traits", error);
       } finally {
@@ -36,16 +42,49 @@ const DashboardPagePatient = () => {
     fetchTraits();
   }, []);
 
+  const handleTraitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedTraitId(Number(e.target.value));
+  };
+
+  const selectedTraitName = traits.find(t => t.idtraits === selectedTraitId)?.nome || '';
+
   if (loading) return <div className={styles.loading}>Carregando dashboard...</div>;
 
   return (
     <div className={styles.dashboardContainer}>
+      
+      {/* HEADER: Título à esquerda, Dropdown à direita */}
       <header className={styles.header}>
-        <h1>Dashboard do Paciente</h1>
-        <p>Resumo do seu bem-estar e monitoramento.</p>
+        <div className={styles.headerText}>
+            <h1>Dashboard</h1>
+            <p>Visão geral do seu bem-estar.</p>
+        </div>
+
+        {/* Dropdown posicionado aqui */}
+        <div className={styles.filterContainer}>
+            {traits.length > 0 ? (
+                <div className={styles.selectWrapper}>
+                    <select 
+                        id="traitSelect"
+                        className={styles.traitSelect}
+                        value={selectedTraitId || ''}
+                        onChange={handleTraitChange}
+                    >
+                        {traits.map((trait) => (
+                            <option key={trait.idtraits} value={trait.idtraits}>
+                                {trait.nome}
+                            </option>
+                        ))}
+                    </select>
+                    {/* Ícone de seta customizado via CSS ou SVG aqui se necessário */}
+                </div>
+            ) : (
+                <p className={styles.noTraitsMsg}>Sem características.</p>
+            )}
+        </div>
       </header>
 
-      {/* SEÇÃO 1: Resumo Rápido */}
+      {/* SEÇÃO 1: Resumo Rápido (Cards Superiores) */}
       <section className={styles.summarySection}>
         <div className={styles.summaryCard}>
             <DailyCompletionChart />
@@ -55,35 +94,41 @@ const DashboardPagePatient = () => {
         </div>
       </section>
 
-      {/* SEÇÃO 2: Evolução Semanal */}
-      <section>
-        <h2 className={styles.sectionTitle}>Evolução Semanal</h2>
-        <div className={styles.gridContainer}>
-          {traits.map((trait, index) => (
-            <WeeklyTrackingChart 
-              key={trait.idtraits} 
-              traitId={trait.idtraits} 
-              traitName={trait.descricao}
-              color={colors[index % colors.length]} 
-            />
-          ))}
-          {traits.length === 0 && <p>Nenhuma característica cadastrada.</p>}
-        </div>
-      </section>
+      {/* SEÇÃO 2: Gráficos Detalhados (Lado a Lado) */}
+      <section className={styles.detailsSection}>
+        <h2 className={styles.sectionTitle}>
+            Análise Detalhada: <span className={styles.highlight}>{selectedTraitName}</span>
+        </h2>
 
-      {/* SEÇÃO 3: Frequência */}
-      <section>
-        <h2 className={styles.sectionTitle}>Frequência por Intensidade (Total)</h2>
-        <div className={styles.gridContainer}>
-          {traits.map((trait, index) => (
-            <TraitFrequencyChart 
-              key={trait.idtraits}
-              traitId={trait.idtraits} // Passando o ID real
-              traitName={trait.descricao}
-              color={colors[index % colors.length]}
-            />
-          ))}
-        </div>
+        {selectedTraitId && (
+            <div className={styles.chartsGrid}>
+                {/* Gráfico 1: Evolução Semanal */}
+                <div className={styles.chartCard}>
+                    <div className={styles.chartHeader}>
+                        <Activity size={20} className={styles.chartIcon} />
+                        <h3>Evolução Recente</h3>
+                    </div>
+                    <WeeklyTrackingChart 
+                        traitId={selectedTraitId} 
+                        traitName={selectedTraitName}
+                        color={chartColor} 
+                    />
+                </div>
+
+                {/* Gráfico 2: Frequência */}
+                <div className={styles.chartCard}>
+                    <div className={styles.chartHeader}>
+                        <BarChart2 size={20} className={styles.chartIcon} />
+                        <h3>Frequência de Intensidade</h3>
+                    </div>
+                    <TraitFrequencyChart 
+                        traitId={selectedTraitId}
+                        traitName={selectedTraitName}
+                        color={chartColor}
+                    />
+                </div>
+            </div>
+        )}
       </section>
     </div>
   );

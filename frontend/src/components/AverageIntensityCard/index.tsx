@@ -10,7 +10,7 @@ const AverageIntensityCard = () => {
     const fetchData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3333/api/dataviz/weekly-average', {
+            const response = await axios.get('http://localhost:3333/api/patient-data/weekly-average', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setAverage(response.data.average);

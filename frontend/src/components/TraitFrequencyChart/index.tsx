@@ -23,7 +23,7 @@ const TraitFrequencyChart = ({ traitId, traitName, color = "#8884d8" }: TraitFre
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3333/api/dataviz/frequency/${traitId}`, {
+        const response = await axios.get(`http://localhost:3333/api/patient-data/frequency/${traitId}`, {
              headers: { Authorization: `Bearer ${token}` }
         });
         setData(response.data);

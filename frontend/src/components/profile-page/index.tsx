@@ -13,6 +13,8 @@ interface ProfileData {
   cpf?: string;
   sexo?: string;
   crp_crm?: string; // Específico para Terapeuta
+  emailterapeuta?: string; // Específico para Paciente
+  emailcuidador?: string; // Específico para Paciente
 }
 
 interface ProfilePageProps {
@@ -274,6 +276,42 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ userId, userRole }) =>
                             value={profileData.crp_crm || ''} 
                             onChange={handleInputChange}
                             disabled={!isEditing} // Pode ser editável ou não, dependendo da sua regra de negócio
+                            className={styles.input}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* Campo Específico para Paciente (email Cuidador) */}
+            {userRole === 'paciente' && (
+                <div className={styles.fieldGroup}>
+                    <label className={styles.label}>Email do Cuidador</label>
+                    <div className={styles.inputWrapper}>
+                        <div className={styles.inputIcon}><Mail size={18} /></div>
+                        <input 
+                            type="text" 
+                            name="emailcuidador"
+                            value={profileData.emailcuidador || ''} 
+                            onChange={handleInputChange}
+                            disabled={isEditing}
+                            className={styles.input}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* Campo Específico para Paciente (email Terapeuta) */}
+            {userRole === 'paciente' && (
+                <div className={styles.fieldGroup}>
+                    <label className={styles.label}>Email do Terapeuta</label>
+                    <div className={styles.inputWrapper}>
+                        <div className={styles.inputIcon}><Mail size={18} /></div>
+                        <input 
+                            type="text" 
+                            name="emailterapeuta"
+                            value={profileData.emailterapeuta || ''} 
+                            onChange={handleInputChange}
+                            disabled={isEditing}
                             className={styles.input}
                         />
                     </div>

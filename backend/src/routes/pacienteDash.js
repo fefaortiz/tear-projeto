@@ -54,7 +54,6 @@ router.get('/frequency/:idtrait', verifyToken, async (req, res) => {
       .orderBy('intensidade', 'asc');
 
     // O banco pode retornar strings no count, convertemos para número no frontend ou aqui.
-    // O Knex/PG geralmente retorna string para BigInt.
     const formattedFreq = frequency.map(item => ({
         intensidade: item.intensidade,
         frequencia: Number(item.frequencia)
@@ -77,9 +76,11 @@ router.get('/daily-completion', verifyToken, async (req, res) => {
     const { id } = req.user;
     const today = new Date().toISOString().split('T')[0];
 
-    // A. Contar Total de Traits Existentes no Sistema (Ou atribuídos ao paciente)
-    // Assumindo que todos os traits são visíveis para todos:
-    const totalTraitsResult = await db('traits').count('* as total').first();
+    // A. Contar Total de Traits do paciente
+    const totalTraitsResult = await db('traits').where({ 
+        idpaciente_criador: id
+      }).count('* as total').first();
+
     const totalTraits = Number(totalTraitsResult.total);
 
     // B. Contar quantos traits DIFERENTES o usuário preencheu hoje

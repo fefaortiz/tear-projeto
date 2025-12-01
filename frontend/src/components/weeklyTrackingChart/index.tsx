@@ -24,12 +24,13 @@ const WeeklyTrackingChart = ({ traitId, traitName, color = "#8884d8" }: WeeklyTr
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3333/api/dataviz/weekly-history/${traitId}`, {
+        const response = await axios.get(`http://localhost:3333/api/patient-data/weekly-history/${traitId}`, {
              headers: { Authorization: `Bearer ${token}` }
         });
 
         // Formata a data para DD/MM para exibir no eixo X
-        const formattedData = response.data.map((item: any) => ({
+        const responseData = response.data as TrackingData[];
+        const formattedData: TrackingData[] = responseData.map((item: TrackingData) => ({
             ...item,
             dataFormatada: new Date(item.dia_de_registro).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
         }));

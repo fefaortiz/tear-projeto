@@ -10,7 +10,7 @@ const terapeutaRoutes = require('./routes/terapeutas.js');
 const trackingRoutes = require('./routes/tracking.js');
 const traitsRoutes = require('./routes/traits.js');
 const datavizRoutes = require('./routes/dataviz.js');
-const patientDataRoutes = require('./routes/patientData.js');
+const patientDataRoutes = require('./routes/pacienteDash.js');
 
 const app = express();
 const PORT = 3333;

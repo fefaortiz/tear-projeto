@@ -19,8 +19,7 @@ router.get('/', verifyToken, async (req, res) => {
 });
 
 // ==========================================================
-// NOVO: Rota 2 (GET /api/pacientes/lookup)
-// Busca um paciente por ID, CPF ou Email
+// NOVO: Rota 2 (GET /api/pacientes/:id)
 // ==========================================================
 router.get('/:id', verifyToken, async (req, res) => {
   try {

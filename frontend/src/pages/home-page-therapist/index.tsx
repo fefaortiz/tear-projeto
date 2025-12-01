@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Users, LayoutDashboard, User, Bell, Loader2, AlertCircle } from 'lucide-react';
+import { LogOut, Users, LayoutDashboard, User, Loader2, AlertCircle } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode';
 import logoImage from '../../assets/logo_preenchido.png';
 import styles from './style.module.css';

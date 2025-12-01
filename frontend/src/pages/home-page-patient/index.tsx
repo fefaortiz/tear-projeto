@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Plus, Loader2, AlertCircle, Activity, LayoutDashboard, User, Bell } from 'lucide-react';
+import { LogOut, Plus, Loader2, AlertCircle, Activity, LayoutDashboard, User } from 'lucide-react';
 import { jwtDecode } from 'jwt-decode'; 
 import logoImage from '../../assets/logo_preenchido.png';
 import styles from './style.module.css';
@@ -292,13 +292,6 @@ export const HomePagePatient = () => {
       </aside>
 
       <main className={`${styles.mainContent} ${isSidebarExpanded ? styles.mainContentShifted : ''}`}>
-        <header className={styles.pageHeader}>
-          <h1 className={styles.pageTitle}>
-            Olá, {userData?.nome ? userData.nome.split(' ')[0] : 'Paciente'}!
-          </h1>
-          <p className={styles.subtitle}>Bem-vindo ao seu espaço de cuidado.</p>
-        </header>
-
         <div className={styles.contentArea}>
             {renderContent()}
         </div>

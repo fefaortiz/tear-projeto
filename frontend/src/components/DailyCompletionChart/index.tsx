@@ -10,7 +10,7 @@ const DailyCompletionChart = () => {
     const fetchData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3333/api/dataviz/daily-completion', {
+            const response = await axios.get('http://localhost:3333/api/patient-data/daily-completion', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setPercentage(response.data.percentage);

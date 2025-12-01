@@ -80,7 +80,7 @@ router.post('/:idpaciente', verifyToken, async (req, res) => {
 // ==========================================================
 // GET /api/traits/:idpaciente (Buscar Traits com Status de Tracking Diário)
 // ==========================================================
-router.get('/:idpaciente', verifyToken, async (req, res) => {
+router.get('/tracking-diario/:idpaciente', verifyToken, async (req, res) => {
   try {
     const { idpaciente } = req.params;
 
@@ -127,6 +127,34 @@ router.get('/:idpaciente', verifyToken, async (req, res) => {
 
   } catch (error) {
     console.error('Erro ao buscar Traits e status de Tracking:', error);
+    res.status(500).json({ error: 'Erro interno ao buscar Traits.' });
+  }
+});
+
+// ==========================================================
+// GET /api/traits/getAll
+// ==========================================================
+router.get('/getAll', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.user;
+
+    // Pega a data de hoje no formato YYYY-MM-DD
+    const hoje = new Date().toISOString().split('T')[0];
+
+    // 1. Buscar todas as Traits para o paciente dado
+    let traits = await db('traits')
+      .where({ idpaciente: id })
+      .orderBy('data_de_criacao', 'desc')
+      .select('idtraits', 'nome', 'data_de_criacao');
+
+    if (traits.length === 0) {
+        return res.status(200).json([]); // Retorna array vazio se não houver traits
+    }
+
+    res.status(200).json(traits);
+
+  } catch (error) {
+    console.error('Erro ao buscar Traits', error);
     res.status(500).json({ error: 'Erro interno ao buscar Traits.' });
   }
 });
@@ -210,7 +238,6 @@ router.get('/daily-tracking/:idpaciente', verifyToken, async (req, res) => {
         't.intensidade as intensidade_default',
         'tr.idtracking',
         'tr.intensidade as nota_hoje',
-        // [CORREÇÃO] Pega os criadores da tabela 'traits' (t), não 'tracking' (tr)
         't.idpaciente_criador',
         't.idcuidador_criador'
       )

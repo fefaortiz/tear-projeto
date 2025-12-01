@@ -4,10 +4,6 @@ const db = require('../database/connection');
 const verifyToken = require('../middleware/authMiddleware');
 
 // ==========================================================
-// POST /api/tracking (Criar novo Tracking) - USANDO ROLE DO JWT
-// ==========================================================
-
-// ==========================================================
 // POST /api/tracking/:idtraits (Criar novo Tracking)
 // ==========================================================
 router.post('/:idtraits', verifyToken, async (req, res) => {

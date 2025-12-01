@@ -8,11 +8,21 @@ const MediaDiariaCard: React.FC<MediaDiariaProps> = ({ pacienteId }) => {
   const [media, setMedia] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+useEffect(() => {
     const fetchMediaHoje = async () => {
       try {
-        // Chama a nova rota 'media-diaria'
-        const response = await fetch(`http://localhost:3333/api/tracking/media-diaria/${pacienteId}`);
+        const token = localStorage.getItem('token'); // 1. Pegar o token
+        
+        const response = await fetch(`http://localhost:3333/api/tracking/media-diaria/${pacienteId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // 2. Enviar no cabeçalho
+          }
+        });
+
+        if (!response.ok) throw new Error('Falha ao buscar média');
+
         const data = await response.json();
         setMedia(data.media);
       } catch (error) {
@@ -22,7 +32,10 @@ const MediaDiariaCard: React.FC<MediaDiariaProps> = ({ pacienteId }) => {
       }
     };
 
-    fetchMediaHoje();
+    // Só executa se tiver um pacienteId válido
+    if (pacienteId) {
+        fetchMediaHoje();
+    }
   }, [pacienteId]);
 
   // Função para determinar a cor e o texto de feedback

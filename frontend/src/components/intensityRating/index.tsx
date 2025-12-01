@@ -1,6 +1,6 @@
 // src/componentes/IntensityRating/index.tsx
 import React, { useState } from 'react';
-import './IntensityRating.css'; // Vamos criar este CSS
+import styles from'./IntensityRating.module.css'; // Vamos criar este CSS
 
 // 1. Define as opções
 const ratings = [
@@ -27,23 +27,25 @@ const IntensityRating: React.FC<IntensityRatingProps> = ({ onChange }) => {
   };
 
   return (
-    <div className="intensity-rating-container">
+    <div className={styles.intensityRatingContainer}>
       {ratings.map((rating) => (
         <button
           type="button" // Impede que o botão envie o formulário
           key={rating.value}
-          // 4. Lógica do Destaque (Highlight)
-          className={`rating-option ${selectedValue === rating.value ? 'selected' : ''}`}
+          className={[
+            styles.ratingOption,
+            selectedValue === rating.value ? styles.selected : ''
+          ].join(' ')}          
           onClick={() => handleClick(rating.value)}
         >
           {/* 5. A Bolinha (com a cor gradiente) */}
           <div 
-            className="rating-circle" 
+            className={styles.ratingCircle} 
             style={{ backgroundColor: rating.color }}
           ></div>
 
           {/* 6. O Label */}
-          <span className="rating-label">{rating.label}</span>
+          <span className={styles.ratingLabel}>{rating.label}</span>
         </button>
       ))}
     </div>

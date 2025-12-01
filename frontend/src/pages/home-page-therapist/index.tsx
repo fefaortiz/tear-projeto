@@ -38,7 +38,6 @@ const therapistNavigation = [
     { name: 'Meus Pacientes', href: '#patients', icon: Users },
     { name: 'Dashboard Geral', href: '#dashboard', icon: LayoutDashboard },
     { name: 'Meu Perfil', href: '#profile', icon: User },
-    { name: 'Notificações', href: '#notifications', icon: Bell },
 ];
 
 export const HomePageTherapist = () => {
@@ -188,8 +187,6 @@ export const HomePageTherapist = () => {
         case 'Meu Perfil':
             return <ProfilePage userId={userData?.id || null} userRole={userData?.role} />;
             
-        case 'Notificações':
-            return <div className={styles.card}><h2 className={styles.cardTitle}>Notificações (Em breve)</h2></div>;
         default:
             return null;
     }

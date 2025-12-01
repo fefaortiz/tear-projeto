@@ -42,7 +42,6 @@ const patientNavigation = [
     { name: 'Tracking Diário', href: '#tracking', icon: Activity },
     { name: 'Dashboard', href: '#dashboard', icon: LayoutDashboard },
     { name: 'Meu Perfil', href: '#profile', icon: User },
-    { name: 'Notificações', href: '#notifications', icon: Bell },
 ];
 
 export const HomePagePatient = () => {
@@ -237,7 +236,7 @@ export const HomePagePatient = () => {
                     {!isLoading && !error && trackingData.length === 0 && (
                         <div className={styles.emptyState}>
                             <p>Você ainda não tem características cadastradas.</p>
-                            <p>Clique no card com "+" para começar a monitorar sua saúde!</p>
+                            <p>Clique no card com "+" para começar a monitorar suas traits!</p>
                         </div>
                     )}
                 </div>
@@ -248,10 +247,8 @@ export const HomePagePatient = () => {
         
         case 'Meu Perfil':
             // Renderiza o novo componente ProfilePage
-            return <ProfilePage userId={userData?.id || null} />;
+            return <ProfilePage userId={userData?.id || null} userRole={userData?.role}/>;
             
-        case 'Notificações':
-            return <div className={styles.card}><h2 className={styles.cardTitle}>Notificações (Em breve)</h2></div>;
         default:
             return null;
     }

@@ -1,20 +1,42 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import WeeklyTrackingChart from '../weeklyTackingChart';
-import TraitFrequencyChart from '../TraitFrequencyChart'; // Novo
-import DailyCompletionChart from '../DailyCompletionChart'; // Novo
-import AverageIntensityCard from '../AverageIntensityCard'; // Novo
+import TraitFrequencyChart from '../TraitFrequencyChart';
+import DailyCompletionChart from '../DailyCompletionChart';
+import AverageIntensityCard from '../AverageIntensityCard';
 import styles from './style.module.css';
 
-const DashboardPagePatient = () => {
-  
-  // Dados mockados de traits
-  const mockTraits = [
-    { id: 1, nome: 'Ansiedade Social' },
-    { id: 2, nome: 'Foco nas Tarefas' },
-    { id: 3, nome: 'Qualidade do Sono' },
-    { id: 4, nome: 'Irritabilidade' }
-  ];
+interface Trait {
+  idtraits: number; // Atenção: Verifique se no seu banco é 'id' ou 'idtraits'
+  descricao: string; // ou 'nome'
+}
 
-  const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
+const DashboardPagePatient = () => {
+  const [traits, setTraits] = useState<Trait[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Cores para alternar nos gráficos
+  const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#0088FE"];
+
+  useEffect(() => {
+    const fetchTraits = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        // Rota para buscar as traits do usuário
+        const response = await axios.get('http://localhost:3333/api/traits', {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        setTraits(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar traits", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTraits();
+  }, []);
+
+  if (loading) return <div className={styles.loading}>Carregando dashboard...</div>;
 
   return (
     <div className={styles.dashboardContainer}>
@@ -23,7 +45,7 @@ const DashboardPagePatient = () => {
         <p>Resumo do seu bem-estar e monitoramento.</p>
       </header>
 
-      {/* SEÇÃO 1: Resumo Rápido (Rosca e Média) */}
+      {/* SEÇÃO 1: Resumo Rápido */}
       <section className={styles.summarySection}>
         <div className={styles.summaryCard}>
             <DailyCompletionChart />
@@ -33,29 +55,31 @@ const DashboardPagePatient = () => {
         </div>
       </section>
 
-      {/* SEÇÃO 2: Gráficos de Linha (Evolução Semanal) */}
+      {/* SEÇÃO 2: Evolução Semanal */}
       <section>
         <h2 className={styles.sectionTitle}>Evolução Semanal</h2>
         <div className={styles.gridContainer}>
-          {mockTraits.map((trait, index) => (
+          {traits.map((trait, index) => (
             <WeeklyTrackingChart 
-              key={trait.id} 
-              traitId={trait.id} 
-              traitName={trait.nome}
+              key={trait.idtraits} 
+              traitId={trait.idtraits} 
+              traitName={trait.descricao}
               color={colors[index % colors.length]} 
             />
           ))}
+          {traits.length === 0 && <p>Nenhuma característica cadastrada.</p>}
         </div>
       </section>
 
-      {/* SEÇÃO 3: Gráficos de Barra (Frequência Acumulada) */}
+      {/* SEÇÃO 3: Frequência */}
       <section>
         <h2 className={styles.sectionTitle}>Frequência por Intensidade (Total)</h2>
         <div className={styles.gridContainer}>
-          {mockTraits.map((trait, index) => (
+          {traits.map((trait, index) => (
             <TraitFrequencyChart 
-              key={trait.id}
-              traitName={trait.nome}
+              key={trait.idtraits}
+              traitId={trait.idtraits} // Passando o ID real
+              traitName={trait.descricao}
               color={colors[index % colors.length]}
             />
           ))}

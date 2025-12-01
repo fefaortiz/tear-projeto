@@ -258,4 +258,5 @@ router.get('/daily-tracking/:idpaciente', verifyToken, async (req, res) => {
   }
 });
 
+
 module.exports = router;

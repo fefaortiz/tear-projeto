@@ -220,7 +220,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ userId, userRole }) =>
             {/* Data de Nascimento */}
             <div className={styles.fieldGroup}>
                 <label className={styles.label}>Data de Nascimento</label>
-                <div className={styles.inputWrapper}>
+                <div className={[styles.inputWrapper, styles.dateInputWrapper].join(' ')}>
                     <div className={styles.inputIcon}><Calendar size={18} /></div>
                     <input 
                         type="date" 

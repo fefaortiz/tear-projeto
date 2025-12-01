@@ -189,35 +189,6 @@
     line-height: normal; 
 }
 
-/* --- CORREÇÃO ESPECÍFICA PARA O INPUT DE DATA --- */
-/* Garante que o ícone nativo do calendário (se houver) não colida com o nosso */
-input[type="date"] {
-    /* Em alguns browsers, o texto pode ficar muito colado se o padding for pequeno */
-    padding-left: 3.5rem; /* Um pouco mais de espaço para datas */
-}
-
-/* Webkit (Chrome, Safari, Edge) - Ícone de calendário nativo */
-input[type="date"]::-webkit-calendar-picker-indicator {
-    /* Podemos mover o ícone nativo para a direita ou deixá-lo visível */
-    cursor: pointer;
-    background: transparent;
-    color: transparent;
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.5rem;
-    height: 1.5rem;
-    /* Você pode querer esconder o ícone nativo se o seu ícone customizado já servir de gatilho 
-       (mas inputs date nativos só abrem clicando no ícone nativo em alguns browsers) 
-       OU apenas garantir que ele não fique na esquerda. */
-    opacity: 0; /* Esconde o ícone nativo, mas mantém clicável em toda a área ou na direita */
-    width: 100%; /* Truque: faz o ícone nativo cobrir todo o input para abrir o calendário ao clicar em qualquer lugar */
-    height: 100%;
-    left: 0;
-    z-index: 5; /* Fica sobre o input mas abaixo do nosso ícone (z-index 10) se pointer-events none */
-}
-
 /* Inputs que não estão dentro de um wrapper com ícone */
 .select, 
 .input:not([type="date"]):not([type="tel"]):not([type="email"]):not([type="text"]),
@@ -228,11 +199,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Re-aplica o padding de 3rem quando dentro do wrapper */
 .inputWrapper > .input {
     padding-left: 3rem;
-}
-
-/* Correção específica para Date dentro do Wrapper */
-.inputWrapper > input[type="date"] {
-    padding-left: 3rem; /* Mantém consistência visual */
 }
 
 

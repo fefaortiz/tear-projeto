@@ -11,6 +11,8 @@ import { TraitCard } from '../../components/traitCard';
 import { TrackMoodModal } from '../../components/modal-trackmood';
 import { CreateTraitModal } from '../../components/modal-createtrait';
 import { ProfilePage } from '../../components/profile-page';
+import MediaDiariaCard from '../../components/MediaDiariaCard';
+import DashboardPagePatient from '../../components/dashboard-page-patient';
 
 // Interface do Token Decodificado
 interface DecodedTokenPayload {
@@ -243,7 +245,7 @@ export const HomePagePatient = () => {
             );
         
         case 'Dashboard':
-            return <div className={styles.card}><h2 className={styles.cardTitle}>Dashboard (Em breve)</h2></div>;
+            return <div className={styles.card}><DashboardPagePatient/></div>;
         
         case 'Meu Perfil':
             // Renderiza o novo componente ProfilePage

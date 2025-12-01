@@ -1,0 +1,62 @@
+.dashboardContainer {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem; /* Espaço entre seções */
+}
+
+.header {
+  margin-bottom: 1rem;
+}
+
+.header h1 {
+  color: #1f2937;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.header p {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.4rem;
+  color: #374151;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #8884d8; /* Detalhe visual */
+  padding-left: 12px;
+}
+
+/* Grid para os gráficos */
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+/* Seção de Resumo (Rosca e Card) */
+.summarySection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.summaryCard {
+  /* Garante altura igual para os cards de resumo */
+  height: 100%;
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+  .dashboardContainer {
+    padding: 1rem;
+  }
+  
+  .gridContainer, .summarySection {
+    grid-template-columns: 1fr;
+  }
+}

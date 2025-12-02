@@ -4,6 +4,27 @@ const db = require('../database/connection');
 const bcrypt = require('bcryptjs');
 const verifyToken = require('../middleware/authMiddleware');
 
+function formatPhone(phone) {
+  if (!phone) return null;
+
+  // Remove tudo que não for número
+  const digits = phone.replace(/\D/g, '');
+
+  // Celular com 11 dígitos (ex: 11987654321)
+  if (digits.length === 11) {
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+  }
+
+  // Telefone fixo com 10 dígitos (ex: 1132654321)
+  if (digits.length === 10) {
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  }
+
+  // Caso inesperado: retorna como veio
+  return phone;
+}
+
+
 // GET route to fetch all pacientes
 // O caminho é '/', pois o prefixo /api/paciente será definido no server.js
 router.get('/', verifyToken, async (req, res) => {
@@ -52,6 +73,44 @@ router.get('/:id', verifyToken, async (req, res) => {
 });
 
 // ==========================================================
+// NOVO: Rota 2.1 (GET /api/pacientes/info_cuidador/:id)
+// ==========================================================
+router.get('/info_cuidador/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const paciente = await db('paciente')
+      .leftJoin('cuidador', 'paciente.idcuidador', 'cuidador.idcuidador')
+      .select([
+        'paciente.idpaciente',
+        'paciente.nome',
+        'paciente.email',
+        'paciente.telefone',
+        'paciente.data_de_nascimento',
+        'paciente.sexo',
+        db.raw('cuidador.nome as nome_cuidador'),
+        db.raw('cuidador.email as email_cuidador'),
+        db.raw('cuidador.telefone as telefone_cuidador')
+      ])
+      .where('paciente.idpaciente', id)
+      .first();
+
+    if (!paciente) {
+      return res.status(404).json({ error: 'Paciente não encontrado.' });
+    }
+
+    paciente.telefone = formatPhone(paciente.telefone);
+    paciente.telefone_cuidador = formatPhone(paciente.telefone_cuidador);
+
+    return res.status(200).json(paciente);
+
+  } catch (error) {
+    console.error('Erro ao buscar paciente com cuidador:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor.' });
+  }
+});
+
+// ==========================================================
 // Rota 3 (GET /api/pacientes/por-terapeuta)
 // Busca os pacientes vinculados a um terapeuta
 // ==========================================================
@@ -74,14 +133,7 @@ router.get('/porTerapeuta/:id_terapeuta', verifyToken, async (req, res) => {
       .join('terapeuta', 'paciente.idterapeuta', '=', 'terapeuta.idterapeuta')
       .select('paciente.*'); // Queremos os dados dos pacientes
 
-    // 3. Aplicamos os filtros baseados nos dados do TERAPEUTA
-    if (id_terapeuta) {
-      query.where('terapeuta.idterapeuta', id_terapeuta);
-    } else if (email_terapeuta) {
-      query.where('terapeuta.email', email_terapeuta);
-    } else if (cpf_terapeuta) {
-      query.where('terapeuta.cpf', cpf_terapeuta);
-    }
+    query.where('terapeuta.idterapeuta', id_terapeuta);
 
     const pacientes = await query;
 

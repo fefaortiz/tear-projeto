@@ -8,6 +8,8 @@ import styles from './style.module.css';
 
 // Reutilizamos o componente de Perfil
 import { ProfilePage } from '../../components/profile-page';
+import { PatientProfileModal } from '../../components/modal-patient-info';
+import DashboardPageCaregiver from '../../components/dashboard-page-caregiver';
 
 // Interface do Token
 interface DecodedTokenPayload {
@@ -50,6 +52,10 @@ export const HomePageCaregiver = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Estados do Modal de Perfil do Paciente (NOVO)
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [viewProfileId, setViewProfileId] = useState<number | null>(null);
 
   // Autenticação e Carga Inicial
   useEffect(() => {
@@ -131,6 +137,12 @@ export const HomePageCaregiver = () => {
     navigate('/login');
   };
 
+  // Handler para abrir o modal de perfil (NOVO)
+  const handleViewProfile = (patientId: number) => {
+      setViewProfileId(patientId);
+      setIsProfileModalOpen(true);
+  };
+
   // Renderização do Conteúdo
   const renderContent = () => {
     switch (activeItem) {
@@ -138,7 +150,7 @@ export const HomePageCaregiver = () => {
             return (
                 <div className={styles.contentContainer}>
                     <div className={styles.sectionHeader}>
-                        <h2 className={styles.cardTitle}>Pacientes sob Cuidados</h2>
+                        <h2 className={styles.cardTitle}>Pacientes sob seu Cuidado</h2>
                         <p className={styles.subtitle}>Gerencie as informações e acompanhamento dos seus pacientes.</p>
                     </div>
                     
@@ -169,7 +181,11 @@ export const HomePageCaregiver = () => {
                                             <p className={styles.patientEmail}>{patient.email}</p>
                                             <p className={styles.patientPhone}>{patient.telefone || 'Sem telefone'}</p>
                                         </div>
-                                        <button className={styles.viewProfileButton}>
+                                        {/* Botão conectado ao Modal */}
+                                        <button 
+                                            className={styles.viewProfileButton}
+                                            onClick={() => handleViewProfile(patient.idpaciente)}
+                                        >
                                             Ver Dados
                                         </button>
                                     </div>
@@ -185,7 +201,7 @@ export const HomePageCaregiver = () => {
             );
         
         case 'Dashboard Geral':
-            return <div className={styles.card}><h2 className={styles.cardTitle}>Dashboard Geral (Em breve)</h2></div>;
+            return <DashboardPageCaregiver/>;
         
         case 'Meu Perfil':
             // Renderiza o ProfilePage passando o role 'cuidador'
@@ -238,6 +254,11 @@ export const HomePageCaregiver = () => {
             {renderContent()}
         </div>
       </main>
+      <PatientProfileModal 
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        patientId={viewProfileId}
+      />
     </div>
   );
 };

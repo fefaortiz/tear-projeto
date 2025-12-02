@@ -1,0 +1,255 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background-color: white;
+  width: 90%;
+  max-width: 500px; /* Um pouco mais largo para acomodar info */
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 90vh; /* Limite de altura */
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Header */
+.header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9fafb;
+}
+
+.title {
+  font-size: 1.25rem;
+  color: #1f2937;
+  font-weight: 700;
+  margin: 0;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.375rem;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.closeButton:hover {
+  background-color: #e5e7eb;
+  color: #ef4444;
+}
+
+/* Conteúdo Scrollável */
+.content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Seção Principal (Avatar e Nome) */
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.avatarLarge {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #0d9488; /* Teal do Terapeuta */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 6px rgba(13, 148, 136, 0.2);
+}
+
+.patientName {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.patientEmail {
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+/* Grid de Informações Básicas */
+.gridInfo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    background-color: #f9fafb;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid #f3f4f6;
+}
+
+.infoItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #9ca3af;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 0.5rem 0;
+}
+
+/* Seção do Cuidador */
+.caregiverSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.sectionTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0d9488; /* Teal */
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.caregiverCard {
+    background-color: #f0fdfa; /* Teal bem claro */
+    border: 1px solid #ccfbf1;
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
+
+.caregiverName {
+    font-weight: 600;
+    color: #115e59;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.caregiverContact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.contactRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #0f766e;
+}
+
+.noCaregiver {
+    font-style: italic;
+    color: #9ca3af;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Footer */
+.footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  background-color: #f9fafb;
+}
+
+.secondaryButton {
+    padding: 0.625rem 1.25rem;
+    border: 1px solid #d1d5db;
+    background-color: white;
+    color: #374151;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.secondaryButton:hover {
+    background-color: #f3f4f6;
+}
+
+/* States */
+.loadingState, .errorState {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #6b7280;
+    gap: 1rem;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+    color: #0d9488;
+}
+
+.errorState {
+    color: #ef4444;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

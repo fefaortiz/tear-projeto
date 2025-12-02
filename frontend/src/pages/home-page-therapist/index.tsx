@@ -6,11 +6,12 @@ import { jwtDecode } from 'jwt-decode';
 import logoImage from '../../assets/logo_preenchido.png';
 import styles from './style.module.css';
 
-// Reutilizamos o componente de Perfil
+// Componentes
 import { ProfilePage } from '../../components/profile-page';
 import DashboardPageTherapist from '../../components/dashboard-page-therapist';
+import { PatientProfileModal } from '../../components/modal-patient-info';
 
-// Interface do Token
+// Interfaces
 interface DecodedTokenPayload {
     id: number;
     role: string;
@@ -18,7 +19,6 @@ interface DecodedTokenPayload {
     [key: string]: unknown;
 }
 
-// Interface do Usuário (Terapeuta)
 interface UserData {
   id: number;
   nome: string;
@@ -26,7 +26,6 @@ interface UserData {
   role: 'terapeuta';
 }
 
-// Interface do Paciente (para a lista)
 interface Patient {
   idpaciente: number;
   nome: string;
@@ -51,6 +50,10 @@ export const HomePageTherapist = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Estados do Modal de Perfil do Paciente (NOVO)
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [viewProfileId, setViewProfileId] = useState<number | null>(null);
+
   // Autenticação e Carga Inicial
   useEffect(() => {
     const initializePage = async () => {
@@ -66,7 +69,6 @@ export const HomePageTherapist = () => {
       try {
         const decoded = jwtDecode<DecodedTokenPayload>(token);
         
-        // Verifica se é realmente um terapeuta
         if (decoded.role !== 'terapeuta') {
             setError('Acesso não autorizado para este perfil.');
             setIsLoading(false);
@@ -77,22 +79,20 @@ export const HomePageTherapist = () => {
         
         setUserData({
             id: userId,
-            nome: 'Terapeuta', // Idealmente viria de uma rota /me
+            nome: 'Terapeuta',
             email: decoded.email,
             role: 'terapeuta'
         });
 
-        // Carrega pacientes se estiver na aba correta
         if (activeItem === 'Meus Pacientes') {
             await fetchPatients(userId, token);
         } else {
             setIsLoading(false);
         }
 
-      } catch (err: unknown) {
+      } catch (err: any) {
         console.error("Erro na inicialização:", err);
-        const error = err as { name?: string };
-        if (error.name === 'InvalidTokenError') {
+        if (err.name === 'InvalidTokenError') {
             localStorage.removeItem('token');
             navigate('/login');
         } else {
@@ -105,13 +105,11 @@ export const HomePageTherapist = () => {
     initializePage();
   }, [navigate, activeItem]);
 
-  // Função para buscar pacientes do terapeuta
   const fetchPatients = async (terapeutaId: number, token: string) => {
     try {
         const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
-        const response = await axios.get<Patient[]>(
-            `${apiUrl}/api/pacientes/porTerapeuta/${terapeutaId}`, 
-            { 
+        const response = await axios.get<Patient[]>(`${apiUrl}/api/pacientes/porTerapeuta/${terapeutaId}`,
+            {
                 headers: { Authorization: `Bearer ${token}` }
             }
         );
@@ -129,7 +127,12 @@ export const HomePageTherapist = () => {
     navigate('/login');
   };
 
-  // Renderização do Conteúdo
+  // Handler para abrir o modal de perfil (NOVO)
+  const handleViewProfile = (patientId: number) => {
+      setViewProfileId(patientId);
+      setIsProfileModalOpen(true);
+  };
+
   const renderContent = () => {
     switch (activeItem) {
         case 'Meus Pacientes':
@@ -167,8 +170,12 @@ export const HomePageTherapist = () => {
                                             <p className={styles.patientEmail}>{patient.email}</p>
                                             <p className={styles.patientPhone}>{patient.telefone || 'Sem telefone'}</p>
                                         </div>
-                                        <button className={styles.viewProfileButton}>
-                                            Ver Dados
+                                        {/* Botão conectado ao Modal */}
+                                        <button 
+                                            className={styles.viewProfileButton}
+                                            onClick={() => handleViewProfile(patient.idpaciente)}
+                                        >
+                                            Ver Perfil
                                         </button>
                                     </div>
                                 ))
@@ -195,7 +202,6 @@ export const HomePageTherapist = () => {
 
   return (
     <div className={styles.container}>
-      {/* Sidebar */}
       <aside 
         className={`${styles.sidebar} ${isSidebarExpanded ? styles.sidebarExpanded : ''}`}
         onMouseEnter={() => setIsSidebarExpanded(true)}
@@ -229,12 +235,17 @@ export const HomePageTherapist = () => {
         </button>
       </aside>
 
-      {/* Conteúdo Principal */}
       <main className={`${styles.mainContent} ${isSidebarExpanded ? styles.mainContentShifted : ''}`}>
         <div className={styles.contentArea}>
             {renderContent()}
         </div>
       </main>
+
+      <PatientProfileModal 
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        patientId={viewProfileId}
+      />
     </div>
   );
 };

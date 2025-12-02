@@ -32,10 +32,10 @@ Antes de rodar o projeto, você vai precisar ter instalado no seu computador:
    cd backend
    npm install
 
-3. Instale as dependências para o frontend:
+3. Instale as dependências para o frontend (a flag abaixo DEVE ser utilizada):
    ```bash
    cd ../frontend
-   npm install
+   npm install --legacy-peer-deps
 
 ## Como Executar
 

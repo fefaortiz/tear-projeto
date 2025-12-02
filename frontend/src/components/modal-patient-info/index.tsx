@@ -7,6 +7,7 @@ interface PatientProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
   patientId: number | null;
+  role: string;
 }
 
 interface PatientDetails {
@@ -20,9 +21,12 @@ interface PatientDetails {
   nome_cuidador?: string;
   email_cuidador?: string;
   telefone_cuidador?: string;
+  nome_terapeuta?: string;
+  email_terapeuta?: string;
+  telefone_terapeuta?: string;
 }
 
-export const PatientProfileModal: React.FC<PatientProfileModalProps> = ({ isOpen, onClose, patientId }) => {
+export const PatientProfileModal: React.FC<PatientProfileModalProps> = ({ isOpen, onClose, patientId, role }) => {
   const [patientData, setPatientData] = useState<PatientDetails | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,12 +46,19 @@ export const PatientProfileModal: React.FC<PatientProfileModalProps> = ({ isOpen
       const token = localStorage.getItem('token');
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
       
-      // Rota para buscar detalhes completos do paciente (incluindo cuidador)
-      // Sugestão: GET /api/pacientes/:id/detalhes (ou apenas /:id se já incluir cuidador)
-      const response = await axios.get(`${apiUrl}/api/pacientes/info_cuidador/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
+      // Rota para buscar detalhes completos do paciente (incluindo cuidador / terapeuta)
+      let response;
+
+      if (role === 'cuidador') {
+        response = await axios.get(`${apiUrl}/api/pacientes/info_terapeuta/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } else  {
+        response = await axios.get(`${apiUrl}/api/pacientes/info_cuidador/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      }
+
       setPatientData(response.data);
     } catch (err) {
       console.error("Erro ao carregar detalhes do paciente:", err);
@@ -76,6 +87,72 @@ export const PatientProfileModal: React.FC<PatientProfileModalProps> = ({ isOpen
   const formatDate = (dateString?: string) => {
       if (!dateString) return 'N/A';
       return new Date(dateString).toLocaleDateString('pt-BR');
+  };
+
+  const secondarySection = () => {
+  if (!patientData) return null;
+
+  // Quando quem abre é o terapeuta → mostrar cuidador
+  if (role === "terapeuta") {
+    return (
+      <div className={styles.caregiverSection}>
+        <h4 className={styles.sectionTitle}>
+          <HeartHandshake size={18} className={styles.sectionIcon}/> 
+          Responsável / Cuidador
+        </h4>
+
+        {patientData.nome_cuidador ? (
+          <div className={styles.caregiverCard}>
+            <div className={styles.caregiverInfo}>
+              <span className={styles.caregiverName}>{patientData.nome_cuidador}</span>
+              <div className={styles.caregiverContact}>
+                <div className={styles.contactRow}>
+                  <Mail size={14} /> {patientData.email_cuidador}
+                </div>
+                <div className={styles.contactRow}>
+                  <Phone size={14} /> {patientData.telefone_cuidador}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p className={styles.noCaregiver}>Nenhum cuidador vinculado.</p>
+        )}
+      </div>
+    );
+  }
+
+  // Quando quem abre é o cuidador → mostrar terapeuta
+  if (role === "cuidador") {
+    return (
+      <div className={styles.caregiverSection}>
+        <h4 className={styles.sectionTitle}>
+          <HeartHandshake size={18} className={styles.sectionIcon}/> 
+          Terapeuta Responsável
+        </h4>
+
+        {patientData.nome_terapeuta ? (
+          <div className={styles.caregiverCard}>
+            <div className={styles.caregiverInfo}>
+              <span className={styles.caregiverName}>{patientData.nome_terapeuta}</span>
+              <div className={styles.caregiverContact}>
+                <div className={styles.contactRow}>
+                  <Mail size={14} /> {patientData.email_terapeuta}
+                </div>
+                <div className={styles.contactRow}>
+                  <Phone size={14} /> {patientData.telefone_terapeuta}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p className={styles.noCaregiver}>Nenhum terapeuta vinculado.</p>
+        )}
+      </div>
+    );
+  }
+
+  return null;
   };
 
   return (
@@ -134,33 +211,8 @@ export const PatientProfileModal: React.FC<PatientProfileModalProps> = ({ isOpen
 
                     <hr className={styles.divider} />
 
-                    {/* Seção Secundária: Dados do Cuidador */}
-                    <div className={styles.caregiverSection}>
-                        <h4 className={styles.sectionTitle}>
-                            <HeartHandshake size={18} className={styles.sectionIcon}/> 
-                            Responsável / Cuidador
-                        </h4>
-                        
-                        {patientData.nome_cuidador ? (
-                            <div className={styles.caregiverCard}>
-                                <div className={styles.caregiverInfo}>
-                                    <span className={styles.caregiverName}>{patientData.nome_cuidador}</span>
-                                    <div className={styles.caregiverContact}>
-                                        <div className={styles.contactRow}>
-                                            <Mail size={14} /> {patientData.email_cuidador}
-                                        </div>
-                                        {patientData.telefone_cuidador && (
-                                            <div className={styles.contactRow}>
-                                                <Phone size={14} /> {patientData.telefone_cuidador}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        ) : (
-                            <p className={styles.noCaregiver}>Nenhum cuidador vinculado.</p>
-                        )}
-                    </div>
+                    {/* Seção Secundária: Dados do Cuidador ou Terapeuta */}
+                    {secondarySection()}
                 </>
             ) : null}
         </div>

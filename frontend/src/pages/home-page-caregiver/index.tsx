@@ -258,6 +258,7 @@ export const HomePageCaregiver = () => {
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
         patientId={viewProfileId}
+        role="cuidador"
       />
     </div>
   );

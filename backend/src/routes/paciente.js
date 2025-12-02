@@ -111,6 +111,44 @@ router.get('/info_cuidador/:id', verifyToken, async (req, res) => {
 });
 
 // ==========================================================
+// NOVO: Rota 2.2 (GET /api/pacientes/info_terapeuta/:id)
+// ==========================================================
+router.get('/info_terapeuta/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const paciente = await db('paciente')
+      .leftJoin('terapeuta', 'paciente.idterapeuta', 'terapeuta.idterapeuta')
+      .select([
+        'paciente.idpaciente',
+        'paciente.nome',
+        'paciente.email',
+        'paciente.telefone',
+        'paciente.data_de_nascimento',
+        'paciente.sexo',
+        db.raw('terapeuta.nome as nome_terapeuta'),
+        db.raw('terapeuta.email as email_terapeuta'),
+        db.raw('terapeuta.telefone as telefone_terapeuta')
+      ])
+      .where('paciente.idpaciente', id)
+      .first();
+
+    if (!paciente) {
+      return res.status(404).json({ error: 'Paciente não encontrado.' });
+    }
+
+    paciente.telefone = formatPhone(paciente.telefone);
+    paciente.telefone_terapeuta = formatPhone(paciente.telefone_terapeuta);
+
+    return res.status(200).json(paciente);
+
+  } catch (error) {
+    console.error('Erro ao buscar paciente com terapeuta:', error);
+    return res.status(500).json({ error: 'Erro interno do servidor.' });
+  }
+});
+
+// ==========================================================
 // Rota 3 (GET /api/pacientes/por-terapeuta)
 // Busca os pacientes vinculados a um terapeuta
 // ==========================================================

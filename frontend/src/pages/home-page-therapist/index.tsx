@@ -245,6 +245,7 @@ export const HomePageTherapist = () => {
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
         patientId={viewProfileId}
+        role="terapeuta"
       />
     </div>
   );

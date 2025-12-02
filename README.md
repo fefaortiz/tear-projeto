@@ -7,7 +7,7 @@
 - [Sobre o Projeto](#sobre-o-projeto)  
 - [Pré-requisitos](#pré-requisitos)  
 - [Instalação](#instalação)  
-- [Como executar (desenvolvimento)](#como-executar-desenvolvimento)  
+- [Como Executar](#como-executar)  
 
 ## Sobre o Projeto
 

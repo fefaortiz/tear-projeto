@@ -1,61 +1,303 @@
-* { box-sizing: border-box; }
+/* FIX: Movemos as variáveis de :root para .container 
+   Isso garante que elas só existam dentro desta página específica,
+   evitando conflitos com as cores do Terapeuta ou Paciente.
+*/
+.container {
+  /* Variáveis Locais (Escopadas) */
+  --sidebar-width-min: 80px;
+  --sidebar-width-max: 250px;
+  --primary-color: #2563EB; /* Azul Vibrante (Blue-600) */
+  --primary-light: #eff6ff; /* Azul Claro (Blue-50) */
+  --text-color-light: #f9fafb;
+  --text-color-dark: #1f2937;
+  --border-radius: 0.75rem;
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f4f7f6;
+  display: flex;
+  min-height: 100vh;
+  /* A variável funciona aqui porque foi definida no mesmo bloco */
+  background-color: var(--primary-light); 
 }
 
-#root {
-  width: 100%;
+/* --- Sidebar --- */
+.sidebar {
+  width: 80px;
+  background-color: var(--primary-color);
+  color: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.15);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+  z-index: 1000;
 }
 
-.initialRoot{
+.sidebarExpanded {
+  width: 250px;
+}
+
+.sidebarHeader {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  height: 60px;
+  margin-bottom: 2rem;
+  overflow: hidden;
 }
 
-.initialContainer{
-  height: 500px;
-  width: 100%;
-  margin: 3rem auto;
-  max-width: 900px;
+.logoImage {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  transition: width 0.3s ease;
+}
+
+.sidebarExpanded .logoImage {
+  width: auto;
+  max-width: 80%;
+}
+
+.navigation {
+  flex-grow: 1;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  color: #f9fafb;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  border: none;
+  background: none;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.navItem:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navItemActive {
+  background-color: white; 
+  color: var(--primary-color); 
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navIcon {
+  min-width: 24px;
+}
+
+.navText {
+  margin-left: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, margin-left 0.3s ease-in-out;
+}
+
+.sidebarExpanded .navText {
+  opacity: 1;
+  visibility: visible;
+}
+
+.logoutButton {
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+}
+
+.logoutButton:hover {
+  background-color: #ef4444; 
+}
+
+/* --- Conteúdo Principal --- */
+.mainContent {
+  margin-left: 80px;
+  flex-grow: 1;
+  padding: 2rem;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.mainContentShifted {
+  margin-left: 250px;
+}
+
+.pageHeader {
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sectionHeader {
+  margin-bottom: 1.5rem;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: 0 0 0.5rem 0;
+}
+
+.subtitle {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+/* --- Grid de Cards de Pacientes --- */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Card do Paciente */
+.patientCard {
   background-color: white;
-  padding: 2.5rem;
-  border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.patientCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary-color);
+}
+
+.patientAvatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.patientInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.patientName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.patientEmail {
+  font-size: 0.875rem;
+  color: #6b7280;
+  word-break: break-all;
+}
+
+.patientPhone {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.viewProfileButton {
+  margin-top: auto;
+  padding: 0.625rem 1.5rem;
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.viewProfileButton:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* --- Estados --- */
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: var(--primary-color);
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.errorState {
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
   text-align: center;
 }
 
-.initialContainer h1 {
-  margin: 0 0 0.75rem 0;
-  color: #213547;
+.emptyState {
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 3rem;
+  text-align: center;
+  color: #6b7280;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  grid-column: 1 / -1;
 }
 
-.initialContainer p {
-  color: #556;
-  margin-bottom: 1.25rem;
+.card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.initialContainer button {
-  padding: 0.7rem 1rem;
-  border-radius: 6px;
-  border: none;
-  background-color: #007aff;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
+@media (max-width: 768px) {
+  .sidebar { width: 60px; }
+  .mainContent { margin-left: 60px; }
+  .sidebarExpanded { width: 200px; }
+  .mainContentShifted { margin-left: 200px; }
+  .cardsGrid { grid-template-columns: 1fr; }
 }
-
-.initialContainer button:hover { background-color: #0056b3; }
-
-.initialContainer a {
-  color: #007aff;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-}
-
-.initialContainer a:hover { text-decoration: underline; }

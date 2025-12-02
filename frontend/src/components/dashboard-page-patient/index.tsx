@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Activity, BarChart2 } from 'lucide-react'; // Ícones para embelezar
+import { Activity, BarChart2 } from 'lucide-react'; 
 import WeeklyTrackingChart from '../../components/weeklyTrackingChart';
 import TraitFrequencyChart from '../../components/TraitFrequencyChart';
 import DailyCompletionChart from '../../components/DailyCompletionChart'; 
@@ -53,14 +53,12 @@ const DashboardPagePatient = () => {
   return (
     <div className={styles.dashboardContainer}>
       
-      {/* HEADER: Título à esquerda, Dropdown à direita */}
       <header className={styles.header}>
         <div className={styles.headerText}>
             <h1>Dashboard</h1>
-            <p>Visão geral do seu bem-estar.</p>
+            <p>Resumo do seu bem-estar.</p>
         </div>
 
-        {/* Dropdown posicionado aqui */}
         <div className={styles.filterContainer}>
             {traits.length > 0 ? (
                 <div className={styles.selectWrapper}>
@@ -76,7 +74,6 @@ const DashboardPagePatient = () => {
                             </option>
                         ))}
                     </select>
-                    {/* Ícone de seta customizado via CSS ou SVG aqui se necessário */}
                 </div>
             ) : (
                 <p className={styles.noTraitsMsg}>Sem características.</p>
@@ -84,17 +81,19 @@ const DashboardPagePatient = () => {
         </div>
       </header>
 
-      {/* SEÇÃO 1: Resumo Rápido (Cards Superiores) */}
       <section className={styles.summarySection}>
         <div className={styles.summaryCard}>
-            <DailyCompletionChart />
+            <DailyCompletionChart 
+              role='paciente'
+            />
         </div>
         <div className={styles.summaryCard}>
-            <AverageIntensityCard />
+            <AverageIntensityCard 
+            role='paciente'
+          />
         </div>
       </section>
 
-      {/* SEÇÃO 2: Gráficos Detalhados (Lado a Lado) */}
       <section className={styles.detailsSection}>
         <h2 className={styles.sectionTitle}>
             Análise Detalhada: <span className={styles.highlight}>{selectedTraitName}</span>
@@ -108,10 +107,12 @@ const DashboardPagePatient = () => {
                         <Activity size={20} className={styles.chartIcon} />
                         <h3>Evolução Recente</h3>
                     </div>
+                    {/* O container flexivel do gráfico será tratado no componente */}
                     <WeeklyTrackingChart 
                         traitId={selectedTraitId} 
                         traitName={selectedTraitName}
                         color={chartColor} 
+                        role='paciente'
                     />
                 </div>
 
@@ -124,7 +125,8 @@ const DashboardPagePatient = () => {
                     <TraitFrequencyChart 
                         traitId={selectedTraitId}
                         traitName={selectedTraitName}
-                        color={chartColor}
+                        color={chartColor} 
+                        role='paciente'
                     />
                 </div>
             </div>

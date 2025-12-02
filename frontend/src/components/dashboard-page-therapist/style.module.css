@@ -1,0 +1,236 @@
+/* Variáveis de Tema do Terapeuta */
+:root {
+  --primary-color: #0d9488; /* Teal-600 */
+  --primary-light: #f0fdfa; /* Teal-50 */
+  --primary-dark: #115e59;  /* Teal-800 */
+  --text-dark: #1f2937;
+  --text-gray: #6b7280;
+  --border-color: #e5e7eb;
+}
+
+.dashboardContainer {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  background-color: #f8fafc; /* Fundo levemente cinza/azul */
+  min-height: 100vh;
+}
+
+/* --- Header e Filtros --- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Alinhamento topo para melhor wrap */
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.headerText h1 {
+  color: var(--text-dark);
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.headerText p {
+  color: var(--text-gray);
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+/* Container dos Filtros (Lado Direito) */
+.filtersWrapper {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: flex-end; /* Alinha os inputs na base */
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 200px;
+}
+
+.filterLabel {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.selectWrapper {
+  position: relative;
+}
+
+.selectWrapper::after {
+  content: "▼";
+  font-size: 0.7rem;
+  color: var(--primary-color);
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.select {
+  width: 100%;
+  padding: 0.65rem 2.5rem 0.65rem 1rem;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.select:hover:not(:disabled) {
+  border-color: var(--primary-color);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1); /* Teal shadow */
+}
+
+.select:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* --- Seção de Resumo --- */
+.summarySection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.summaryCard {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+  position: relative;
+}
+
+/* --- Seção de Detalhes --- */
+.detailsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  color: var(--text-dark);
+  font-weight: 700;
+  margin: 0;
+}
+
+.highlight {
+  color: var(--primary-color);
+}
+
+.subHighlight {
+  color: var(--text-gray);
+  font-weight: 500;
+}
+
+.separator {
+  color: #d1d5db;
+  margin: 0 0.5rem;
+}
+
+/* Charts Grid */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .chartsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.chartCard {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: 420px;
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 1rem;
+}
+
+.chartIcon {
+  color: var(--primary-color);
+}
+
+.chartHeader h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+/* States */
+.loading, .emptyState, .errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: var(--text-gray);
+  background-color: white;
+  border-radius: 1rem;
+  border: 1px dashed var(--border-color);
+}
+
+.loading {
+  height: 100vh;
+  background: transparent;
+  border: none;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

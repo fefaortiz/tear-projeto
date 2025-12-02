@@ -45,7 +45,8 @@ export const TrackMoodModal: React.FC<TrackMoodProps> = ({
         `${apiUrl}/api/tracking/${traitId}`,
         {
           intensidade,
-          descricao
+          descricao,
+          dia_de_registro: new Date().toISOString().split('T')[0] // Data atual
         },
         {
           headers: { Authorization: `Bearer ${token}` }

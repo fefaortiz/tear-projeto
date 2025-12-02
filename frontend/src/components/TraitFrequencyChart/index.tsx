@@ -3,7 +3,6 @@ import axios from 'axios';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid
 } from 'recharts';
-import styles from './style.module.css';
 
 interface FrequencyData {
   intensidade: number;
@@ -11,21 +10,34 @@ interface FrequencyData {
 }
 
 interface TraitFrequencyChartProps {
-  traitId: number; // Adicionado prop ID
+  traitId: number;
   traitName: string;
   color?: string;
+  role: string;
+  patientId?: number;
 }
 
-const TraitFrequencyChart = ({ traitId, traitName, color = "#8884d8" }: TraitFrequencyChartProps) => {
+const TraitFrequencyChart = ({ traitId, color = "#8884d8", role, patientId }: TraitFrequencyChartProps) => {
   const [data, setData] = useState<FrequencyData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3333/api/patient-data/frequency/${traitId}`, {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
+        
+        let response;
+
+        if (role === 'terapeuta') {
+          response = await axios.get(`${apiUrl}/api/patient-data/therapist-frequency/${traitId}/${patientId}`, {
              headers: { Authorization: `Bearer ${token}` }
-        });
+          });
+        } else {
+          response = await axios.get(`${apiUrl}/api/patient-data/frequency/${traitId}`, {
+             headers: { Authorization: `Bearer ${token}` }
+          });
+        }
+
         setData(response.data);
       } catch (error) {
         console.error("Erro frequência", error);
@@ -35,19 +47,30 @@ const TraitFrequencyChart = ({ traitId, traitName, color = "#8884d8" }: TraitFre
   }, [traitId]);
 
   return (
-    <div className={styles.cardContainer}>
-      <h3 className={styles.title}>Histórico: {traitName}</h3>
-      <div className={styles.chartWrapper}>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-            <CartesianGrid stroke="#f3f4f6" vertical={false} />
-            <XAxis dataKey="intensidade" tickLine={false} axisLine={false} tick={{ fill: '#9ca3af' }} />
-            <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: '#9ca3af' }} />
-            <Tooltip cursor={{ fill: '#f3f4f6' }} contentStyle={{ borderRadius: '8px', border: 'none' }} />
-            <Bar dataKey="frequencia" fill={color} radius={[4, 4, 0, 0]} barSize={30} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+    <div style={{ width: '100%', height: '100%', flex: 1, minHeight: 0 }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={data} margin={{ top: 10, right: 10, bottom: 0, left: -20 }}>
+          <CartesianGrid stroke="#f3f4f6" vertical={false} />
+          <XAxis 
+              dataKey="intensidade" 
+              tickLine={false} 
+              axisLine={false} 
+              tick={{ fill: '#9ca3af', fontSize: 12 }}
+              dy={10}
+          />
+          <YAxis 
+              allowDecimals={false} 
+              tickLine={false} 
+              axisLine={false} 
+              tick={{ fill: '#9ca3af', fontSize: 12 }} 
+          />
+          <Tooltip 
+              cursor={{ fill: '#f9fafb' }} 
+              contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }} 
+          />
+          <Bar dataKey="frequencia" fill={color} radius={[4, 4, 0, 0]} barSize={40} />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 };

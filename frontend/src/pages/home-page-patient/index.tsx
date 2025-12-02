@@ -11,7 +11,6 @@ import { TraitCard } from '../../components/traitCard';
 import { TrackMoodModal } from '../../components/modal-trackmood';
 import { CreateTraitModal } from '../../components/modal-createtrait';
 import { ProfilePage } from '../../components/profile-page';
-import MediaDiariaCard from '../../components/MediaDiariaCard';
 import DashboardPagePatient from '../../components/dashboard-page-patient';
 
 // Interface do Token Decodificado
@@ -19,7 +18,7 @@ interface DecodedTokenPayload {
     id: number;
     role: string;
     email: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 // Interface para os dados do usuário
@@ -27,7 +26,7 @@ interface UserData {
   id: number;
   nome: string;
   email: string;
-  role: 'paciente' | 'terapeuta' | 'cuidador';
+  role: 'paciente';
 }
 
 // Interface para as Traits
@@ -249,7 +248,7 @@ export const HomePagePatient = () => {
         
         case 'Meu Perfil':
             // Renderiza o novo componente ProfilePage
-            return <ProfilePage userId={userData?.id || null} userRole={userData?.role}/>;
+            return <ProfilePage userId={userData?.id || null} userRole='paciente' />;
             
         default:
             return null;

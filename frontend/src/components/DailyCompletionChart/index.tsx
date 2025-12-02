@@ -3,16 +3,32 @@ import axios from 'axios';
 import { PieChart, Pie, Cell, ResponsiveContainer, Label } from 'recharts';
 import styles from './style.module.css';
 
-const DailyCompletionChart = () => {
+interface DailyCompletionChartProps {
+  role: string;
+  patientId?: number;
+}
+
+const DailyCompletionChart = ({ role, patientId }: DailyCompletionChartProps) => {
   const [percentage, setPercentage] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3333/api/patient-data/daily-completion', {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
+
+            let response;
+
+            if (role === 'terapeuta') {
+              response = await axios.get(`${apiUrl}/api/patient-data/therapist-daily-completion/${patientId}`, {
                 headers: { Authorization: `Bearer ${token}` }
-            });
+              });
+            } else {
+              response = await axios.get(`${apiUrl}/api/patient-data/daily-completion`, {
+                headers: { Authorization: `Bearer ${token}` }
+              });
+            }
+            
             setPercentage(response.data.percentage);
         } catch (error) {
             console.error("Erro daily stats", error);

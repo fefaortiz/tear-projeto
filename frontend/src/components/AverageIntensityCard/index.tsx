@@ -3,16 +3,31 @@ import axios from 'axios';
 import styles from './style.module.css';
 import { Activity } from 'lucide-react';
 
-const AverageIntensityCard = () => {
+interface AverageIntensityCardProps {
+  role: string;
+  patientId?: number;
+}
+
+const AverageIntensityCard = ({ role, patientId }: AverageIntensityCardProps) => {
   const [average, setAverage] = useState<string>("0.0");
 
   useEffect(() => {
     const fetchData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3333/api/patient-data/weekly-average', {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333';
+
+            let response;
+
+            if (role === 'terapeuta') {
+              response = await axios.get(`${apiUrl}/api/patient-data/therapist-weekly-average/${patientId}`, {
                 headers: { Authorization: `Bearer ${token}` }
-            });
+              });
+            } else {
+              response = await axios.get(`${apiUrl}/api/patient-data/weekly-average`, {
+                headers: { Authorization: `Bearer ${token}` }
+              });
+            }
             setAverage(response.data.average);
         } catch (error) {
             console.error("Erro average stats", error);

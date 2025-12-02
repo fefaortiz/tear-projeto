@@ -10,11 +10,10 @@ router.post('/:idtraits', verifyToken, async (req, res) => {
   try {
     // 1. Pega o ID da URL e dados do corpo
     const { idtraits } = req.params;
-    const { intensidade, descricao } = req.body;
+    const { intensidade, descricao, dia_de_registro } = req.body;
 
-    // 2. Determina a data de registro (Data do servidor para consistência)
-    const dia_de_registro = new Date().toISOString().split('T')[0];
-    
+    const finalDate = dia_de_registro ?? new Date().toISOString().split('T')[0];
+
     // 3. Pega ID e ROLE diretamente do Token (payload)
     const { id: creatorId, role } = req.user; 
 
@@ -29,7 +28,7 @@ router.post('/:idtraits', verifyToken, async (req, res) => {
     const existingTracking = await db('tracking')
       .where({
         idtraits: idtraits,
-        dia_de_registro: dia_de_registro 
+        dia_de_registro: finalDate 
       })
       .first(); 
 

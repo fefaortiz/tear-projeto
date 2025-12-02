@@ -98,33 +98,21 @@ router.get('/porTerapeuta/:id_terapeuta', verifyToken, async (req, res) => {
 // CORRIGIDO: Rota 3 (GET /api/pacientes/por-cuidador)
 // Busca os pacientes vinculados a um cuidador
 // ==========================================================
-router.get('/por-cuidador', verifyToken, async (req, res) => {
+router.get('/por-cuidador/:id_cuidador', verifyToken, async (req, res) => {
   try {
-    const { id_cuidador, email_cuidador, cpf_cuidador } = req.query;
+    const { id_cuidador } = req.params;
 
-    if (!id_cuidador && !email_cuidador && !cpf_cuidador) {
+    if (!id_cuidador) {
       return res.status(400).json({ 
-        error: 'Parâmetro de busca (id_cuidador, email_cuidador ou cpf_cuidador) é obrigatório.' 
+        error: 'Parâmetro de busca é obrigatório.' 
       });
     }
 
-    // 2. Esta é a forma eficiente: Usamos um JOIN
-    // "SELECT paciente.* FROM paciente
-    //  JOIN cuidador ON paciente.idcuidador = cuidador.idcuidador
-    //  WHERE cuidador.idcuidador = ? OR cuidador.email = ? OR cuidador.cpf = ?"
-    
     const query = db('paciente') // Começamos selecionando da tabela 'paciente'
       .join('cuidador', 'paciente.idcuidador', '=', 'cuidador.idcuidador')
       .select('paciente.*'); // Queremos os dados dos pacientes
 
-    // 3. Aplicamos os filtros baseados nos dados do TERAPEUTA
-    if (id_cuidador) {
-      query.where('cuidador.idcuidador', id_cuidador);
-    } else if (email_cuidador) {
-      query.where('cuidador.email', email_cuidador);
-    } else if (cpf_cuidador) {
-      query.where('cuidador.cpf', cpf_cuidador);
-    }
+    query.where('cuidador.idcuidador', id_cuidador);
 
     const pacientes = await query;
 

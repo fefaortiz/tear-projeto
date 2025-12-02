@@ -8,13 +8,14 @@ import styles from './style.module.css';
 
 // Reutilizamos o componente de Perfil
 import { ProfilePage } from '../../components/profile-page';
+import DashboardPageTherapist from '../../components/dashboard-page-therapist';
 
 // Interface do Token
 interface DecodedTokenPayload {
     id: number;
     role: string;
     email: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 // Interface do Usuário (Terapeuta)
@@ -31,7 +32,6 @@ interface Patient {
   nome: string;
   email: string;
   telefone?: string;
-  // Adicione outros campos que a rota retornar se necessário
 }
 
 const therapistNavigation = [
@@ -89,9 +89,10 @@ export const HomePageTherapist = () => {
             setIsLoading(false);
         }
 
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Erro na inicialização:", err);
-        if (err.name === 'InvalidTokenError') {
+        const error = err as { name?: string };
+        if (error.name === 'InvalidTokenError') {
             localStorage.removeItem('token');
             navigate('/login');
         } else {
@@ -167,7 +168,7 @@ export const HomePageTherapist = () => {
                                             <p className={styles.patientPhone}>{patient.telefone || 'Sem telefone'}</p>
                                         </div>
                                         <button className={styles.viewProfileButton}>
-                                            Ver Perfil
+                                            Ver Dados
                                         </button>
                                     </div>
                                 ))
@@ -182,10 +183,10 @@ export const HomePageTherapist = () => {
             );
         
         case 'Dashboard Geral':
-            return <div className={styles.card}><h2 className={styles.cardTitle}>Dashboard Geral (Em breve)</h2></div>;
+            return <DashboardPageTherapist/>;
         
         case 'Meu Perfil':
-            return <ProfilePage userId={userData?.id || null} userRole={userData?.role} />;
+            return <ProfilePage userId={userData?.id || null} userRole='terapeuta' />;
             
         default:
             return null;
@@ -230,16 +231,6 @@ export const HomePageTherapist = () => {
 
       {/* Conteúdo Principal */}
       <main className={`${styles.mainContent} ${isSidebarExpanded ? styles.mainContentShifted : ''}`}>
-        {/* Header da Página (exceto no perfil) */}
-        {activeItem !== 'Meu Perfil' && (
-            <header className={styles.pageHeader}>
-            <h1 className={styles.pageTitle}>
-                Área do Terapeuta
-            </h1>
-            <p className={styles.subtitle}>Bem-vindo de volta.</p>
-            </header>
-        )}
-
         <div className={styles.contentArea}>
             {renderContent()}
         </div>

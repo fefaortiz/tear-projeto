@@ -84,19 +84,20 @@ export const TrackMoodModal: React.FC<TrackMoodProps> = ({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className={styles.form}>
-          
+
           {/* Seleção de Intensidade */}
-          <div className={styles.fieldGroup}>
-            <label className={styles.label}>Qual a intensidade hoje? (1 a 5)</label>
-            <div className={styles.intensitySelector}>
+          <div className={styles.intensityBlock}>
+            <label className={styles.label}>Qual foi a intensidade hoje?</label>
+
+            <div className={styles.intensityGrid}>
               {[1, 2, 3, 4, 5].map((level) => (
                 <button
                   key={level}
                   type="button"
-                  className={`${styles.intensityBtn} ${intensidade === level ? styles.intensityBtnSelected : ''}`}
+                  className={`${styles.intensityCircle} ${styles[`i${level}`]} ${intensidade === level ? styles.selected : ""}`}
                   onClick={() => setIntensidade(level)}
                 >
-                  {level}
+                  <span className={styles.intValue}>{level}</span>
                 </button>
               ))}
             </div>
@@ -104,11 +105,11 @@ export const TrackMoodModal: React.FC<TrackMoodProps> = ({
 
           {/* Descrição */}
           <div className={styles.fieldGroup}>
-            <label htmlFor="desc" className={styles.label}>Descrição / Justificativa</label>
+            <label htmlFor="desc" className={styles.label}>Conte mais sobre (opcional)</label>
             <textarea
               id="desc"
               className={styles.textarea}
-              placeholder="Descreva brevemente como você se sentiu..."
+              placeholder="Escreva um pouco sobre como você está se sentindo…"
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
               rows={3}
@@ -123,7 +124,7 @@ export const TrackMoodModal: React.FC<TrackMoodProps> = ({
             </div>
           )}
 
-          {/* Footer Actions */}
+          {/* Footer */}
           <div className={styles.footer}>
             <button type="button" onClick={onClose} className={styles.cancelButton}>
               Cancelar
@@ -141,12 +142,11 @@ export const TrackMoodModal: React.FC<TrackMoodProps> = ({
               ) : (
                 <>
                   <Save size={18} />
-                  Salvar Registro
+                  Registrar
                 </>
               )}
             </button>
           </div>
-
         </form>
       </div>
     </div>

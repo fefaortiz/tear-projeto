@@ -18,7 +18,6 @@ function RegisterPatientPage() {
   const [emailTerapeuta, setEmailTerapeuta ] = useState(''); // Email do terapeuta associado
   const [emailCuidador, setEmailCuidador ] = useState('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
 
     const [showPassword, setShowPassword] = useState(false);
     const [message, setMessage] = useState('');
@@ -114,7 +113,7 @@ return (
             <option value="PrefiroNaoInformar">Prefiro não informar</option>
           </select>
           <input className={styles.inputField} placeholder="email de seu terapeuta" type="email" id="emailTerapeuta" value={emailTerapeuta} onChange={(e) => setEmailTerapeuta(e.target.value)}/>
-          <input className={styles.inputField} placeholder="email de seu responsável" type="email" id="emailCuidador" value={emailCuidador} onChange={(e) => setEmailCuidador(e.target.value)}/>
+          <input className={styles.inputField} placeholder="email de seu cuidador / responsável" type="email" id="emailCuidador" value={emailCuidador} onChange={(e) => setEmailCuidador(e.target.value)}/>
         <button className={styles.button} type="submit" disabled={isSubmitting}> 
           Cadastrar
         </button>

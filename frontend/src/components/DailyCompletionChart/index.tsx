@@ -35,7 +35,7 @@ const DailyCompletionChart = ({ role, patientId }: DailyCompletionChartProps) =>
         }
     };
     fetchData();
-  }, []);
+  }, [patientId]);
 
   const data = [
     { name: 'Completo', value: percentage },

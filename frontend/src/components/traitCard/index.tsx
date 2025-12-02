@@ -23,7 +23,7 @@ export const TraitCard: React.FC<TraitCardProps> = ({
   onRegisterClick,
   onDeleteClick
 }) => {
-  const notaDisplay = typeof nota === 'number' ? `${nota}/5` : nota;
+  const notaDisplay = atualizadoHoje ?`${nota}/5` : '-';
 
   return (
     <div className={styles.card}>
@@ -45,7 +45,7 @@ export const TraitCard: React.FC<TraitCardProps> = ({
 
       <div className={styles.infoGrid}>
         <div className={styles.infoBlock}>
-          <span className={styles.label}>Intensidade:</span>
+          <span className={styles.label}>Intensidade Hoje:</span>
           <span className={`${styles.value} ${typeof nota === 'number' ? styles.valueHighlight : styles.valueDimmed}`}>
             {notaDisplay}
           </span>

@@ -34,7 +34,7 @@ const AverageIntensityCard = ({ role, patientId }: AverageIntensityCardProps) =>
         }
     };
     fetchData();
-  }, []);
+  }, [patientId]);
 
   const getStatusColor = (val: number) => {
     if (val < 2.5) return styles.low;

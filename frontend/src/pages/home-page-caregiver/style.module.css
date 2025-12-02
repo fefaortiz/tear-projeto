@@ -1,21 +1,16 @@
-/* FIX: Movemos as variáveis de :root para .container 
-   Isso garante que elas só existam dentro desta página específica,
-   evitando conflitos com as cores do Terapeuta ou Paciente.
-*/
+/* Escopo Local para o Cuidador (Azul) */
 .container {
-  /* Variáveis Locais (Escopadas) */
   --sidebar-width-min: 80px;
   --sidebar-width-max: 250px;
-  --primary-color: #2563EB; /* Azul Vibrante (Blue-600) */
-  --primary-light: #eff6ff; /* Azul Claro (Blue-50) */
+  --primary-color: #2563EB; /* Blue-600 */
+  --primary-light: #eff6ff; /* Blue-50 */
   --text-color-light: #f9fafb;
   --text-color-dark: #1f2937;
   --border-radius: 0.75rem;
 
   display: flex;
   min-height: 100vh;
-  /* A variável funciona aqui porque foi definida no mesmo bloco */
-  background-color: var(--primary-light); 
+  background-color: var(--primary-light);
 }
 
 /* --- Sidebar --- */
@@ -89,8 +84,8 @@
 }
 
 .navItemActive {
-  background-color: white; 
-  color: var(--primary-color); 
+  background-color: white;
+  color: var(--primary-color);
   font-weight: 600;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -119,7 +114,7 @@
 }
 
 .logoutButton:hover {
-  background-color: #ef4444; 
+  background-color: #ef4444;
 }
 
 /* --- Conteúdo Principal --- */
@@ -151,7 +146,7 @@
 }
 
 .sectionHeader {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .cardTitle {
@@ -166,35 +161,168 @@
   font-size: 1rem;
 }
 
-/* --- Grid de Cards de Pacientes --- */
+/* Lista de Pacientes (Grid Simples) */
+.patientsGridSimple {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.patientCardSimple {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.patientCardSimple:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.15);
+}
+
+.patientCardActive {
+    border-color: var(--primary-color);
+    background-color: #eff6ff; /* Azul bem claro */
+    box-shadow: 0 0 0 2px var(--primary-color) inset;
+}
+
+.patientAvatarSmall {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.patientInfoSmall {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.patientNameSmall {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.patientEmailSmall {
+    color: #6b7280;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 0;
+}
+
+/* --- Seção de Traits --- */
+.traitsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.traitsHeaderRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.traitsTitleGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.subTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 0;
+}
+
+.iconPrimary {
+    color: var(--primary-color);
+}
+
+.selectWrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.selectLabel {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.select {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    background-color: white;
+    color: #374151;
+    font-size: 0.9rem;
+    cursor: pointer;
+    min-width: 200px;
+}
+
+.select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Grid de Cards de Traits */
 .cardsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 
-/* Card do Paciente */
-.patientCard {
-  background-color: white;
-  padding: 1.5rem;
+/* Card de Adicionar (Azul) */
+.addCard {
+  background-color: #f0f9ff; /* Fundo azul bem claro */
+  border: 2px dashed var(--primary-color);
   border-radius: 0.75rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e5e7eb;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
+  justify-content: center;
+  min-height: 200px;
+  cursor: pointer;
+  transition: all 0.3s ease;
   gap: 1rem;
+  height: 100%;
 }
 
-.patientCard:hover {
+.addCard:hover {
+  background-color: #e0f2fe;
   transform: translateY(-4px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  border-color: var(--primary-color);
+  box-shadow: 0 10px 15px rgba(37, 99, 235, 0.15);
 }
 
-.patientAvatar {
+.addButton {
   width: 64px;
   height: 64px;
   border-radius: 50%;
@@ -202,89 +330,59 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
 }
 
-.patientInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  width: 100%;
+.addCard:hover .addButton {
+  transform: scale(1.1);
 }
 
-.patientName {
-  font-size: 1.25rem;
+.addCardText {
   font-weight: 600;
-  color: #1f2937;
-  margin: 0;
-}
-
-.patientEmail {
-  font-size: 0.875rem;
-  color: #6b7280;
-  word-break: break-all;
-}
-
-.patientPhone {
-  font-size: 0.875rem;
-  color: #9ca3af;
-}
-
-.viewProfileButton {
-  margin-top: auto;
-  padding: 0.625rem 1.5rem;
-  background-color: transparent;
+  font-size: 1.125rem;
   color: var(--primary-color);
-  border: 1px solid var(--primary-color);
-  border-radius: 0.5rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  width: 100%;
 }
 
-.viewProfileButton:hover {
-  background-color: var(--primary-color);
-  color: white;
+.emptyTraitsMsg {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #6b7280;
+    background-color: white;
+    border-radius: 0.75rem;
+    border: 1px dashed #e5e7eb;
 }
 
-/* --- Estados --- */
-.loadingState {
+/* Estados */
+.loadingState, .emptyState, .errorState {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 4rem;
-  color: var(--primary-color);
+  color: #64748b;
+  text-align: center;
 }
 
 .spinner {
   animation: spin 1s linear infinite;
+  color: var(--primary-color);
   margin-bottom: 1rem;
 }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 .errorState {
-  background-color: #fee2e2;
-  border: 1px solid #fca5a5;
-  color: #991b1b;
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  text-align: center;
+    background-color: #fee2e2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
 }
 
 .emptyState {
   background-color: white;
   border-radius: 0.75rem;
-  padding: 3rem;
-  text-align: center;
-  color: #6b7280;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  grid-column: 1 / -1;
+  border: 1px dashed #e5e7eb;
 }
 
 .card {
@@ -300,4 +398,12 @@
   .sidebarExpanded { width: 200px; }
   .mainContentShifted { margin-left: 200px; }
   .cardsGrid { grid-template-columns: 1fr; }
+  .traitsHeaderRow { flex-direction: column; align-items: flex-start; }
+  .selectWrapper { width: 100%; }
+  .select { width: 100%; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

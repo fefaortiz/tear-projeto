@@ -293,7 +293,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ userId, userRole }) =>
                             name="emailcuidador"
                             value={profileData.emailcuidador || ''} 
                             onChange={handleInputChange}
-                            disabled={isEditing}
+                            disabled={true}
                             className={styles.input}
                         />
                     </div>
@@ -311,7 +311,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ userId, userRole }) =>
                             name="emailterapeuta"
                             value={profileData.emailterapeuta || ''} 
                             onChange={handleInputChange}
-                            disabled={isEditing}
+                            disabled={true}
                             className={styles.input}
                         />
                     </div>
